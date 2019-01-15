@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
 @Getter
-public abstract class BaseController {
+public abstract class BaseRestController {
 
     protected HttpServletRequest request;
     protected HttpServletResponse response;
