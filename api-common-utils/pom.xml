@@ -39,13 +39,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Dozer  -->
-        <dependency>
-            <groupId>com.github.dozermapper</groupId>
-            <artifactId>dozer-spring-boot-starter</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
         <!-- JUnit -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
