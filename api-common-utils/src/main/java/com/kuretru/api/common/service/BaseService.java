@@ -4,26 +4,26 @@ import java.util.List;
 
 /**
  * 基本业务逻辑接口
- * 泛型：V表示该实体对应的VO，T表示该实体对应的DTO
+ * 泛型：T表示该实体对应的DTO
  *
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public interface BaseService<V, T> {
+public interface BaseService<T> {
 
     /**
      * 根据主键ID获取记录
      *
      * @param id 主键ID
-     * @return 记录VO
+     * @return 记录DTO
      */
-    V get(Integer id);
+    T get(Long id);
 
     /**
      * 获取所有记录
      *
-     * @return 所有记录VO
+     * @return 所有记录DTO
      */
-    List<V> list();
+    List<T> list();
 
     /**
      * 统计记录条数
@@ -36,24 +36,24 @@ public interface BaseService<V, T> {
      * 保存新记录
      *
      * @param record 新纪录
-     * @return 新纪录VO
+     * @return 新纪录DTO
      */
-    V save(T record);
+    T save(T record);
 
     /**
      * 根据主键ID删除记录
      *
      * @param id 主键ID
-     * @return
+     * @return 受影响的行数
      */
-    int remove(Integer id);
+    int remove(Long id);
 
     /**
      * 更新记录
      *
      * @param record 新数据
-     * @return 新数据VO
+     * @return 新数据DTO
      */
-    V update(T record);
+    T update(T record);
 
 }
