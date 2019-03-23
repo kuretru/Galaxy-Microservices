@@ -1,61 +1,72 @@
 package com.kuretru.api.common.service.impl;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.github.dozermapper.core.Mapper;
+import com.kuretru.api.common.entity.data.BaseDO;
 import com.kuretru.api.common.service.BaseService;
-import com.kuretru.api.common.util.PojoUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public abstract class BaseServiceImpl<M extends BaseMapper<D>, D, V, T> implements BaseService<V, T> {
-    @Autowired
+public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T> implements BaseService<M, D, T> {
+
     protected M mapper;
 
-    @Autowired
-    protected Mapper beanConverter;
-
     @Override
-    public V get(Integer id) {
+    public T get(Long id) {
         D record = mapper.selectById(id);
-        return beanConverter.map(record, getVOClass());
+        return doToDTO(record);
     }
 
     @Override
-    public List<V> list() {
-        List<D> records = mapper.selectList(Wrappers.emptyWrapper());
-        return PojoUtils.map(records, getVOClass());
+    public List<T> list() {
+        List<D> records = mapper.selectList(null);
+        return doToDTO(records);
     }
 
     @Override
     public int count() {
-        return SqlHelper.retCount(mapper.selectCount(Wrappers.emptyWrapper()));
+        Integer result = mapper.selectCount(null);
+        return null == result ? 0 : result;
     }
 
     @Override
-    public V save(T record) {
-        return null;
+    public T save(T record) {
+        D data = dtoToDO(record);
+        mapper.insert(data);
+        return get(data.getId());
     }
 
     @Override
-    public int remove(Integer id) {
-        return 0;
+    public int remove(Long id) {
+        return mapper.deleteById(id);
     }
 
     @Override
-    public V update(T record) {
-        return null;
+    public T update(T record) {
+        D data = dtoToDO(record);
+        mapper.updateById(data);
+        return get(data.getId());
     }
 
-    protected Class<V> getVOClass() {
-        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-        return PojoUtils.cast(type.getActualTypeArguments()[2]);
+    @Override
+    public List<T> doToDTO(List<D> records) {
+        List<T> result = new ArrayList<>(records.size());
+        for (D record : records) {
+            result.add(doToDTO(record));
+        }
+        return result;
+    }
+
+    @Override
+    public List<D> dtoToDO(List<T> records) {
+        List<D> result = new ArrayList<>(records.size());
+        for (T record : records) {
+            result.add(dtoToDO(record));
+        }
+        return result;
     }
 
 }

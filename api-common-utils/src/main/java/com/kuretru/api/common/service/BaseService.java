@@ -1,14 +1,17 @@
 package com.kuretru.api.common.service;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.kuretru.api.common.entity.data.BaseDO;
+
 import java.util.List;
 
 /**
- * 基本业务逻辑接口
- * 泛型：T表示该实体对应的DTO
+ * 基本业务逻辑接口，基本表直接继承此接口，并实现转换方法即可直接使用
+ * 泛型：T表示该实体对应的DTO，D表示该实体对应的DO
  *
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public interface BaseService<T> {
+public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
 
     /**
      * 根据主键ID获取记录
@@ -55,5 +58,44 @@ public interface BaseService<T> {
      * @return 新数据DTO
      */
     T update(T record);
+
+    /**
+     * 设置通用Mapper方法
+     *
+     * @param mapper 对应实体类的通用Mapper
+     */
+    void setMapper(M mapper);
+
+    /**
+     * 将DO转换为DTO的方法
+     *
+     * @param record DO记录
+     * @return DTO记录
+     */
+    T doToDTO(D record);
+
+    /**
+     * 批量将DO转换为DTO的方法
+     *
+     * @param records DO记录集
+     * @return DTO记录集
+     */
+    List<T> doToDTO(List<D> records);
+
+    /**
+     * 将DTO转换为DO的方法
+     *
+     * @param record DTO记录
+     * @return DO记录
+     */
+    D dtoToDO(T record);
+
+    /**
+     * 批量将DTO转换为DO的方法
+     *
+     * @param records DTO记录集
+     * @return DO记录集
+     */
+    List<D> dtoToDO(List<T> records);
 
 }
