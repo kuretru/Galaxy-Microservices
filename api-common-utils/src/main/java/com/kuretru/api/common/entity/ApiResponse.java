@@ -8,6 +8,11 @@ import lombok.Data;
 @Data
 public class ApiResponse<D> {
 
+    public static final Integer SUCCESS = 2000;
+    public static final Integer CREATED = 2001;
+    public static final Integer UPDATED = 2002;
+    public static final Integer DELETED = 2003;
+
     private Integer code;
     private String message;
     private D data;
@@ -23,19 +28,19 @@ public class ApiResponse<D> {
     }
 
     public static ApiResponse success(Object data) {
-        return new ApiResponse<>(2000, "success", data);
+        return new ApiResponse<>(SUCCESS, "success", data);
     }
 
     public static ApiResponse created(Object data) {
-        return new ApiResponse<>(2001, "created", data);
+        return new ApiResponse<>(CREATED, "created", data);
     }
 
     public static ApiResponse updated(Object data) {
-        return new ApiResponse<>(2002, "updated", data);
+        return new ApiResponse<>(UPDATED, "updated", data);
     }
 
     public static ApiResponse deleted(Object data) {
-        return new ApiResponse<>(2003, "deleted", data);
+        return new ApiResponse<>(DELETED, "deleted", data);
     }
 
 }
