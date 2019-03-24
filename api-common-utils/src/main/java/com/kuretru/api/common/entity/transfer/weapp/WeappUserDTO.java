@@ -1,5 +1,6 @@
 package com.kuretru.api.common.entity.transfer.weapp;
 
+import com.kuretru.api.common.entity.enums.WeappGenderEnum;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +16,7 @@ public class WeappUserDTO extends BaseDTO {
 
     private String avatarUrl;
 
-    private String gender;
+    private WeappGenderEnum gender;
 
     private String country;
 

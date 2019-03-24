@@ -20,7 +20,7 @@ public class WeappUserDO extends BaseDO {
 
     private String avatarUrl;
 
-    private Short gender;
+    private Integer gender;
 
     private String country;
 
