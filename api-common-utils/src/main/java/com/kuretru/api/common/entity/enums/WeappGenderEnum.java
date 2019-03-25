@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
 @Getter
-public enum WeappGenderEnum {
+public enum WeappGenderEnum implements BaseEnum {
     /**
      * 性别未知
      */

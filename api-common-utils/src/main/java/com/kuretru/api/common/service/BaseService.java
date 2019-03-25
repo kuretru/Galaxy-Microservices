@@ -61,6 +61,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
 
     /**
      * 设置通用Mapper方法
+     * TODO 待寻找通用解决方案
      *
      * @param mapper 对应实体类的通用Mapper
      */
@@ -68,6 +69,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
 
     /**
      * 将DO转换为DTO的方法
+     * TODO 待寻找通用解决方案
      *
      * @param record DO记录
      * @return DTO记录
@@ -84,6 +86,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
 
     /**
      * 将DTO转换为DO的方法
+     * TODO 待寻找通用解决方案
      *
      * @param record DTO记录
      * @return DO记录
