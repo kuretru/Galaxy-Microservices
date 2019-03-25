@@ -6,13 +6,15 @@ import com.kuretru.api.common.exception.NotFoundException;
 import com.kuretru.api.common.service.BaseService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public abstract class BaseRestController<S extends BaseService> extends BaseController {
+public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> extends BaseController {
 
     protected S service;
 
@@ -25,7 +27,7 @@ public abstract class BaseRestController<S extends BaseService> extends BaseCont
 
     @GetMapping("/{id}")
     public ApiResponse get(@PathVariable("id") Long id) throws ApiException {
-        Object result = service.get(id);
+        T result = service.get(id);
         if (result == null) {
             throw new NotFoundException("未找到相关对象！");
         }
@@ -34,10 +36,16 @@ public abstract class BaseRestController<S extends BaseService> extends BaseCont
 
     @GetMapping
     public ApiResponse list() throws ApiException {
-        List result = service.list();
+        List<T> result = service.list();
         if (result.isEmpty()) {
             throw new NotFoundException("未找到相关对象！");
         }
+        return ApiResponse.success(result);
+    }
+
+    @PostMapping
+    public ApiResponse create(@RequestBody T record) throws ApiException {
+        T result = service.save(record);
         return ApiResponse.success(result);
     }
 
