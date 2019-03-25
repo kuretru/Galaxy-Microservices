@@ -1,10 +1,9 @@
 package com.kuretru.api.common.controller;
 
 import lombok.Getter;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -13,16 +12,9 @@ import javax.servlet.http.HttpSession;
 @Getter
 public abstract class BaseController {
 
+    @Autowired
     protected HttpServletRequest request;
-    protected HttpServletResponse response;
+    @Autowired
     protected HttpSession session;
-
-    //TODO 这种写法会在单实例模式下可能会导致不对应的情况
-    @ModelAttribute
-    public void init(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
-        this.session = request.getSession();
-    }
 
 }
