@@ -35,6 +35,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public T save(T record) {
         D data = dtoToDO(record);
+        data.addCrateTime();
         mapper.insert(data);
         return get(data.getId());
     }

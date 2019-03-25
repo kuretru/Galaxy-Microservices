@@ -23,8 +23,9 @@ public abstract class BaseDO {
     private Instant modifiedAt;
 
     public void addCrateTime() {
-        createAt = Instant.now();
-        modifiedAt = Instant.now();
+        Instant now = Instant.now();
+        createAt = now;
+        modifiedAt = now;
     }
 
 }
