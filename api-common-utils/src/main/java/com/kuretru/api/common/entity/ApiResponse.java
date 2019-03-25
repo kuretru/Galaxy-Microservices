@@ -13,6 +13,11 @@ public class ApiResponse<D> {
     public static final Integer UPDATED = 2002;
     public static final Integer DELETED = 2003;
 
+    public static final Integer ERROR = 4000;
+    public static final Integer MISSING = 4001;
+    public static final Integer INVALID = 4002;
+    public static final Integer NOT_FOUND = 4004;
+
     private Integer code;
     private String message;
     private D data;
@@ -41,6 +46,22 @@ public class ApiResponse<D> {
 
     public static ApiResponse deleted(Object data) {
         return new ApiResponse<>(DELETED, "deleted", data);
+    }
+
+    public static ApiResponse error(Object data) {
+        return new ApiResponse<>(ERROR, "error", data);
+    }
+
+    public static ApiResponse missingParameters(Object data) {
+        return new ApiResponse<>(MISSING, "missing parameters", data);
+    }
+
+    public static ApiResponse invalidParameters(Object data) {
+        return new ApiResponse<>(INVALID, "invalid parameters", data);
+    }
+
+    public static ApiResponse notFound(Object data) {
+        return new ApiResponse<>(NOT_FOUND, "not found", data);
     }
 
 }
