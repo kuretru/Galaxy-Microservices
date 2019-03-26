@@ -1,6 +1,8 @@
 package com.kuretru.api.common.controller;
 
+import com.kuretru.api.common.annotation.RequestAuthorization;
 import com.kuretru.api.common.entity.ApiResponse;
+import com.kuretru.api.common.entity.enums.UserRoleEnum;
 import com.kuretru.api.common.util.InstantUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +35,7 @@ public class TestController extends BaseController {
         return ApiResponse.success(now);
     }
 
+    @RequestAuthorization(requiredRole = UserRoleEnum.ADMIN)
     @PostMapping("/shutdown")
     public ApiResponse shutdown() {
         new Thread(() -> {

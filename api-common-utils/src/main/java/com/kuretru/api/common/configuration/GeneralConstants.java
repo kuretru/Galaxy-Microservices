@@ -30,4 +30,14 @@ public class GeneralConstants {
      */
     public static final Integer ACCESS_TOKEN_EXPIRES_MINUTE = 480;
 
+    /**
+     * Access Token在请求头中存放的Key
+     */
+    public static final String ACCESS_TOKEN_HEADER = "Access-Token";
+
+    /**
+     * 测试用万能Token
+     */
+    public static final String MAGIC_TOKEN = "kuretru742";
+
 }

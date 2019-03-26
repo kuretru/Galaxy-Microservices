@@ -18,6 +18,8 @@ public class ApiResponse<D> {
     public static final Integer INVALID = 4002;
     public static final Integer NOT_FOUND = 4004;
 
+    public static final Integer UNAUTHORIZED = 4010;
+
     private Integer code;
     private String message;
     private D data;
@@ -62,6 +64,10 @@ public class ApiResponse<D> {
 
     public static ApiResponse notFound(Object data) {
         return new ApiResponse<>(NOT_FOUND, "not found", data);
+    }
+
+    public static ApiResponse unauthorized(Object data) {
+        return new ApiResponse<>(UNAUTHORIZED, "unauthorized", data);
     }
 
 }

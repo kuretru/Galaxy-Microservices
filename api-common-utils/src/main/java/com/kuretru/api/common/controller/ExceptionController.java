@@ -1,10 +1,7 @@
 package com.kuretru.api.common.controller;
 
 import com.kuretru.api.common.entity.ApiResponse;
-import com.kuretru.api.common.exception.ApiException;
-import com.kuretru.api.common.exception.InvalidParametersException;
-import com.kuretru.api.common.exception.MissingParametersException;
-import com.kuretru.api.common.exception.NotFoundException;
+import com.kuretru.api.common.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +37,12 @@ public class ExceptionController extends BaseController {
     @ExceptionHandler(NotFoundException.class)
     public ApiResponse notFoundExceptionHandler(NotFoundException e) {
         return ApiResponse.notFound(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ApiResponse authenticationFailedExceptionHandler(AuthenticationFailedException e) {
+        return ApiResponse.unauthorized(e.getMessage());
     }
 
 }
