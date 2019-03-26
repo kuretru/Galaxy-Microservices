@@ -2,8 +2,6 @@ package com.kuretru.api.common.entity.data;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.kuretru.api.common.util.InstantUtils;
 import lombok.Data;
 
 import java.time.Instant;
@@ -17,7 +15,6 @@ public abstract class BaseDO {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @JsonFormat(pattern = InstantUtils.GENERAL_DATE_FORMAT, timezone = InstantUtils.GENERAL_TIME_ZONE)
     private Instant createAt;
 
     private Instant modifiedAt;

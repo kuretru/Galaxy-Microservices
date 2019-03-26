@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
@@ -27,5 +29,13 @@ public class WeappUserDO extends BaseDO {
     private String province;
 
     private String city;
+
+    private Instant lastLogin;
+
+    @Override
+    public void addCrateTime() {
+        super.addCrateTime();
+        this.lastLogin = Instant.now();
+    }
 
 }
