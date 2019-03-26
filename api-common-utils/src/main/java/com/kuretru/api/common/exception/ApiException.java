@@ -9,4 +9,8 @@ public class ApiException extends Exception {
         super(message);
     }
 
+    public static ApiException unknownException() {
+        return new ApiException("未知异常，请联系管理员");
+    }
+
 }

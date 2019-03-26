@@ -20,4 +20,14 @@ public class GeneralConstants {
      */
     public static final String ITEMS_RAW_SEPARATOR = "|";
 
+    /**
+     * Redis存储AccessToken时使用的key
+     */
+    public static final String ACCESS_TOKEN_KEY = ".ACCESS_TOKEN#";
+
+    /**
+     * AccessToken过期时间
+     */
+    public static final Integer ACCESS_TOKEN_EXPIRES_MINUTE = 480;
+
 }
