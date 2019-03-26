@@ -1,5 +1,6 @@
 package com.kuretru.api.common.controller;
 
+import com.kuretru.api.common.annotation.RequestAuthorization;
 import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.exception.ApiException;
 import com.kuretru.api.common.exception.NotFoundException;
@@ -25,6 +26,7 @@ public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> exte
      */
     public abstract void setService(S service);
 
+    @RequestAuthorization
     @GetMapping("/{id}")
     public ApiResponse get(@PathVariable("id") Long id) throws ApiException {
         T result = service.get(id);
@@ -34,6 +36,7 @@ public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> exte
         return ApiResponse.success(result);
     }
 
+    @RequestAuthorization
     @GetMapping
     public ApiResponse list() throws ApiException {
         List<T> result = service.list();
@@ -43,6 +46,7 @@ public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> exte
         return ApiResponse.success(result);
     }
 
+    @RequestAuthorization
     @PostMapping
     public ApiResponse create(@RequestBody T record) throws ApiException {
         T result = service.save(record);
