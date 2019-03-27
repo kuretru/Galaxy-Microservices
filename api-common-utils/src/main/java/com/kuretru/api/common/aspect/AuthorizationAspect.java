@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -67,23 +68,45 @@ public class AuthorizationAspect {
         return joinPoint.proceed(args);
     }
 
-    private Object[] bindUser(AccessTokenBO tokenBO, ProceedingJoinPoint joinPoint) {
+    private Object[] bindUser(AccessTokenBO tokenBO, ProceedingJoinPoint joinPoint) throws Throwable {
+        // 获取所有入参
         Object[] args = joinPoint.getArgs();
-
+        // 获取调用的方法
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         Parameter[] parameters = method.getParameters();
+        bind:
         for (int i = 0; i < parameters.length; i++) {
             Annotation[] annotations = parameters[i].getAnnotations();
             for (Annotation annotation : annotations) {
                 if (!(annotation instanceof BindUser)) {
                     continue;
                 }
+                Class c = parameters[i].getType();
                 // 如果绑定对象是Long的情况
-                if (parameters[i].getType().equals(Long.class)) {
-                    args[i] = tokenBO.getId();
+                if (c.equals(Long.class)) {
+                    if (args[i] == null) {
+                        // 说明这是一个需要直接绑定的参数
+                        args[i] = tokenBO.getId();
+                    } else {
+                        // 说明这是一个存在于URL中的参数，进一步检查两者是否相等
+                        if (!tokenBO.getId().equals(args[i])) {
+                            throw new AuthenticationFailedException("请勿操作别人的数据");
+                        }
+                    }
+                    break bind;
                 }
-                // TODO 如果绑定对象是其他POJO的情况
+                // 如果绑定对象是其他POJO类型的情况，进一步设置其属性
+                String property = ((BindUser) annotation).value();
+                if (StringUtils.isNullOrEmpty(property)) {
+                    throw new NullPointerException("未指定要绑定的POJO中的属性名称");
+                }
+                if (args[i] == null) {
+                    args[i] = c.newInstance();
+                }
+                Field field = args[i].getClass().getDeclaredField(property);
+                field.setAccessible(true);
+                field.set(args[i], tokenBO.getId());
             }
         }
         return args;

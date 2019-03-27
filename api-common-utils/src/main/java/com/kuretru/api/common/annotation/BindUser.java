@@ -10,4 +10,11 @@ import java.lang.annotation.*;
 @Documented
 public @interface BindUser {
 
+    /**
+     * 在POJO中要绑定相关用户ID的属性名
+     *
+     * @return 属性名
+     */
+    String value() default "";
+
 }
