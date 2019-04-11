@@ -48,7 +48,7 @@ public class CommonProperties {
     /**
      * 上传文件的根目录
      */
-    @Value("${file.upload.root}")
+    @Value("${file.upload.root:}")
     private String fileUploadRoot;
 
     /**

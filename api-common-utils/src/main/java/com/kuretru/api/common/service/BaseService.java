@@ -44,14 +44,6 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
     T save(T record);
 
     /**
-     * 根据主键ID删除记录
-     *
-     * @param id 主键ID
-     * @return 受影响的行数
-     */
-    int remove(Long id);
-
-    /**
      * 更新记录
      *
      * @param record 新数据
@@ -60,16 +52,16 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
     T update(T record);
 
     /**
-     * 设置通用Mapper方法
-     * TODO 待寻找通用解决方案
+     * 根据主键ID删除记录
      *
-     * @param mapper 对应实体类的通用Mapper
+     * @param id 主键ID
+     * @return 受影响的行数
      */
-    void setMapper(M mapper);
+    int remove(Long id);
 
     /**
      * 将DO转换为DTO的方法
-     * TODO 待寻找通用解决方案
+     * TODO 挖个坑，这里能否传递一个Wrapper自动转换内部特殊属性
      *
      * @param record DO记录
      * @return DTO记录
@@ -86,7 +78,6 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
 
     /**
      * 将DTO转换为DO的方法
-     * TODO 待寻找通用解决方案
      *
      * @param record DTO记录
      * @return DO记录

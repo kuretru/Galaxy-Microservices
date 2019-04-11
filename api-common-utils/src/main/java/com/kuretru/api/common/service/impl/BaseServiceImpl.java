@@ -3,6 +3,7 @@ package com.kuretru.api.common.service.impl;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kuretru.api.common.entity.data.BaseDO;
 import com.kuretru.api.common.service.BaseService;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,32 @@ import java.util.List;
 public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T> implements BaseService<M, D, T> {
 
     protected M mapper;
+    protected Class<D> doClass;
+    protected Class<T> dtoClass;
+
+    /**
+     * 子类中必须调用此构造函数，传递参数
+     * <pre>
+     * @Service
+     * public class DataOxfordServiceImpl extends BaseServiceImpl<DataOxfordMapper, DataOxfordDO, DataOxfordDTO> implements DataOxfordService {
+     *
+     *     @Autowired
+     *     public DataOxfordServiceImpl(DataOxfordMapper mapper) {
+     *         super(mapper, DataOxfordDO.class, DataOxfordDTO.class);
+     *     }
+     *
+     * }
+     * </pre>
+     *
+     * @param mapper   对应的Mapper
+     * @param doClass  对应DO的class
+     * @param dtoClass 对应DTO的class
+     */
+    public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
+        this.mapper = mapper;
+        this.doClass = doClass;
+        this.dtoClass = dtoClass;
+    }
 
     @Override
     public T get(Long id) {
@@ -41,15 +68,25 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
+    public T update(T record) {
+        D data = dtoToDO(record);
+        mapper.updateById(data);
+        return get(data.getId());
+    }
+
+    @Override
     public int remove(Long id) {
         return mapper.deleteById(id);
     }
 
     @Override
-    public T update(T record) {
-        D data = dtoToDO(record);
-        mapper.updateById(data);
-        return get(data.getId());
+    public T doToDTO(D record) {
+        if (record == null) {
+            return null;
+        }
+        T result = netInstance(dtoClass);
+        BeanUtils.copyProperties(record, result);
+        return result;
     }
 
     @Override
@@ -62,12 +99,33 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
+    public D dtoToDO(T record) {
+        if (record == null) {
+            return null;
+        }
+        D result = netInstance(doClass);
+        BeanUtils.copyProperties(record, result);
+        return result;
+    }
+
+    @Override
     public List<D> dtoToDO(List<T> records) {
         List<D> result = new ArrayList<>(records.size());
         for (T record : records) {
             result.add(dtoToDO(record));
         }
         return result;
+    }
+
+    private <K> K netInstance(Class<K> kClass) {
+        try {
+            return kClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        throw new Error("目标类缺少无参构造函数");
     }
 
 }
