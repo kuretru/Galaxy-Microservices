@@ -25,7 +25,7 @@ public class AccessTokenManagerImpl extends BaseRedisManagerImpl implements Acce
 
     @Autowired
     public AccessTokenManagerImpl(StringRedisTemplate redisTemplate, CommonProperties commonProperties) {
-        super.redisTemplate = redisTemplate;
+        super(redisTemplate);
         this.commonProperties = commonProperties;
     }
 

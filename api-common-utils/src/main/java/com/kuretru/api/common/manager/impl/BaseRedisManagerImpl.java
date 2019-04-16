@@ -11,10 +11,11 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class BaseRedisManagerImpl implements RedisManager {
 
-    /**
-     * Redis模板，实现类中必须注入
-     */
     protected StringRedisTemplate redisTemplate;
+
+    public BaseRedisManagerImpl(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 获取键的代理方法

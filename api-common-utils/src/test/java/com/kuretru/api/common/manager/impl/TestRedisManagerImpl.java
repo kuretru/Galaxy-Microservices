@@ -13,7 +13,7 @@ public class TestRedisManagerImpl extends BaseRedisManagerImpl {
 
     @Autowired
     public TestRedisManagerImpl(StringRedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+        super(redisTemplate);
     }
 
     @Override
