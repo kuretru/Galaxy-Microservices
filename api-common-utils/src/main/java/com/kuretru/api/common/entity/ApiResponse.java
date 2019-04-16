@@ -46,8 +46,12 @@ public class ApiResponse<D> {
         return new ApiResponse<>(UPDATED, "updated", data);
     }
 
-    public static ApiResponse deleted(Object data) {
-        return new ApiResponse<>(DELETED, "deleted", data);
+    public static ApiResponse removed() {
+        return removed("删除成功");
+    }
+
+    public static ApiResponse removed(Object data) {
+        return new ApiResponse<>(DELETED, "removed", data);
     }
 
     public static ApiResponse error(Object data) {

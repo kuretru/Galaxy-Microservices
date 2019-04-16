@@ -2,6 +2,7 @@ package com.kuretru.api.common.controller;
 
 import com.kuretru.api.common.annotation.RequestAuthorization;
 import com.kuretru.api.common.entity.ApiResponse;
+import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ApiException;
 import com.kuretru.api.common.exception.NotFoundException;
 import com.kuretru.api.common.service.BaseService;
@@ -13,16 +14,30 @@ import java.util.List;
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> extends BaseController {
+public abstract class BaseRestController<S extends BaseService<?, ?, T>, T extends BaseDTO> extends BaseController {
 
     protected S service;
 
     /**
-     * 注入对应serice实例
+     * 子类中必须调用此构造函数，传递参数
+     * <pre>
+     * @RestController
+     * @RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+     * public class WebTagController extends BaseRestController<WebTagService, WebTagDTO> {
      *
-     * @param service service实例
+     *     @Autowired
+     *     public WebTagController(WebTagService service) {
+     *         super(service);
+     *     }
+     *
+     * }
+     * </pre>
+     *
+     * @param service 对应的Service
      */
-    public abstract void setService(S service);
+    public BaseRestController(S service) {
+        this.service = service;
+    }
 
     @RequestAuthorization
     @GetMapping("/{id}")
@@ -50,6 +65,24 @@ public abstract class BaseRestController<S extends BaseService<?, ?, T>, T> exte
     public ApiResponse create(@RequestBody T record) throws ApiException {
         T result = service.save(record);
         return ApiResponse.created(result);
+    }
+
+    @RequestAuthorization
+    @PutMapping("/{id}")
+    public ApiResponse update(@PathVariable("id") Long id, @RequestBody T record) throws ApiException {
+        record.setId(id);
+        T result = service.update(record);
+        return ApiResponse.updated(result);
+    }
+
+    @RequestAuthorization
+    @DeleteMapping("/{id}")
+    public ApiResponse remove(@PathVariable("id") Long id) throws ApiException {
+        int result = service.remove(id);
+        if (1 != result) {
+            throw new NotFoundException("未找到相关对象！");
+        }
+        return ApiResponse.removed();
     }
 
 }
