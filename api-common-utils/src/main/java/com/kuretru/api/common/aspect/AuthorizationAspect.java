@@ -2,6 +2,7 @@ package com.kuretru.api.common.aspect;
 
 import com.kuretru.api.common.annotation.BindUser;
 import com.kuretru.api.common.annotation.RequestAuthorization;
+import com.kuretru.api.common.configuration.EnvironmentConstants;
 import com.kuretru.api.common.configuration.GeneralConstants;
 import com.kuretru.api.common.entity.business.AccessTokenBO;
 import com.kuretru.api.common.entity.enums.UserRoleEnum;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +32,15 @@ import java.lang.reflect.Parameter;
 @Order(20)
 public class AuthorizationAspect {
 
+    private Environment environment;
+
     private HttpServletRequest request;
 
     private AccessTokenManager accessTokenManager;
 
     @Autowired
-    public AuthorizationAspect(HttpServletRequest request, AccessTokenManager accessTokenManager) {
+    public AuthorizationAspect(Environment environment, HttpServletRequest request, AccessTokenManager accessTokenManager) {
+        this.environment = environment;
         this.request = request;
         this.accessTokenManager = accessTokenManager;
     }
@@ -51,8 +56,13 @@ public class AuthorizationAspect {
 
         AccessTokenBO tokenBO;
         if (GeneralConstants.MAGIC_TOKEN.equals(header)) {
-            // 2.万能Token
-            tokenBO = AccessTokenBO.build(1L, UserRoleEnum.ADMIN);
+            // 2.测试环境万能Token
+            String activeProfile = environment.getActiveProfiles()[0];
+            if (EnvironmentConstants.DEVELOPMENT.equalsIgnoreCase(activeProfile)) {
+                tokenBO = AccessTokenBO.build(1L, UserRoleEnum.ADMIN);
+            } else {
+                throw new AuthenticationFailedException("当前环境无调试权限");
+            }
         } else {
             // 2.正常查询Redis
             tokenBO = accessTokenManager.verifyToken(header);
