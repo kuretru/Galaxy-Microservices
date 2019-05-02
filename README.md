@@ -36,5 +36,15 @@ public class Application {
 
 }
 ```
-6.至此，您的项目已拥有`api-common-utils`中的所有功能  
+6.至此，您的项目已拥有`api-common-utils`中的所有功能，您的parent目录看起来会是如下所示：
+```bash
+.
+├── api-common-utils
+│   ├── pom.xml
+│   ├── src
+├── aries-navigation-api
+│   ├── pom.xml
+│   ├── src
+└── pom.xml
+```
 7.若需进行单元测试，或maven打包，则需要修改`src/test/resources/application.properties`中的具体设置
