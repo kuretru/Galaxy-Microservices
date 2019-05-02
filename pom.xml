@@ -12,7 +12,7 @@
 
     <groupId>com.kuretru.common</groupId>
     <artifactId>api-common-utils</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Api-Common-Utils</name>
     <description>RESTful API开发通用工具</description>
 

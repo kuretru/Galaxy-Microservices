@@ -1,6 +1,5 @@
 package com.kuretru.api.common.manager.impl;
 
-import com.kuretru.api.common.ApplicationTests;
 import com.kuretru.api.common.entity.business.AccessTokenBO;
 import com.kuretru.api.common.entity.enums.UserRoleEnum;
 import com.kuretru.api.common.exception.ApiException;
@@ -10,14 +9,22 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AccessTokenManagerImplTest extends ApplicationTests {
+@EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
+public class AccessTokenManagerImplTest {
 
     private static AccessTokenBO model = AccessTokenBO.build(1L, UserRoleEnum.USER);
     @Rule

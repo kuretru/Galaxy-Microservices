@@ -8,7 +8,6 @@ import com.kuretru.api.common.exception.AuthenticationFailedException;
 import com.kuretru.api.common.manager.AccessTokenManager;
 import com.kuretru.api.common.util.StringUtils;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
 @Component
-@Slf4j
 public class AccessTokenManagerImpl extends BaseRedisManagerImpl implements AccessTokenManager {
 
     private CommonProperties commonProperties;

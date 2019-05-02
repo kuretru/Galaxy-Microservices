@@ -1,8 +1,13 @@
 package com.kuretru.api.common.manager.impl;
 
-import com.kuretru.api.common.ApplicationTests;
+import com.kuretru.api.common.ApplicationTest;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -10,7 +15,10 @@ import static org.junit.Assert.assertNull;
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public class BaseTestRedisManagerImpl extends ApplicationTests {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
+public class BaseTestRedisManagerImpl extends ApplicationTest {
 
     private static final String TEST_KEY = "Xandria";
 
