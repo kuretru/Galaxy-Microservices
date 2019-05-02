@@ -63,8 +63,7 @@ public class FileServiceImpl implements FileService {
             String time = InstantUtils.instantToString(Instant.now()).replace(" ", "_");
             String nonce = UUID.randomUUID().toString().substring(0, 6);
             String suffix = getFileSuffix(file.getOriginalFilename());
-            StringBuilder filenameBuilder = new StringBuilder(time).append("-").append(nonce).append(".").append(suffix);
-            String filename = filenameBuilder.toString();
+            String filename = time + "-" + nonce + "." + suffix;
 
             // 写入文件
             Path targetLocation = rootPath.resolve(filename);

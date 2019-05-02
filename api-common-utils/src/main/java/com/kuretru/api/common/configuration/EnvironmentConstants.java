@@ -20,4 +20,14 @@ public class EnvironmentConstants {
      */
     public static final String PRODUCTION = "production";
 
+    /**
+     * Windows系统环境
+     */
+    public static final String WINDOWS = "windows";
+
+    /**
+     * macOS系统环境
+     */
+    public static final String MACOS = "macos";
+
 }
