@@ -60,7 +60,7 @@ public class FileServiceImpl implements FileService {
         // 合法文件则开始写入
         for (MultipartFile file : files) {
             // 新建文件名
-            String time = InstantUtils.instantToString(Instant.now()).replace(" ", "_");
+            String time = InstantUtils.instantToString(Instant.now()).replace(" ", "_").replace(":", ";");
             String nonce = UUID.randomUUID().toString().substring(0, 6);
             String suffix = getFileSuffix(file.getOriginalFilename());
             String filename = time + "-" + nonce + "." + suffix;
@@ -74,7 +74,7 @@ public class FileServiceImpl implements FileService {
             }
 
             // 设置返回实体
-            String url = commonProperties.getFileCdnPrefix() + filename + commonProperties.getFileCdnSuffix();
+            String url = commonProperties.getFileCdnPrefix() + "upload/" + filename + commonProperties.getFileCdnSuffix();
             FileUploadDTO dto = new FileUploadDTO(filename, url);
             result.add(dto);
         }
