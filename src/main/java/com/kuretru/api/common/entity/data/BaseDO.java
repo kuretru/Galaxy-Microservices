@@ -2,6 +2,7 @@ package com.kuretru.api.common.entity.data;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.kuretru.api.common.entity.Indexable;
 import lombok.Data;
 
 import java.time.Instant;
@@ -10,7 +11,7 @@ import java.time.Instant;
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
 @Data
-public abstract class BaseDO {
+public abstract class BaseDO implements Indexable {
 
     @TableId(type = IdType.AUTO)
     private Long id;
