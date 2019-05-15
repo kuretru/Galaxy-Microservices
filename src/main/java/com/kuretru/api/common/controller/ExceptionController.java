@@ -45,4 +45,10 @@ public class ExceptionController extends BaseController {
         return ApiResponse.unauthorized(e.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(TokenInvalidException.class)
+    public ApiResponse tokenInvalidExceptionHandler(TokenInvalidException e) {
+        return ApiResponse.invalidParameters(e.getMessage());
+    }
+
 }

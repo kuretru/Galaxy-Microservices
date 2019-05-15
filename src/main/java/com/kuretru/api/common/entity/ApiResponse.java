@@ -19,6 +19,7 @@ public class ApiResponse<D> {
     public static final Integer NOT_FOUND = 4004;
 
     public static final Integer UNAUTHORIZED = 4010;
+    public static final Integer TOKEN_INVALID = 4011;
 
     private Integer code;
     private String message;
@@ -72,6 +73,10 @@ public class ApiResponse<D> {
 
     public static ApiResponse unauthorized(Object data) {
         return new ApiResponse<>(UNAUTHORIZED, "unauthorized", data);
+    }
+
+    public static ApiResponse tokenInvalid(Object data) {
+        return new ApiResponse<>(TOKEN_INVALID, "token invalid", data);
     }
 
 }

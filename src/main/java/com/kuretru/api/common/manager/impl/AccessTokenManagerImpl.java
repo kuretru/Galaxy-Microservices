@@ -4,7 +4,7 @@ import com.kuretru.api.common.configuration.CommonProperties;
 import com.kuretru.api.common.configuration.GeneralConstants;
 import com.kuretru.api.common.entity.business.AccessTokenBO;
 import com.kuretru.api.common.exception.ApiException;
-import com.kuretru.api.common.exception.AuthenticationFailedException;
+import com.kuretru.api.common.exception.TokenInvalidException;
 import com.kuretru.api.common.manager.AccessTokenManager;
 import com.kuretru.api.common.util.StringUtils;
 import lombok.NonNull;
@@ -55,7 +55,7 @@ public class AccessTokenManagerImpl extends BaseRedisManagerImpl implements Acce
 
         // 1.验证Token是否合法
         if (StringUtils.isNullOrEmpty(idAndRole)) {
-            throw new AuthenticationFailedException("Token非法或已过期");
+            throw new TokenInvalidException("Token非法或已过期");
         }
 
         // 2.可省略步骤，双向验证是否合法
@@ -63,7 +63,7 @@ public class AccessTokenManagerImpl extends BaseRedisManagerImpl implements Acce
         if (StringUtils.isNullOrEmpty(redisToken)) {
             throw ApiException.unknownException();
         } else if (!redisToken.equals(incomingToken)) {
-            throw new AuthenticationFailedException("已在别的设备上登录");
+            throw new TokenInvalidException("已在别的设备上登录");
         }
 
         // 3.刷新过期时间
