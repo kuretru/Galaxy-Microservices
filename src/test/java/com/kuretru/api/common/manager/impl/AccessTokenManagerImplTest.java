@@ -4,6 +4,7 @@ import com.kuretru.api.common.entity.business.AccessTokenBO;
 import com.kuretru.api.common.entity.enums.UserRoleEnum;
 import com.kuretru.api.common.exception.ApiException;
 import com.kuretru.api.common.exception.AuthenticationFailedException;
+import com.kuretru.api.common.exception.TokenInvalidException;
 import com.kuretru.api.common.manager.AccessTokenManager;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -45,7 +46,7 @@ public class AccessTokenManagerImplTest {
     @Test
     public void cRemoveToken() throws ApiException {
         manager.removeToken(model.getToken());
-        thrown.expect(AuthenticationFailedException.class);
+        thrown.expect(TokenInvalidException.class);
         manager.verifyToken(model.getToken());
     }
 
