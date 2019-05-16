@@ -78,10 +78,7 @@ public abstract class BaseRestController<S extends BaseService<?, ?, T>, T exten
     @RequestAuthorization
     @DeleteMapping("/{id}")
     public ApiResponse remove(@PathVariable("id") Long id) throws ApiException {
-        int result = service.remove(id);
-        if (1 != result) {
-            throw new NotFoundException("未找到相关对象！");
-        }
+        service.remove(id);
         return ApiResponse.removed();
     }
 

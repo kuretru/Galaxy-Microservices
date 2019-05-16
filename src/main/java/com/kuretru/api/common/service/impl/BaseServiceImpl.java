@@ -1,10 +1,14 @@
 package com.kuretru.api.common.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kuretru.api.common.entity.data.BaseDO;
+import com.kuretru.api.common.exception.ApiException;
+import com.kuretru.api.common.exception.NotFoundException;
 import com.kuretru.api.common.service.BaseService;
 import org.springframework.beans.BeanUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +53,15 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public List<T> list() {
-        List<D> records = mapper.selectList(null);
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        Field[] fields = doClass.getDeclaredFields();
+        for (Field field : fields) {
+            if ("sequence".equals(field.getName())) {
+                queryWrapper.orderByAsc("sequence");
+                break;
+            }
+        }
+        List<D> records = mapper.selectList(queryWrapper);
         return doToDTO(records);
     }
 
@@ -68,15 +80,22 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public T update(T record) {
+    public T update(T record) throws ApiException {
         D data = dtoToDO(record);
-        mapper.updateById(data);
+        int rows = mapper.updateById(data);
+        if (1 != rows) {
+            throw new NotFoundException("无此记录！");
+        }
         return get(data.getId());
     }
 
     @Override
-    public int remove(Long id) {
-        return mapper.deleteById(id);
+    public int remove(Long id) throws ApiException {
+        int rows = mapper.deleteById(id);
+        if (1 != rows) {
+            throw new NotFoundException("无此记录！");
+        }
+        return rows;
     }
 
     @Override

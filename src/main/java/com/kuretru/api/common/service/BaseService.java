@@ -2,6 +2,7 @@ package com.kuretru.api.common.service;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kuretru.api.common.entity.data.BaseDO;
+import com.kuretru.api.common.exception.ApiException;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      * @param record 新数据
      * @return 新数据DTO
      */
-    T update(T record);
+    T update(T record) throws ApiException;
 
     /**
      * 根据主键ID删除记录
@@ -57,7 +58,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      * @param id 主键ID
      * @return 受影响的行数
      */
-    int remove(Long id);
+    int remove(Long id) throws ApiException;
 
     /**
      * 将DO转换为DTO的方法
