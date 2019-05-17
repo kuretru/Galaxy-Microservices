@@ -36,8 +36,7 @@ public class FileServiceImpl implements FileService {
         this.commonProperties = commonProperties;
         this.blacklist = StringUtils.stringToList(commonProperties.getFileUploadSuffixBlacklist());
         this.whitelist = StringUtils.stringToList(commonProperties.getFileUploadSuffixWhitelist());
-        this.rootPath = Paths.get(commonProperties.getFileUploadRoot())
-                .resolve("images").toAbsolutePath().normalize();
+        this.rootPath = Paths.get(commonProperties.getFileUploadRoot()).toAbsolutePath().normalize();
     }
 
     @Override
