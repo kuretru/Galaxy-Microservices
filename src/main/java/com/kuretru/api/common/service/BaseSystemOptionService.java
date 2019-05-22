@@ -7,6 +7,6 @@ import com.kuretru.api.common.mapper.SystemOptionMapper;
 /**
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
-public interface SystemOptionService extends BaseService<SystemOptionMapper, SystemOptionDO, SystemOptionDTO> {
+public interface BaseSystemOptionService extends BaseService<SystemOptionMapper, SystemOptionDO, SystemOptionDTO> {
 
 }
