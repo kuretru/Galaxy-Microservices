@@ -42,7 +42,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      * @param record 新纪录
      * @return 新纪录DTO
      */
-    T save(T record);
+    T save(T record) throws ApiException;
 
     /**
      * 更新记录

@@ -72,7 +72,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public T save(T record) {
+    public T save(T record) throws ApiException {
         D data = dtoToDO(record);
         data.addCrateTime();
         mapper.insert(data);
