@@ -22,7 +22,7 @@ import java.time.Instant;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class TestController extends BaseController {
 
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Autowired
     public TestController(ApplicationContext applicationContext) {

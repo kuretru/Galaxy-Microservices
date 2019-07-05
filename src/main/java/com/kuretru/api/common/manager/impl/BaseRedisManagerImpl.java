@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class BaseRedisManagerImpl implements RedisManager {
 
-    protected StringRedisTemplate redisTemplate;
+    protected final StringRedisTemplate redisTemplate;
 
     public BaseRedisManagerImpl(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class BaseCrudController<S extends BaseService<?, ?, T>, T extends BaseDTO> extends BaseController {
 
-    protected S service;
+    protected final S service;
 
     /**
      * 子类中必须调用此构造函数，传递参数

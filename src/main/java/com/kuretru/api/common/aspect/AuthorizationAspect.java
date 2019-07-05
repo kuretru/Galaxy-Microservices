@@ -32,11 +32,11 @@ import java.lang.reflect.Parameter;
 @Order(20)
 public class AuthorizationAspect {
 
-    private Environment environment;
+    private final Environment environment;
 
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
-    private AccessTokenManager accessTokenManager;
+    private final AccessTokenManager accessTokenManager;
 
     @Autowired
     public AuthorizationAspect(Environment environment, HttpServletRequest request, AccessTokenManager accessTokenManager) {

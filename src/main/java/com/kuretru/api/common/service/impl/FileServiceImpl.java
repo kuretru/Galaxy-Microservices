@@ -29,7 +29,7 @@ public class FileServiceImpl implements FileService {
     private final List<String> blacklist;
     private final List<String> whitelist;
     private final Path rootPath;
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     @Autowired
     public FileServiceImpl(CommonProperties commonProperties) {

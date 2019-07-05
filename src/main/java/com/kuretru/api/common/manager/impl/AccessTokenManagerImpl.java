@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccessTokenManagerImpl extends BaseRedisManagerImpl implements AccessTokenManager {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     @Autowired
     public AccessTokenManagerImpl(StringRedisTemplate redisTemplate, CommonProperties commonProperties) {

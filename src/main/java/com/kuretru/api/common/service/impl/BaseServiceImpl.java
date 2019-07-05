@@ -17,9 +17,9 @@ import java.util.List;
  */
 public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T> implements BaseService<M, D, T> {
 
-    protected M mapper;
-    protected Class<D> doClass;
-    protected Class<T> dtoClass;
+    protected final M mapper;
+    protected final Class<D> doClass;
+    protected final Class<T> dtoClass;
 
     /**
      * 子类中必须调用此构造函数，传递参数
