@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Order(10)
 public class ScheduleAspect {
 
-    private ThreadLocal<Logger> logger = new ThreadLocal<>();
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final ThreadLocal<Logger> logger = new ThreadLocal<>();
+    private final ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     @Around("@annotation(scheduled)")
     public Object around(ProceedingJoinPoint joinPoint, Scheduled scheduled) throws Throwable {

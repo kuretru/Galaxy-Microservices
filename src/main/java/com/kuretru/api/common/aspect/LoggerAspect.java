@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 @Order(10)
 public class LoggerAspect {
 
-    private ThreadLocal<Logger> logger = new ThreadLocal<>();
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final ThreadLocal<Logger> logger = new ThreadLocal<>();
+    private final ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     @Around("pointCut()")
     public ApiResponse around(ProceedingJoinPoint joinPoint) throws Throwable {
