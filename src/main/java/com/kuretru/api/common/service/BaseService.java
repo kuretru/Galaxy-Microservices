@@ -41,6 +41,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      *
      * @param record 新纪录
      * @return 新纪录DTO
+     * @throws ApiException API异常
      */
     T save(T record) throws ApiException;
 
@@ -49,6 +50,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      *
      * @param record 新数据
      * @return 新数据DTO
+     * @throws ApiException API异常
      */
     T update(T record) throws ApiException;
 
@@ -57,6 +59,7 @@ public interface BaseService<M extends BaseMapper<D>, D extends BaseDO, T> {
      *
      * @param id 主键ID
      * @return 受影响的行数
+     * @throws ApiException API异常
      */
     int remove(Long id) throws ApiException;
 

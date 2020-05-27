@@ -18,6 +18,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AccessTokenBO {
 
+    private static final Integer ARGS_COUNT = 2;
+
     private Long id;
 
     private UserRoleEnum role;
@@ -35,7 +37,7 @@ public class AccessTokenBO {
             return null;
         }
         String[] args = idAndRole.split("@");
-        if (args.length != 2) {
+        if (ARGS_COUNT != args.length) {
             return null;
         }
         Long id = Long.valueOf(args[0]);

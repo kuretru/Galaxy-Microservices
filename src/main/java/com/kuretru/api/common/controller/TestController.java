@@ -19,7 +19,7 @@ import java.time.Instant;
  * @author 呉真 Kuretru < kuretru@gmail.com >
  */
 @RestController
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TestController extends BaseController {
 
     private final ApplicationContext applicationContext;
