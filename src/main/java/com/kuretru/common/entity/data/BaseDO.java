@@ -1,4 +1,4 @@
-package com.kuretru.common.entity;
+package com.kuretru.common.entity.data;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
