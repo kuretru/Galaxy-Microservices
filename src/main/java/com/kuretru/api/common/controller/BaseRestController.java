@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 public abstract class BaseRestController<S extends BaseService<T>, T extends BaseDTO> extends BaseCrudController<S, T> {
 
-    protected BaseRestController(S service) {
+    public BaseRestController(S service) {
         super(service);
     }
 

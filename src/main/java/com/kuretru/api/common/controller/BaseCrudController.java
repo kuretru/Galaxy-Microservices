@@ -21,7 +21,7 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
 
     protected final S service;
 
-    protected BaseCrudController(S service) {
+    public BaseCrudController(S service) {
         this.service = service;
     }
 
