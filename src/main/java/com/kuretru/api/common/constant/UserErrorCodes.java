@@ -1,0 +1,34 @@
+package com.kuretru.api.common.constant;
+
+import lombok.Getter;
+
+/**
+ * 用户操作错误响应码枚举
+ *
+ * @author 呉真(kuretru) <kuretru@gmail.com>
+ */
+@Getter
+public enum UserErrorCodes implements ResponseCodes {
+
+    /** A0200-用户密码错误 */
+    WRONG_USER_PASSWORD(10200, "用户密码错误"),
+
+    /** A0300-访问权限异常 */
+    ACCESS_PERMISSION_ERROR(10300, "访问权限异常"),
+    /** A0340-用户签名异常 */
+    WRONG_USER_SIGNATURE(10340, "用户签名异常"),
+
+    /** A0400-用户请求参数错误 */
+    REQUEST_PARAMETER_ERROR(10400, "用户请求参数错误"),
+    /** A0412-订购数量为空 */
+    ORDER_QUANTITY_EMPTY(10412, "订购数量为空");
+
+    private final int code;
+    private final String message;
+
+    UserErrorCodes(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+}
