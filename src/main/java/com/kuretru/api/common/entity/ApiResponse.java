@@ -1,7 +1,7 @@
-package com.kuretru.common.entity;
+package com.kuretru.api.common.entity;
 
-import com.kuretru.common.constant.ResponseCodes;
-import com.kuretru.common.constant.SuccessCodes;
+import com.kuretru.api.common.constant.ResponseCodes;
+import com.kuretru.api.common.constant.SuccessCodes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

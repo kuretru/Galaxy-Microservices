@@ -1,4 +1,4 @@
-package com.kuretru.common.entity.transfer;
+package com.kuretru.api.common.entity.transfer;
 
 import lombok.Data;
 
