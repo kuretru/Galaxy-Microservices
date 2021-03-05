@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * 基控制器，提供一些基本成员及方法
+ *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Getter

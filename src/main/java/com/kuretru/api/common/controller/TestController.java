@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 
 /**
+ * 测试控制器，提供一些测试功能
+ *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @RestController

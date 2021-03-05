@@ -3,7 +3,7 @@ package com.kuretru.api.common.constant;
 import lombok.Getter;
 
 /**
- * 内部服务错误响应码枚举
+ * 错误发生在内部服务的响应码枚举，范围在50000~59999之间
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */

@@ -3,7 +3,7 @@ package com.kuretru.api.common.constant;
 import lombok.Getter;
 
 /**
- * 正常响应码枚举
+ * 业务正常执行的响应码枚举，范围在100~199之间
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
@@ -12,8 +12,14 @@ public enum SuccessCodes implements ResponseCodes {
 
     /** 成功 */
     SUCCESS(100, "成功"),
-    /** 未找到该资源 */
-    NOT_FOUND(110, "未找到该资源");
+    /** 已创建 */
+    CREATED(101, "已创建"),
+    /** 已更新 */
+    UPDATED(102, "已更新"),
+    /** 已删除 */
+    REMOVED(103, "已删除"),
+    /** 资源不存在 */
+    NOT_FOUND(110, "资源不存在");
 
     private final int code;
     private final String message;

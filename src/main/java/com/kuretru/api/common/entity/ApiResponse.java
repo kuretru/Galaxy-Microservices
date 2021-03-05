@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * API统一响应实体
+ *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Data
@@ -23,6 +25,18 @@ public class ApiResponse<D> {
 
     public static <T> ApiResponse<T> success(T data) {
         return build(SuccessCodes.SUCCESS, data);
+    }
+
+    public static <T> ApiResponse<T> created(T data) {
+        return build(SuccessCodes.CREATED, data);
+    }
+
+    public static <T> ApiResponse<T> updated(T data) {
+        return build(SuccessCodes.UPDATED, data);
+    }
+
+    public static <T> ApiResponse<T> removed(T data) {
+        return build(SuccessCodes.REMOVED, data);
     }
 
     public static <T> ApiResponse<T> notFound(T data) {
