@@ -144,7 +144,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         }
         D result = doClass.getConstructor().newInstance();
         BeanUtils.copyProperties(record, result);
-        result.setUuid(record.getId().toString());
+        if (record.getId() != null) {
+            result.setUuid(record.getId().toString());
+        }
         return result;
     }
 
