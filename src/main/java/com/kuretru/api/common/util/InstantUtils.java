@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * String与Instant类型的时间互相转换的工具类
+ * String与Instant类型的时间互相转换的静态工具类
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
