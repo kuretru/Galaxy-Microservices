@@ -36,13 +36,13 @@ public abstract class BaseRestController<S extends BaseService<T>, T extends Bas
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public ApiResponse<T> create(T record) throws ServiceException {
+    public ApiResponse<T> create(@RequestBody T record) throws ServiceException {
         return super.create(record);
     }
 
     @PutMapping("/{id}")
     @Override
-    public ApiResponse<T> update(@PathVariable("id") UUID id, T record) throws ServiceException {
+    public ApiResponse<T> update(@PathVariable("id") UUID id, @RequestBody T record) throws ServiceException {
         return super.update(id, record);
     }
 
