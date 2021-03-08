@@ -1,4 +1,4 @@
-package com.kuretru.api.common.constant;
+package com.kuretru.api.common.constant.code;
 
 import lombok.Getter;
 

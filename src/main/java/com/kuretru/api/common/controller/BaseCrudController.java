@@ -1,6 +1,6 @@
 package com.kuretru.api.common.controller;
 
-import com.kuretru.api.common.constant.UserErrorCodes;
+import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;

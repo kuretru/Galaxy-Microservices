@@ -2,8 +2,8 @@ package com.kuretru.api.common.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.kuretru.api.common.constant.ServiceErrorCodes;
-import com.kuretru.api.common.constant.UserErrorCodes;
+import com.kuretru.api.common.constant.code.ServiceErrorCodes;
+import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.data.BaseDO;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;

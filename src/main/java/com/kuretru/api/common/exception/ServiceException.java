@@ -1,8 +1,8 @@
 package com.kuretru.api.common.exception;
 
-import com.kuretru.api.common.constant.ResponseCodes;
-import com.kuretru.api.common.constant.ServiceErrorCodes;
-import com.kuretru.api.common.constant.UserErrorCodes;
+import com.kuretru.api.common.constant.code.ResponseCodes;
+import com.kuretru.api.common.constant.code.ServiceErrorCodes;
+import com.kuretru.api.common.constant.code.UserErrorCodes;
 import lombok.Getter;
 
 /**

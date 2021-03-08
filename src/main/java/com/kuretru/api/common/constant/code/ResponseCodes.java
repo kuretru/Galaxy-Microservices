@@ -1,4 +1,4 @@
-package com.kuretru.api.common.constant;
+package com.kuretru.api.common.constant.code;
 
 /**
  * 业务响应码枚举接口
