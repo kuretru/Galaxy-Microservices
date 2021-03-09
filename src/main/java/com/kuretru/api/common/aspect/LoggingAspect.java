@@ -39,7 +39,7 @@ public class LoggingAspect {
     @Around("pointcut()")
     public ApiResponse<?> around(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
-        BaseController controller = (BaseController) joinPoint.getTarget();
+        BaseController controller = (BaseController)joinPoint.getTarget();
         HttpServletRequest request = controller.getRequest();
         MDC.clear();
         MDC.put(LoggingConstants.TRACE_ID_KEY, traceIdManager.generateTraceId());
@@ -56,7 +56,7 @@ public class LoggingAspect {
         }
 
         try {
-            return (ApiResponse<?>) joinPoint.proceed();
+            return (ApiResponse<?>)joinPoint.proceed();
         } finally {
             if (log.isInfoEnabled()) {
                 long endTime = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class LoggingAspect {
     @AfterThrowing(value = "pointcut()", throwing = "t")
     public void afterThrowing(Throwable t) {
         if (t instanceof ServiceException) {
-            ResponseCodes code = ((ServiceException) t).getCode();
+            ResponseCodes code = ((ServiceException)t).getCode();
             log.error("{}({},{}): {}", t.getClass().getSimpleName(), code.getCode(), code.getMessage(), t.getMessage());
         } else {
             log.error("{}: {}", t.getClass().getSimpleName(), t.getMessage());
