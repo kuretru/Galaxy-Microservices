@@ -85,7 +85,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         } else if (1 != rows) {
             throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
-        return get(data.getId());
+        return get(record.getId());
     }
 
     @Override

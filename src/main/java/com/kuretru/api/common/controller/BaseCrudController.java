@@ -60,7 +60,7 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
 
     public ApiResponse<String> remove(UUID id) throws ServiceException {
         service.remove(id);
-        return ApiResponse.removed("资源" + id.toString() + "已删除");
+        return ApiResponse.removed("资源已删除");
     }
 
 }
