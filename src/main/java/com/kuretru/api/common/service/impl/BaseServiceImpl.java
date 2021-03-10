@@ -63,7 +63,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public T save(T record) {
+    public T save(T record) throws ServiceException {
         D data = dtoToDo(record);
         data.setUuid(UUID.randomUUID().toString());
         Instant now = Instant.now();

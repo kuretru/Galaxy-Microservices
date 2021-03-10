@@ -18,7 +18,7 @@ public interface BaseService<T extends BaseDTO> {
      * 根据物理主键查询一条记录
      *
      * @param id 物理主键ID
-     * @return 一条记录
+     * @return 一条记录，找不到时返回Null
      */
     T get(Long id);
 
@@ -26,14 +26,14 @@ public interface BaseService<T extends BaseDTO> {
      * 根据业务逻辑主键查询一条记录
      *
      * @param uuid 业务逻辑主键UUID
-     * @return 一条记录
+     * @return 一条记录，找不到时返回Null
      */
     T get(UUID uuid);
 
     /**
      * 查询所有记录
      *
-     * @return 所有记录
+     * @return 所有记录，找不到时返回空List
      */
     List<T> list();
 
@@ -49,8 +49,9 @@ public interface BaseService<T extends BaseDTO> {
      *
      * @param record 新记录
      * @return 保存后的新记录
+     * @throws ServiceException 校验数据失败时会引发异常
      */
-    T save(T record);
+    T save(T record) throws ServiceException;
 
     /**
      * 更新记录，必须传入所有字段
