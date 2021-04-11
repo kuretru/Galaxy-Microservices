@@ -19,7 +19,7 @@ Java后端API开发通用工具
 3.下载本项目至api-common-utils，或使用git submodule的方式引入，若使用此方式，可以先fork此项目至您自己的仓库，方便二次修改
 
 ```bash
-git submodule add git@github.com:kuretru/Aries-Navigation.git "api-common-utils"
+git submodule add git@github.com:kuretru/Api-Common-Utils.git "api-common-utils"
 ```
 
 4.新建aries-navigation-api您自己的项目，并在此项目中引入api-common-utils依赖
@@ -28,7 +28,7 @@ git submodule add git@github.com:kuretru/Aries-Navigation.git "api-common-utils"
 <dependency>
     <groupId>com.kuretru.common</groupId>
     <artifactId>api-common-utils</artifactId>
-    <version>0.0.1</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
