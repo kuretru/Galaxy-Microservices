@@ -1,5 +1,6 @@
 package com.kuretru.api.common.controller;
 
+import com.kuretru.api.common.constant.code.ServiceErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.exception.ServiceException;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,19 @@ public class ExceptionController {
     @ExceptionHandler(ServiceException.InternalServerError.class)
     public ApiResponse<?> internalServerErrorHandler(ServiceException.InternalServerError e) {
         return ApiResponse.build(e.getCode(), e.getMessage());
+    }
+
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<?> exceptionHandler(Exception e) {
+        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Error.class)
+    public ApiResponse<?> errorHandler(Error e) {
+        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, e.getMessage());
     }
 
 }
