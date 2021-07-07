@@ -2,6 +2,8 @@ package com.kuretru.api.common.controller;
 
 import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
+import com.kuretru.api.common.entity.PaginationQuery;
+import com.kuretru.api.common.entity.PaginationResponse;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.service.BaseService;
@@ -25,7 +27,7 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
         this.service = service;
     }
 
-    public ApiResponse<T> get(UUID id) throws ServiceException {
+    protected ApiResponse<T> get(UUID id) throws ServiceException {
         T result = service.get(id);
         if (null == result) {
             // 指定ID查询单个实体但实体不存在时，认为是用户方ID输入错误，因此抛异常
@@ -34,7 +36,7 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
         return ApiResponse.success(result);
     }
 
-    public ApiResponse<List<T>> list() throws ServiceException {
+    protected ApiResponse<List<T>> list() throws ServiceException {
         List<T> result = service.list();
         if (null == result) {
             result = new ArrayList<>();
@@ -46,19 +48,30 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
         return ApiResponse.success(result);
     }
 
+    protected ApiResponse<PaginationResponse<T>> listByPage(PaginationQuery paginationQuery) throws ServiceException {
+        PaginationResponse<T> result = service.list(paginationQuery);
+        if (null == result.getList()) {
+            result.setList(new ArrayList<>());
+        }
+        if (result.getList().isEmpty()) {
+            return ApiResponse.notFound(result);
+        }
+        return ApiResponse.success(result);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<T> create(T record) throws ServiceException {
+    protected ApiResponse<T> create(T record) throws ServiceException {
         T result = service.save(record);
         return ApiResponse.created(result);
     }
 
-    public ApiResponse<T> update(UUID id, T record) throws ServiceException {
+    protected ApiResponse<T> update(UUID id, T record) throws ServiceException {
         record.setId(id);
         T result = service.update(record);
         return ApiResponse.updated(result);
     }
 
-    public ApiResponse<String> remove(UUID id) throws ServiceException {
+    protected ApiResponse<String> remove(UUID id) throws ServiceException {
         service.remove(id);
         return ApiResponse.removed("资源已删除");
     }

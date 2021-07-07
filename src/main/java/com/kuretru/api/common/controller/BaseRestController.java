@@ -1,6 +1,7 @@
 package com.kuretru.api.common.controller;
 
 import com.kuretru.api.common.entity.ApiResponse;
+import com.kuretru.api.common.entity.PaginationQuery;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.service.BaseService;
@@ -28,8 +29,10 @@ public abstract class BaseRestController<S extends BaseService<T>, T extends Bas
     }
 
     @GetMapping
-    @Override
-    public ApiResponse<List<T>> list() throws ServiceException {
+    public ApiResponse<?> list(PaginationQuery paginationQuery) throws ServiceException {
+        if (paginationQuery != null && paginationQuery.getCurrent() != null && paginationQuery.getPageSize() != null) {
+            return super.listByPage(paginationQuery);
+        }
         return super.list();
     }
 
