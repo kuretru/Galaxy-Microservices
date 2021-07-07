@@ -2,8 +2,11 @@ package com.kuretru.api.common.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuretru.api.common.constant.code.ServiceErrorCodes;
 import com.kuretru.api.common.constant.code.UserErrorCodes;
+import com.kuretru.api.common.entity.PaginationQuery;
+import com.kuretru.api.common.entity.PaginationResponse;
 import com.kuretru.api.common.entity.data.BaseDO;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
@@ -48,12 +51,30 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return doToDto(record);
     }
 
+    protected List<T> list(QueryWrapper<D> queryWrapper) {
+        List<D> records = mapper.selectList(queryWrapper);
+        return doToDto(records);
+    }
+
     @Override
     public List<T> list() {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("id");
-        List<D> records = mapper.selectList(queryWrapper);
-        return doToDto(records);
+        return list(queryWrapper);
+    }
+
+    protected PaginationResponse<T> list(PaginationQuery pagination, QueryWrapper<D> queryWrapper) {
+        Page<D> page = new Page<>(pagination.getCurrent(), pagination.getPageSize());
+        page = mapper.selectPage(page, queryWrapper);
+        List<T> records = doToDto(page.getRecords());
+        return new PaginationResponse<>(records, page.getCurrent(), page.getSize(), page.getTotal());
+    }
+
+    @Override
+    public PaginationResponse<T> list(PaginationQuery pagination) {
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("id");
+        return list(pagination, queryWrapper);
     }
 
     @Override

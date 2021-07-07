@@ -30,8 +30,7 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     public List<T> list() {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("sequence");
-        List<D> records = mapper.selectList(queryWrapper);
-        return doToDto(records);
+        return super.list(queryWrapper);
     }
 
     @Override
@@ -43,7 +42,7 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
         data.setUpdateTime(now);
         data.setSequence(getMaxSequence() + 1);
         mapper.insert(data);
-        return get(data.getId());
+        return super.get(data.getId());
     }
 
 }

@@ -1,5 +1,7 @@
 package com.kuretru.api.common.service;
 
+import com.kuretru.api.common.entity.PaginationQuery;
+import com.kuretru.api.common.entity.PaginationResponse;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
 
@@ -36,6 +38,14 @@ public interface BaseService<T extends BaseDTO> {
      * @return 所有记录，找不到时返回空List
      */
     List<T> list();
+
+    /**
+     * 分页查询所有记录
+     *
+     * @param pagination 分页参数
+     * @return 分页记录
+     */
+    PaginationResponse<T> list(PaginationQuery pagination);
 
     /**
      * 查询记录条数
