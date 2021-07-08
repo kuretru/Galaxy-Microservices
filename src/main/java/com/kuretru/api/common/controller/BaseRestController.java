@@ -8,7 +8,6 @@ import com.kuretru.api.common.service.BaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -16,7 +15,7 @@ import java.util.UUID;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseRestController<S extends BaseService<T>, T extends BaseDTO> extends BaseCrudController<S, T> {
+public abstract class BaseRestController<S extends BaseService<T, Q>, T extends BaseDTO, Q> extends BaseCrudController<S, T, Q> {
 
     public BaseRestController(S service) {
         super(service);
@@ -29,11 +28,11 @@ public abstract class BaseRestController<S extends BaseService<T>, T extends Bas
     }
 
     @GetMapping
-    public ApiResponse<?> list(PaginationQuery paginationQuery) throws ServiceException {
+    public ApiResponse<?> list(PaginationQuery paginationQuery, Q query) throws ServiceException {
         if (paginationQuery != null && paginationQuery.getCurrent() != null && paginationQuery.getPageSize() != null) {
-            return super.listByPage(paginationQuery);
+            return super.listByPage(paginationQuery, query);
         }
-        return super.list();
+        return super.list(query);
     }
 
     @PostMapping

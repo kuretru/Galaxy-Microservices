@@ -10,11 +10,11 @@ import java.util.UUID;
 
 /**
  * 业务逻辑层基类接口
- * 泛型：D->实体对应的数据对象，T->实体对应的数据传输对象，M->实体对应的数据访问层
+ * 泛型：T->实体对应的数据传输对象，Q->实体对应的查询对象
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface BaseService<T extends BaseDTO> {
+public interface BaseService<T extends BaseDTO, Q> {
 
     /**
      * 根据物理主键查询一条记录
@@ -40,12 +40,29 @@ public interface BaseService<T extends BaseDTO> {
     List<T> list();
 
     /**
+     * 根据查询条件，查询所有记录
+     *
+     * @param query 查询条件
+     * @return 所有记录，找不到时返回空List
+     */
+    List<T> list(Q query);
+
+    /**
      * 分页查询所有记录
      *
-     * @param pagination 分页参数
-     * @return 分页记录
+     * @param paginationQuery 分页参数
+     * @return 分页后的所有记录
      */
-    PaginationResponse<T> list(PaginationQuery pagination);
+    PaginationResponse<T> list(PaginationQuery paginationQuery);
+
+    /**
+     * 根据查询条件，分页查询所有记录
+     *
+     * @param pagination 分页参数
+     * @param query      查询条件
+     * @return 符合查询条件，分页后的所有记录
+     */
+    PaginationResponse<T> list(PaginationQuery pagination, Q query);
 
     /**
      * 查询记录条数

@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseCrudController<S extends BaseService<T>, T extends BaseDTO> extends BaseController {
+public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends BaseDTO, Q> extends BaseController {
 
     protected final S service;
 
@@ -36,8 +36,8 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
         return ApiResponse.success(result);
     }
 
-    protected ApiResponse<List<T>> list() throws ServiceException {
-        List<T> result = service.list();
+    protected ApiResponse<List<T>> list(Q query) throws ServiceException {
+        List<T> result = service.list(query);
         if (null == result) {
             result = new ArrayList<>();
         }
@@ -48,8 +48,8 @@ public abstract class BaseCrudController<S extends BaseService<T>, T extends Bas
         return ApiResponse.success(result);
     }
 
-    protected ApiResponse<PaginationResponse<T>> listByPage(PaginationQuery paginationQuery) throws ServiceException {
-        PaginationResponse<T> result = service.list(paginationQuery);
+    protected ApiResponse<PaginationResponse<T>> listByPage(PaginationQuery paginationQuery, Q query) throws ServiceException {
+        PaginationResponse<T> result = service.list(paginationQuery, query);
         if (null == result.getList()) {
             result.setList(new ArrayList<>());
         }

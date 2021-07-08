@@ -13,19 +13,29 @@ import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.service.BaseService;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 业务逻辑层基类，继承此类即可获得一些基础方法
- * 泛型：M->实体对应的数据访问层，D->实体对应的数据对象，T->实体对应的数据传输对象
+ * 泛型：M->实体对应的数据访问层，D->实体对应的数据对象，T->实体对应的数据传输对象，Q->实体对应的查询对象
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO> implements BaseService<T> {
+public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q> implements BaseService<T, Q> {
 
     protected final M mapper;
     protected final Class<D> doClass;
@@ -59,7 +69,14 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public List<T> list() {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc("id");
+        addDefaultOrderBy(queryWrapper);
+        return list(queryWrapper);
+    }
+
+    @Override
+    public List<T> list(Q query) {
+        QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
+        addDefaultOrderBy(queryWrapper);
         return list(queryWrapper);
     }
 
@@ -71,9 +88,16 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public PaginationResponse<T> list(PaginationQuery pagination) {
+    public PaginationResponse<T> list(PaginationQuery paginationQuery) {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc("id");
+        addDefaultOrderBy(queryWrapper);
+        return list(paginationQuery, queryWrapper);
+    }
+
+    @Override
+    public PaginationResponse<T> list(PaginationQuery pagination, Q query) {
+        QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
+        addDefaultOrderBy(queryWrapper);
         return list(pagination, queryWrapper);
     }
 
@@ -183,6 +207,40 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
             result.add(dtoToDo(record));
         }
         return result;
+    }
+
+    /** 根据查询实体构建QueryWrapper */
+    protected QueryWrapper<D> buildQueryWrapper(Q query) {
+        ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
+        Class<?> queryClass = (Class<?>)baseType.getActualTypeArguments()[3];
+
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        try {
+            BeanInfo beanInfo = Introspector.getBeanInfo(queryClass);
+            List<PropertyDescriptor> descriptors = Arrays.stream(beanInfo.getPropertyDescriptors()).filter(p -> {
+                String name = p.getName();
+                return !"class".equals(name);
+            }).collect(Collectors.toList());
+
+            for (PropertyDescriptor descriptor : descriptors) {
+                Method readMethod = descriptor.getReadMethod();
+                Object value = readMethod.invoke(query);
+                if (value == null) {
+                    continue;
+                }
+
+                if (value instanceof String && StringUtils.hasText((String)value)) {
+                    queryWrapper.like(descriptor.getName(), value);
+                }
+            }
+        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return queryWrapper;
+    }
+
+    protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
+        queryWrapper.orderByAsc("id");
     }
 
 }

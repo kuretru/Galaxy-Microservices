@@ -8,13 +8,12 @@ import com.kuretru.api.common.mapper.BaseSequenceMapper;
 import com.kuretru.api.common.service.BaseSequenceService;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO> extends BaseServiceImpl<M, D, T> implements BaseSequenceService<T> {
+public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO, Q> extends BaseServiceImpl<M, D, T, Q> implements BaseSequenceService<T, Q> {
 
     protected BaseSequenceServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
         super(mapper, doClass, dtoClass);
@@ -27,13 +26,6 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     }
 
     @Override
-    public List<T> list() {
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc("sequence");
-        return super.list(queryWrapper);
-    }
-
-    @Override
     public T save(T record) throws ServiceException {
         D data = dtoToDo(record);
         data.setUuid(UUID.randomUUID().toString());
@@ -43,6 +35,11 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
         data.setSequence(getMaxSequence() + 1);
         mapper.insert(data);
         return super.get(data.getId());
+    }
+
+    @Override
+    protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
+        queryWrapper.orderByAsc("sequence");
     }
 
 }

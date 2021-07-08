@@ -20,4 +20,13 @@ public class PaginationQuery {
     /** 每页条数 */
     private Long pageSize;
 
+    /**
+     * 为了兼容下划线格式(page_size)传递的pageSize参数
+     *
+     * @param page_size 每页条数
+     */
+    public void setPage_size(Long page_size) {
+        this.pageSize = page_size;
+    }
+
 }
