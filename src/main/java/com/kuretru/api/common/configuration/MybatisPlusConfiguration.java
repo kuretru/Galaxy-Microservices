@@ -22,4 +22,9 @@ public class MybatisPlusConfiguration {
         return interceptor;
     }
 
+    @Bean
+    public MyBatisPlusSqlInjector myBatisPlusSqlInjector() {
+        return new MyBatisPlusSqlInjector();
+    }
+
 }
