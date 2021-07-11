@@ -1,5 +1,7 @@
 package com.kuretru.api.common.controller;
 
+import com.kuretru.api.common.constant.UuidConstants;
+import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.entity.PaginationQuery;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
@@ -24,6 +26,9 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @GetMapping("/{id}")
     @Override
     public ApiResponse<T> get(@PathVariable("id") UUID id) throws ServiceException {
+        if (id == null || UuidConstants.EMPTY.equals(id)) {
+            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
+        }
         return super.get(id);
     }
 
@@ -39,18 +44,30 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @ResponseStatus(HttpStatus.CREATED)
     @Override
     public ApiResponse<T> create(@RequestBody T record) throws ServiceException {
+        if (record == null) {
+            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定记录");
+        }
         return super.create(record);
     }
 
     @PutMapping("/{id}")
     @Override
     public ApiResponse<T> update(@PathVariable("id") UUID id, @RequestBody T record) throws ServiceException {
+        if (id == null || UuidConstants.EMPTY.equals(id)) {
+            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
+        }
+        if (record == null) {
+            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定记录");
+        }
         return super.update(id, record);
     }
 
     @DeleteMapping("/{id}")
     @Override
     public ApiResponse<String> remove(@PathVariable("id") UUID id) throws ServiceException {
+        if (id == null || UuidConstants.EMPTY.equals(id)) {
+            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
+        }
         return super.remove(id);
     }
 

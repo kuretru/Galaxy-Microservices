@@ -61,23 +61,30 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return doToDto(record);
     }
 
-    protected List<T> list(QueryWrapper<D> queryWrapper) {
-        List<D> records = mapper.selectList(queryWrapper);
-        return doToDto(records);
+    protected List<D> list(QueryWrapper<D> queryWrapper) {
+        return mapper.selectList(queryWrapper);
+    }
+
+    protected List<D> list(List<UUID> uuidList) {
+        List<String> ids = uuidList.stream().map(UUID::toString).collect(Collectors.toList());
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("uuid", ids);
+        addDefaultOrderBy(queryWrapper);
+        return mapper.selectList(queryWrapper);
     }
 
     @Override
     public List<T> list() {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         addDefaultOrderBy(queryWrapper);
-        return list(queryWrapper);
+        return doToDto(list(queryWrapper));
     }
 
     @Override
     public List<T> list(Q query) {
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
-        return list(queryWrapper);
+        return doToDto(list(queryWrapper));
     }
 
     protected PaginationResponse<T> list(PaginationQuery pagination, QueryWrapper<D> queryWrapper) {
@@ -151,12 +158,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      * @param record 数据实体
      * @return 数据传输实体
      */
-    @SneakyThrows
     protected T doToDto(D record) {
         if (record == null) {
             return null;
         }
-        T result = dtoClass.getConstructor().newInstance();
+        T result = buildDTOInstance();
         BeanUtils.copyProperties(record, result);
         result.setId(UUID.fromString(record.getUuid()));
         return result;
@@ -169,6 +175,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      * @return 数据传输实体列表
      */
     protected List<T> doToDto(List<D> records) {
+        if (records == null) {
+            return null;
+        }
         List<T> result = new ArrayList<>(records.size());
         for (D record : records) {
             result.add(doToDto(record));
@@ -182,12 +191,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      * @param record 数据传输实体
      * @return 数据实体
      */
-    @SneakyThrows()
     protected D dtoToDo(T record) {
         if (record == null) {
             return null;
         }
-        D result = doClass.getConstructor().newInstance();
+        D result = buildDOInstance();
         BeanUtils.copyProperties(record, result);
         if (record.getId() != null) {
             result.setUuid(record.getId().toString());
@@ -202,11 +210,34 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      * @return 数据实体列表
      */
     protected List<D> dtoToDo(List<T> records) {
+        if (records == null) {
+            return null;
+        }
         List<D> result = new ArrayList<>(records.size());
         for (T record : records) {
             result.add(dtoToDo(record));
         }
         return result;
+    }
+
+    /**
+     * 构建DO的新实例
+     *
+     * @return DO的新实例
+     */
+    @SneakyThrows
+    protected D buildDOInstance() {
+        return doClass.getConstructor().newInstance();
+    }
+
+    /**
+     * 构建DTO的新实例
+     *
+     * @return DTO的新实例
+     */
+    @SneakyThrows
+    protected T buildDTOInstance() {
+        return dtoClass.getConstructor().newInstance();
     }
 
     /** 根据查询实体构建QueryWrapper */

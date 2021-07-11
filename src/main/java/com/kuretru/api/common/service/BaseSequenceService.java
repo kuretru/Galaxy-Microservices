@@ -1,6 +1,10 @@
 package com.kuretru.api.common.service;
 
 import com.kuretru.api.common.entity.transfer.BaseDTO;
+import com.kuretru.api.common.exception.ServiceException;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
@@ -13,5 +17,13 @@ public interface BaseSequenceService<T extends BaseDTO, Q> extends BaseService<T
      * @return 最大的排序号
      */
     int getMaxSequence();
+
+    /**
+     * 根据UUID列表重新排序sequence字段
+     *
+     * @param uuidList UUID列表
+     * @throws ServiceException 找不到记录时，会引发NotFound异常
+     */
+    void reorder(List<UUID> uuidList) throws ServiceException;
 
 }
