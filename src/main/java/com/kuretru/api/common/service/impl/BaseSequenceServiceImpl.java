@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO, Q> extends BaseServiceImpl<M, D, T, Q> implements BaseSequenceService<T, Q> {
 
-    protected BaseSequenceServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
+    public BaseSequenceServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
         super(mapper, doClass, dtoClass);
     }
 

@@ -41,7 +41,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     protected final Class<D> doClass;
     protected final Class<T> dtoClass;
 
-    protected BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
+    public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
         this.mapper = mapper;
         this.doClass = doClass;
         this.dtoClass = dtoClass;
