@@ -2,12 +2,15 @@ package com.kuretru.api.common.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
+import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kuretru.api.common.constant.code.ServiceErrorCodes;
 import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.PaginationQuery;
 import com.kuretru.api.common.entity.PaginationResponse;
 import com.kuretru.api.common.entity.data.BaseDO;
+import com.kuretru.api.common.entity.enums.BaseEnum;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.service.BaseService;
@@ -23,10 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -269,8 +270,22 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                     continue;
                 }
 
+                // 用MyBatis自带的缓存，将驼峰映射为下划线列名
+                Map<String, ColumnCache> columns = LambdaUtils.getColumnMap(doClass);
+                String columnName = columns.get(descriptor.getName().toUpperCase()).getColumn();
+
                 if (value instanceof String && StringUtils.hasText((String)value)) {
-                    queryWrapper.like(descriptor.getName(), value);
+                    // String类型：like '%xxx%'
+                    queryWrapper.like(columnName, value);
+                } else if (value instanceof UUID) {
+                    // UUID类型：= UUID
+                    queryWrapper.eq(columnName, value.toString());
+                } else if (value instanceof BaseEnum) {
+                    // 枚举类型：= 枚举编号
+                    queryWrapper.eq(columnName, ((BaseEnum)value).getCode());
+                } else if (value instanceof LocalDate) {
+                    // 日期类型：= 日期
+                    queryWrapper.eq(columnName, value);
                 }
             }
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
