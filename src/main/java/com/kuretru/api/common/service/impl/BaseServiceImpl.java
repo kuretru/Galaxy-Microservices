@@ -41,11 +41,21 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     protected final M mapper;
     protected final Class<D> doClass;
     protected final Class<T> dtoClass;
+    protected final Class<?> queryClass;
 
     public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
         this.mapper = mapper;
         this.doClass = doClass;
         this.dtoClass = dtoClass;
+        ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
+        queryClass = (Class<?>)baseType.getActualTypeArguments()[3];
+    }
+
+    public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass, Class<?> queryClass) {
+        this.mapper = mapper;
+        this.doClass = doClass;
+        this.dtoClass = dtoClass;
+        this.queryClass = queryClass;
     }
 
     @Override
@@ -252,9 +262,6 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     /** 根据查询实体构建QueryWrapper */
     protected QueryWrapper<D> buildQueryWrapper(Q query) {
-        ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
-        Class<?> queryClass = (Class<?>)baseType.getActualTypeArguments()[3];
-
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(queryClass);
