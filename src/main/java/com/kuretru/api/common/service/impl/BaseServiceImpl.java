@@ -114,13 +114,22 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return null == result ? 0 : result;
     }
 
-    @Override
-    public T save(T record) throws ServiceException {
-        D data = dtoToDo(record);
-        data.setUuid(UUID.randomUUID().toString());
+    protected void addCreateTime(D record, UUID uuid) {
+        record.setUuid(uuid.toString());
         Instant now = Instant.now();
-        data.setCreateTime(now);
-        data.setUpdateTime(now);
+        record.setCreateTime(now);
+        record.setUpdateTime(now);
+    }
+
+    @Override
+    public synchronized T save(T record) throws ServiceException {
+        UUID uuid = UUID.randomUUID();
+        if (get(uuid) != null) {
+            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
+        }
+
+        D data = dtoToDo(record);
+        addCreateTime(data, uuid);
         mapper.insert(data);
         return get(data.getId());
     }

@@ -9,7 +9,6 @@ import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.mapper.BaseSequenceMapper;
 import com.kuretru.api.common.service.BaseSequenceService;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,12 +66,14 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     }
 
     @Override
-    public T save(T record) throws ServiceException {
+    public synchronized T save(T record) throws ServiceException {
+        UUID uuid = UUID.randomUUID();
+        if (get(uuid) != null) {
+            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
+        }
+
         D data = dtoToDo(record);
-        data.setUuid(UUID.randomUUID().toString());
-        Instant now = Instant.now();
-        data.setCreateTime(now);
-        data.setUpdateTime(now);
+        addCreateTime(data, uuid);
         data.setSequence(getMaxSequence() + 1);
         mapper.insert(data);
         return super.get(data.getId());
