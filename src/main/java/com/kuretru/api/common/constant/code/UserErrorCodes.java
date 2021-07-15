@@ -20,6 +20,8 @@ public enum UserErrorCodes implements ResponseCodes {
 
     /** A0400-用户请求参数错误 */
     REQUEST_PARAMETER_ERROR(10400, "用户请求参数错误"),
+    /** A0410-请求必填参数为空 */
+    MISSING_REQUIRED_PARAMETERS(10410, "请求必填参数为空"),
     /** A0412-订购数量为空 */
     ORDER_QUANTITY_EMPTY(10412, "订购数量为空"),
 

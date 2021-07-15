@@ -72,8 +72,8 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return doToDto(record);
     }
 
-    protected List<D> list(QueryWrapper<D> queryWrapper) {
-        return mapper.selectList(queryWrapper);
+    protected List<T> list(QueryWrapper<D> queryWrapper) {
+        return doToDto(mapper.selectList(queryWrapper));
     }
 
     protected List<D> list(List<UUID> uuidList) {
@@ -88,14 +88,14 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     public List<T> list() {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         addDefaultOrderBy(queryWrapper);
-        return doToDto(list(queryWrapper));
+        return list(queryWrapper);
     }
 
     @Override
     public List<T> list(Q query) {
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
-        return doToDto(list(queryWrapper));
+        return list(queryWrapper);
     }
 
     protected PaginationResponse<T> list(PaginationQuery pagination, QueryWrapper<D> queryWrapper) {
