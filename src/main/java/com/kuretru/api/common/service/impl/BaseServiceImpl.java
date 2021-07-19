@@ -272,6 +272,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
             for (PropertyDescriptor descriptor : descriptors) {
                 Method readMethod = descriptor.getReadMethod();
+                if (readMethod == null) {
+                    continue;
+                }
                 Object value = readMethod.invoke(query);
                 if (value == null) {
                     continue;
