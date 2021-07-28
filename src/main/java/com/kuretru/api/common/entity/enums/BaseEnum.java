@@ -3,7 +3,7 @@ package com.kuretru.api.common.entity.enums;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface BaseEnum {
+public interface BaseEnum<T> extends Comparable<T> {
 
     /**
      * 获取枚举编号
