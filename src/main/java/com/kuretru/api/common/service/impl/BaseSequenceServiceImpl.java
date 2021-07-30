@@ -2,7 +2,6 @@ package com.kuretru.api.common.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuretru.api.common.constant.code.ServiceErrorCodes;
-import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.data.BaseSequenceDO;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
@@ -35,14 +34,8 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
             return;
         }
 
-        List<D> records = list(uuidList);
+        List<D> records = verifyUuidList(uuidList);
         int length = uuidList.size();
-        if (records.size() > length) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
-        } else if (records.size() < length) {
-            //TODO 返回所有不存在的列表
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
-        }
 
         // 将所有记录的Sequence排序
         List<Integer> sequences = new ArrayList<>(length);

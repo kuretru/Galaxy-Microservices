@@ -145,6 +145,17 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return get(data.getId());
     }
 
+    protected List<D> verifyUuidList(List<UUID> uuidList) throws ServiceException {
+        List<D> records = list(uuidList);
+        if (records.size() > uuidList.size()) {
+            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
+        } else if (records.size() < uuidList.size()) {
+            //TODO 返回所有不存在的列表
+            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
+        }
+        return records;
+    }
+
     @Override
     public T update(T record) throws ServiceException {
         D data = dtoToDo(record);
@@ -292,7 +303,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                     queryWrapper.eq(columnName, value.toString());
                 } else if (value instanceof BaseEnum) {
                     // 枚举类型：= 枚举编号
-                    queryWrapper.eq(columnName, ((BaseEnum)value).getCode());
+                    queryWrapper.eq(columnName, ((BaseEnum<?>)value).getCode());
                 } else if (value instanceof LocalDate) {
                     // 日期类型：= 日期
                     queryWrapper.eq(columnName, value);
