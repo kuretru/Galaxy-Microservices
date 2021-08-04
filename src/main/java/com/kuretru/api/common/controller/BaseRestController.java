@@ -1,6 +1,6 @@
 package com.kuretru.api.common.controller;
 
-import com.kuretru.api.common.constant.UuidConstants;
+import com.kuretru.api.common.constant.EmptyConstants;
 import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.entity.PaginationQuery;
@@ -26,7 +26,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @GetMapping("/{id}")
     @Override
     public ApiResponse<T> get(@PathVariable("id") UUID id) throws ServiceException {
-        if (id == null || UuidConstants.EMPTY.equals(id)) {
+        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }
         return super.get(id);
@@ -53,7 +53,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @PutMapping("/{id}")
     @Override
     public ApiResponse<T> update(@PathVariable("id") UUID id, @RequestBody T record) throws ServiceException {
-        if (id == null || UuidConstants.EMPTY.equals(id)) {
+        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }
         if (record == null) {
@@ -65,7 +65,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @DeleteMapping("/{id}")
     @Override
     public ApiResponse<String> remove(@PathVariable("id") UUID id) throws ServiceException {
-        if (id == null || UuidConstants.EMPTY.equals(id)) {
+        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }
         return super.remove(id);

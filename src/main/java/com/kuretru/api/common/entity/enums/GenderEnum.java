@@ -1,11 +1,14 @@
 package com.kuretru.api.common.entity.enums;
 
+import lombok.Getter;
+
 /**
  * 性别枚举
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public enum GenderEnum {
+@Getter
+public enum GenderEnum implements BaseEnum<GenderEnum> {
 
     /** 未知 */
     UNKNOWN((short)0, "未知"),
