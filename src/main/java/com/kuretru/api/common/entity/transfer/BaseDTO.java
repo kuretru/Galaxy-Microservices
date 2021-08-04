@@ -1,5 +1,6 @@
 package com.kuretru.api.common.entity.transfer;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 public abstract class BaseDTO {
 
-    /** 业务逻辑主键 */
+    @Schema(description = "实体ID")
     private UUID id;
 
 }
