@@ -2,6 +2,7 @@ package com.kuretru.api.common.entity;
 
 import com.kuretru.api.common.constant.code.ResponseCodes;
 import com.kuretru.api.common.constant.code.SuccessCodes;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "API统一响应实体")
 public class ApiResponse<D> {
 
     /** 业务响应码 */
+    @Schema(description = "业务响应码")
     private Integer code;
     /** 业务信息 */
+    @Schema(description = "业务信息")
     private String message;
     /** 业务数据 */
+    @Schema(description = "业务数据")
     private D data;
 
     public static <T> ApiResponse<T> success(T data) {

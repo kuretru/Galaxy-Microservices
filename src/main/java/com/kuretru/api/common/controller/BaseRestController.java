@@ -10,6 +10,7 @@ import com.kuretru.api.common.service.BaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -52,7 +53,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @Operation(summary = "创建新记录")
     @Parameter(name = "record", description = "记录内容", required = true)
     @Override
-    public ApiResponse<T> create(@RequestBody T record) throws ServiceException {
+    public ApiResponse<T> create(@Validated @RequestBody T record) throws ServiceException {
         if (record == null) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定记录");
         }
@@ -64,7 +65,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @Parameter(name = "id", description = "记录ID")
     @Parameter(name = "record", description = "记录内容", required = true)
     @Override
-    public ApiResponse<T> update(@PathVariable("id") UUID id, @RequestBody T record) throws ServiceException {
+    public ApiResponse<T> update(@PathVariable("id") UUID id, @Validated @RequestBody T record) throws ServiceException {
         if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }

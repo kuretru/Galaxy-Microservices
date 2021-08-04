@@ -5,6 +5,8 @@ import com.kuretru.api.common.entity.ApiResponse;
 import com.kuretru.api.common.entity.transfer.BaseDTO;
 import com.kuretru.api.common.exception.ServiceException;
 import com.kuretru.api.common.service.BaseSequenceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -21,6 +23,8 @@ public class BaseSequenceRestController<S extends BaseSequenceService<T, Q>, T e
     }
 
     @PutMapping("/reorder")
+    @Operation(summary = "重新排序记录")
+    @Parameter(name = "uuidList", description = "新顺序的记录ID列表")
     public ApiResponse<String> reorder(@RequestBody List<UUID> uuidList) throws ServiceException {
         if (uuidList == null || uuidList.isEmpty()) {
             throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID列表");

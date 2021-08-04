@@ -1,5 +1,6 @@
 package com.kuretru.api.common.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,12 +13,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "分页查询查询条件")
 public class PaginationQuery {
 
     /** 当前页数 */
+    @Schema(description = "当前页码")
     private Long current;
 
     /** 每页条数 */
+    @Schema(description = "每页记录条数")
     private Long pageSize;
 
     /**
