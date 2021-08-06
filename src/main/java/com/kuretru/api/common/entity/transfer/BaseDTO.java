@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 public abstract class BaseDTO {
 
-    @Schema(description = "实体ID")
+    @Schema(description = "记录ID")
     private UUID id;
 
 }
