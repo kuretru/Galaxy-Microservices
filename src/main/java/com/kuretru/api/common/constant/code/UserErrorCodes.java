@@ -10,8 +10,16 @@ import lombok.Getter;
 @Getter
 public enum UserErrorCodes implements ResponseCodes {
 
-    /** A0200-用户密码错误 */
-    WRONG_USER_PASSWORD(10200, "用户密码错误"),
+    /** A0200-用户登录异常 */
+    USER_LOGIN_ERROR(10200, "用户登录异常"),
+    /** A0201-用户账户不存在 */
+    WRONG_USERNAME(10201, "用户账户不存在"),
+    /** A0202-用户账户被冻结 */
+    USER_FROZEN(10202, "用户账户被冻结"),
+    /** A0210-用户密码错误 */
+    WRONG_PASSWORD(10210, "用户密码错误"),
+    /** A0230-用户登录已过期 */
+    USER_LOGIN_EXPIRED(10230, "用户登录已过期"),
 
     /** A0300-访问权限异常 */
     ACCESS_PERMISSION_ERROR(10300, "访问权限异常"),
