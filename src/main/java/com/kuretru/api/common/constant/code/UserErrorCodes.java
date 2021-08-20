@@ -16,8 +16,12 @@ public enum UserErrorCodes implements ResponseCodes {
     WRONG_USERNAME(10201, "用户账户不存在"),
     /** A0202-用户账户被冻结 */
     USER_FROZEN(10202, "用户账户被冻结"),
+    /** A0203-用户账户已作废 */
+    USER_VOIDED(10203, "用户账户已作废"),
     /** A0210-用户密码错误 */
     WRONG_PASSWORD(10210, "用户密码错误"),
+    /** A0211-用户输入密码错误次数超限 */
+    MAX_TRY_LIMIT(10211, "用户输入密码错误次数超限"),
     /** A0230-用户登录已过期 */
     USER_LOGIN_EXPIRED(10230, "用户登录已过期"),
 

@@ -27,7 +27,7 @@ public class ExceptionController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<?> x(MethodArgumentNotValidException e) {
+    public ApiResponse<?> methodArgumentNotValidHandler(MethodArgumentNotValidException e) {
         StringBuilder stringBuilder = new StringBuilder();
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         for (int i = 0; i < fieldErrors.size(); i++) {
@@ -75,14 +75,20 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> exceptionHandler(Exception e) {
         log.error("{}: {}", e.getClass().getSimpleName(), e.getMessage());
-        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, e.getMessage());
+        e.printStackTrace();
+        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, buildExceptionMessage(e));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Error.class)
     public ApiResponse<?> errorHandler(Error e) {
         log.error("{}: {}", e.getClass().getSimpleName(), e.getMessage());
-        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, e.getMessage());
+        e.printStackTrace();
+        return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, buildExceptionMessage(e));
+    }
+
+    private String buildExceptionMessage(Throwable e) {
+        return e.getClass().getSimpleName() + ": " + e.getMessage();
     }
 
 }
