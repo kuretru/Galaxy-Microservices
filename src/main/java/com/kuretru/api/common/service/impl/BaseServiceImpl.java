@@ -121,8 +121,8 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public int count() {
-        Integer result = mapper.selectCount(null);
-        return null == result ? 0 : result;
+        Long result = mapper.selectCount(null);
+        return null == result ? 0 : Math.toIntExact(result);
     }
 
     protected void addCreateTime(D record, UUID uuid) {
