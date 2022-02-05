@@ -24,7 +24,7 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
 
     @Override
     public int getMaxSequence() {
-        Integer result = mapper.getMaxSequence();
+        Integer result = mapper.getMaxSequence(null);
         return null == result ? 0 : result;
     }
 

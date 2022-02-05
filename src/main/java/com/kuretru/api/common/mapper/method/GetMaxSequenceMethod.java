@@ -10,12 +10,18 @@ import org.apache.ibatis.mapping.SqlSource;
  */
 public class GetMaxSequenceMethod extends AbstractMethod {
 
+    public GetMaxSequenceMethod(String name) {
+        super(name);
+    }
+
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        String sql = "select max(sequence) from " + tableInfo.getTableName();
-        String method = "getMaxSequence";
+        String sqlTemplate = "select max(sequence) from ";
+        String tableName = tableInfo.getTableName();
+        String where = super.sqlWhereEntityWrapper(true, tableInfo);
+        String sql = String.format(sqlTemplate, tableName, where);
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
-        return this.addSelectMappedStatementForOther(mapperClass, method, sqlSource, Integer.class);
+        return this.addSelectMappedStatementForOther(mapperClass, this.methodName, sqlSource, Integer.class);
     }
 
 }

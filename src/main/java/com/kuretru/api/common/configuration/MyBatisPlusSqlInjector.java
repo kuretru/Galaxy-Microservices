@@ -17,7 +17,7 @@ public class MyBatisPlusSqlInjector extends DefaultSqlInjector {
     public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
         List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
         if (BaseSequenceMapper.class.isAssignableFrom(mapperClass)) {
-            methodList.add(new GetMaxSequenceMethod());
+            methodList.add(new GetMaxSequenceMethod("getMaxSequence"));
         }
         return methodList;
     }
