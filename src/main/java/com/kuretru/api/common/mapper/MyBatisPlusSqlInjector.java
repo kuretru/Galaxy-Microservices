@@ -1,10 +1,10 @@
-package com.kuretru.api.common.configuration;
+package com.kuretru.api.common.mapper;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
-import com.kuretru.api.common.mapper.BaseSequenceMapper;
 import com.kuretru.api.common.mapper.method.GetMaxSequenceMethod;
+import com.kuretru.api.common.mapper.method.UpdateSequenceByUuidsMethod;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ public class MyBatisPlusSqlInjector extends DefaultSqlInjector {
         List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
         if (BaseSequenceMapper.class.isAssignableFrom(mapperClass)) {
             methodList.add(new GetMaxSequenceMethod("getMaxSequence"));
+//            methodList.add(new UpdateSequenceByUuidsMethod("updateSequenceByUuids"));
         }
         return methodList;
     }
