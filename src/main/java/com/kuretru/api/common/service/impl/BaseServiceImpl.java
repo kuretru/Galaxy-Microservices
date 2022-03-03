@@ -125,15 +125,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return null == result ? 0 : Math.toIntExact(result);
     }
 
-    protected void addCreateTime(D record, UUID uuid) {
-        record.setUuid(uuid.toString());
-        Instant now = Instant.now();
-        record.setCreateTime(now);
-        record.setUpdateTime(now);
-    }
-
     @Override
     public synchronized T save(T record) throws ServiceException {
+        verifyDTO(record);
+
         UUID uuid = UUID.randomUUID();
         if (get(uuid) != null) {
             throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
@@ -145,19 +140,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return get(data.getId());
     }
 
-    protected List<D> verifyUuidList(List<UUID> uuidList) throws ServiceException {
-        List<D> records = list(uuidList);
-        if (records.size() > uuidList.size()) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
-        } else if (records.size() < uuidList.size()) {
-            //TODO 返回所有不存在的列表
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
-        }
-        return records;
-    }
-
     @Override
     public T update(T record) throws ServiceException {
+        verifyDTO(record);
+
         D data = dtoToDo(record);
         data.setUpdateTime(Instant.now());
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
@@ -181,6 +167,76 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         } else if (1 != rows) {
             throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
+    }
+
+    /** 根据查询实体构建QueryWrapper */
+    protected QueryWrapper<D> buildQueryWrapper(Q query) {
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        try {
+            BeanInfo beanInfo = Introspector.getBeanInfo(queryClass);
+            List<PropertyDescriptor> descriptors = Arrays.stream(beanInfo.getPropertyDescriptors()).filter(p -> {
+                String name = p.getName();
+                return !"class".equals(name);
+            }).toList();
+
+            for (PropertyDescriptor descriptor : descriptors) {
+                Method readMethod = descriptor.getReadMethod();
+                if (readMethod == null) {
+                    continue;
+                }
+                Object value = readMethod.invoke(query);
+                if (value == null) {
+                    continue;
+                }
+
+                // 用MyBatis自带的缓存，将驼峰映射为下划线列名
+                Map<String, ColumnCache> columns = LambdaUtils.getColumnMap(doClass);
+                String columnName = columns.get(descriptor.getName().toUpperCase()).getColumn();
+
+                if (value instanceof String && StringUtils.hasText((String)value)) {
+                    // String类型：like '%xxx%'
+                    queryWrapper.like(columnName, value);
+                } else if (value instanceof UUID) {
+                    // UUID类型：= UUID
+                    queryWrapper.eq(columnName, value.toString());
+                } else if (value instanceof BaseEnum) {
+                    // 枚举类型：= 枚举编号
+                    queryWrapper.eq(columnName, ((BaseEnum<?>)value).getCode());
+                } else if (value instanceof LocalDate) {
+                    // 日期类型：= 日期
+                    queryWrapper.eq(columnName, value);
+                }
+            }
+        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return queryWrapper;
+    }
+
+    protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
+        queryWrapper.orderByAsc("id");
+    }
+
+    protected void addCreateTime(D record, UUID uuid) {
+        record.setUuid(uuid.toString());
+        Instant now = Instant.now();
+        record.setCreateTime(now);
+        record.setUpdateTime(now);
+    }
+
+    protected void verifyDTO(T record) throws ServiceException {
+
+    }
+
+    protected List<D> verifyUuidList(List<UUID> uuidList) throws ServiceException {
+        List<D> records = list(uuidList);
+        if (records.size() > uuidList.size()) {
+            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
+        } else if (records.size() < uuidList.size()) {
+            //TODO 返回所有不存在的列表
+            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
+        }
+        return records;
     }
 
     /**
@@ -269,54 +325,6 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @SneakyThrows
     protected T buildDTOInstance() {
         return dtoClass.getConstructor().newInstance();
-    }
-
-    /** 根据查询实体构建QueryWrapper */
-    protected QueryWrapper<D> buildQueryWrapper(Q query) {
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(queryClass);
-            List<PropertyDescriptor> descriptors = Arrays.stream(beanInfo.getPropertyDescriptors()).filter(p -> {
-                String name = p.getName();
-                return !"class".equals(name);
-            }).collect(Collectors.toList());
-
-            for (PropertyDescriptor descriptor : descriptors) {
-                Method readMethod = descriptor.getReadMethod();
-                if (readMethod == null) {
-                    continue;
-                }
-                Object value = readMethod.invoke(query);
-                if (value == null) {
-                    continue;
-                }
-
-                // 用MyBatis自带的缓存，将驼峰映射为下划线列名
-                Map<String, ColumnCache> columns = LambdaUtils.getColumnMap(doClass);
-                String columnName = columns.get(descriptor.getName().toUpperCase()).getColumn();
-
-                if (value instanceof String && StringUtils.hasText((String)value)) {
-                    // String类型：like '%xxx%'
-                    queryWrapper.like(columnName, value);
-                } else if (value instanceof UUID) {
-                    // UUID类型：= UUID
-                    queryWrapper.eq(columnName, value.toString());
-                } else if (value instanceof BaseEnum) {
-                    // 枚举类型：= 枚举编号
-                    queryWrapper.eq(columnName, ((BaseEnum<?>)value).getCode());
-                } else if (value instanceof LocalDate) {
-                    // 日期类型：= 日期
-                    queryWrapper.eq(columnName, value);
-                }
-            }
-        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return queryWrapper;
-    }
-
-    protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
-        queryWrapper.orderByAsc("id");
     }
 
 }
