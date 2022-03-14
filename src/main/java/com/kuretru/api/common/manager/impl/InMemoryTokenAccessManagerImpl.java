@@ -48,8 +48,7 @@ public class InMemoryTokenAccessManagerImpl implements AccessTokenManager {
         exist(id);
         AccessTokenDO value = database.get(id);
 
-        Instant now = Instant.now();
-        if (value.getExpireTime().isAfter(now)) {
+        if (Instant.now().isAfter(value.getExpireTime())) {
             database.remove(id);
             throw new ServiceException.Unauthorized(UserErrorCodes.USER_LOGIN_EXPIRED, "登录已过期，请重新登录");
         }
