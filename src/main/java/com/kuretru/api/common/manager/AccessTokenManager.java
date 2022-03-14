@@ -4,6 +4,7 @@ import com.kuretru.api.common.entity.business.AccessTokenBO;
 import com.kuretru.api.common.entity.transfer.AccessTokenDTO;
 import com.kuretru.api.common.exception.ServiceException;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -17,9 +18,10 @@ public interface AccessTokenManager {
      * 生成一个AccessToken，并存入数据库
      *
      * @param userId 该AccessToken绑定的用户ID
+     * @param roles  用户的角色列表
      * @return AccessToken
      */
-    AccessTokenDTO generate(UUID userId);
+    AccessTokenDTO generate(UUID userId, Set<String> roles);
 
     /**
      * 根据Token ID查询AccessToken

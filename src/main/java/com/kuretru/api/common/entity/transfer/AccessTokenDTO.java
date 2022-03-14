@@ -1,6 +1,8 @@
 package com.kuretru.api.common.entity.transfer;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 向前端传输的AccessToken实体
@@ -8,6 +10,8 @@ import lombok.Data;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccessTokenDTO {
 
     private String id;
