@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
 
 /**
@@ -63,13 +65,34 @@ public class ExceptionController {
         return ApiResponse.build(e.getCode(), e.getMessage());
     }
 
+    @ExceptionHandler(UndeclaredThrowableException.class)
+    public ApiResponse<?> undeclaredThrowableException(HttpServletResponse response, UndeclaredThrowableException e) {
+        if (e.getCause() instanceof ServiceException serviceException) {
+            // 判断是否是业务异常
+            if (serviceException instanceof ServiceException.BadRequest) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+            } else if (serviceException instanceof ServiceException.Unauthorized) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            } else if (serviceException instanceof ServiceException.Forbidden) {
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+            } else if (serviceException instanceof ServiceException.NotFound) {
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+            }
+            return ApiResponse.build(serviceException.getCode(), serviceException.getMessage());
+        } else {
+            log.error("{}: {}", e.getClass().getSimpleName(), e.getMessage());
+            e.printStackTrace();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return ApiResponse.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, buildExceptionMessage(e));
+        }
+    }
+
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ServiceException.InternalServerError.class)
     public ApiResponse<?> internalServerErrorHandler(ServiceException.InternalServerError e) {
         return ApiResponse.build(e.getCode(), e.getMessage());
     }
-
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)

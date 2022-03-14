@@ -19,6 +19,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.UndeclaredThrowableException;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
@@ -67,6 +68,9 @@ public class LoggingAspect {
 
     @AfterThrowing(value = "pointcut()", throwing = "t")
     public void afterThrowing(Throwable t) {
+        if (t instanceof UndeclaredThrowableException) {
+            t = t.getCause();
+        }
         if (t instanceof ServiceException) {
             ResponseCodes code = ((ServiceException)t).getCode();
             log.error("{}({},{}): {}", t.getClass().getSimpleName(), code.getCode(), code.getMessage(), t.getMessage());
