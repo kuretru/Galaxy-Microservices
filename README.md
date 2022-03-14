@@ -10,10 +10,25 @@ Java后端API开发通用工具
 2. 在此目录下新建一个pom.xml文件，作为父工程
 
 ```xml
-<modules>
-    <module>api-common-utils</module>
-    <module>aries-navigation-api</module>
-</modules>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kuretru.web</groupId>
+    <artifactId>aries-navigation-parent</artifactId>
+    <version>1.0.0</version>
+    <name>Aries-Navigation-Parent</name>
+    <description>白羊导航-后端API-父项目</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>api-common-utils</module>
+        <module>aries-navigation-api</module>
+    </modules>
+
+</project>
+
 ```
 
 3.下载本项目至api-common-utils，或使用git submodule的方式引入，若使用此方式，可以先fork此项目至您自己的仓库，方便二次修改
@@ -28,7 +43,7 @@ git submodule add git@github.com:kuretru/Api-Common-Utils.git "api-common-utils"
 <dependency>
     <groupId>com.kuretru.common</groupId>
     <artifactId>api-common-utils</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -58,5 +73,3 @@ public class Application {
 │   ├── src
 └── pom.xml
 ```
-
-7.若需进行单元测试，或maven打包，则需要修改`src/test/resources/application.properties`中的具体设置
