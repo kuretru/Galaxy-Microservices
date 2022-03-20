@@ -1,11 +1,15 @@
 package com.kuretru.api.common.controller;
 
+import com.kuretru.api.common.constant.code.ResponseCodes;
 import com.kuretru.api.common.constant.code.ServiceErrorCodes;
 import com.kuretru.api.common.constant.code.UserErrorCodes;
 import com.kuretru.api.common.entity.ApiResponse;
+import com.kuretru.api.common.entity.OAuth2ErrorResponse;
+import com.kuretru.api.common.exception.OAuth2Exception;
 import com.kuretru.api.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +31,8 @@ import java.util.List;
 @Slf4j
 public class ExceptionController {
 
+    // 框架异常处理
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<?> methodArgumentNotValidHandler(MethodArgumentNotValidException e) {
@@ -40,6 +46,28 @@ public class ExceptionController {
         }
         return ApiResponse.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, stringBuilder.toString());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    public ApiResponse<?> bindExceptionHandler(HttpServletResponse response, BindException e) {
+        ResponseCodes codes = UserErrorCodes.REQUEST_PARAMETER_ERROR;
+        StringBuilder result = new StringBuilder();
+        for (FieldError error : e.getFieldErrors()) {
+            result.append("字段");
+            result.append(error.getField());
+            result.append('：');
+            result.append(error.getDefaultMessage());
+            result.append(',');
+            if (error.getRejectedValue() == null) {
+                codes = UserErrorCodes.MISSING_REQUIRED_PARAMETERS;
+            }
+        }
+        result.deleteCharAt(result.length() - 1);
+        return ApiResponse.build(codes, result.toString());
+    }
+
+
+    // 业务异常处理
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ServiceException.BadRequest.class)
@@ -66,7 +94,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(UndeclaredThrowableException.class)
-    public ApiResponse<?> undeclaredThrowableException(HttpServletResponse response, UndeclaredThrowableException e) {
+    public ApiResponse<?> undeclaredThrowableExceptionHandler(HttpServletResponse response, UndeclaredThrowableException e) {
         if (e.getCause() instanceof ServiceException serviceException) {
             // 判断是否是业务异常
             if (serviceException instanceof ServiceException.BadRequest) {
@@ -87,6 +115,17 @@ public class ExceptionController {
         }
     }
 
+
+    // OAuth2异常处理
+
+    @ExceptionHandler(OAuth2Exception.class)
+    public OAuth2ErrorResponse oAuth2ErrorResponseHandler(HttpServletResponse response, OAuth2Exception e) {
+        response.setStatus(e.getErrorEnum().getHttpStatus().value());
+        return new OAuth2ErrorResponse(e.getErrorEnum(), e.getMessage());
+    }
+
+
+    // 其他异常处理
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ServiceException.InternalServerError.class)
