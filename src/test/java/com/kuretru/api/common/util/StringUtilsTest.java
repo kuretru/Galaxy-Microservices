@@ -17,4 +17,9 @@ class StringUtilsTest {
         assertEquals(expected, text);
     }
 
+    @Test
+    void randomUUID() {
+        assertEquals(32, StringUtils.randomUUID().length());
+    }
+
 }

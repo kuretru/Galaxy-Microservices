@@ -3,6 +3,7 @@ package com.kuretru.api.common.util;
 import lombok.NonNull;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /**
  * 字符串相关的静态工具类
@@ -31,6 +32,16 @@ public class StringUtils {
             result[(i << 1) + 1] = HEX_ARRAY[c & 0x0F];
         }
         return new String(result, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 返回一个32位的小写字符串
+     * e.g.: 7bf290551c7742878fb2d2fb73480856
+     *
+     * @return 32位的小写字符串
+     */
+    public static String randomUUID() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
 }
