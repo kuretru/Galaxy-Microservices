@@ -9,6 +9,9 @@ import org.springframework.util.StringUtils;
  */
 public class CaseUtils {
 
+    public static final String SNAKE_STRING = "_";
+    public static final char SNAKE_CHAR = '_';
+
     private CaseUtils() {
 
     }
@@ -27,7 +30,7 @@ public class CaseUtils {
         char[] camel = new char[snake.length];
         int length = 0;
         for (int i = 0; i < snake.length; i++) {
-            if (snake[i] == '_') {
+            if (snake[i] == SNAKE_CHAR) {
                 if (i + 1 < snake.length) {
                     snake[i + 1] = Character.toUpperCase(snake[i + 1]);
                 }

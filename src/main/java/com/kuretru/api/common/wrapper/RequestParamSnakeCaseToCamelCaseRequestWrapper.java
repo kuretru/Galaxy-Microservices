@@ -1,7 +1,7 @@
 package com.kuretru.api.common.wrapper;
 
 import com.kuretru.api.common.util.CaseUtils;
-import com.kuretru.api.common.util.HashUtils;
+import com.kuretru.api.common.util.HashMapUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -20,9 +20,9 @@ public class RequestParamSnakeCaseToCamelCaseRequestWrapper extends HttpServletR
     public RequestParamSnakeCaseToCamelCaseRequestWrapper(HttpServletRequest request) {
         super(request);
         Map<String, String[]> oldMap = request.getParameterMap();
-        this.parameterMap = new HashMap<>(HashUtils.initialCapacity(oldMap.size()));
+        this.parameterMap = new HashMap<>(HashMapUtils.initialCapacity(oldMap.size()));
         oldMap.forEach((k, v) -> {
-            if (k.contains("_")) {
+            if (k.contains(CaseUtils.SNAKE_STRING)) {
                 k = CaseUtils.snakeToCamel(k);
             }
             this.parameterMap.put(k, v);
