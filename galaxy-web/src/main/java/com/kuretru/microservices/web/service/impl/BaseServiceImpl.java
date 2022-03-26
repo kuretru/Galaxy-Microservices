@@ -131,7 +131,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
         UUID uuid = UUID.randomUUID();
         if (get(uuid) != null) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
+            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
         }
 
         D data = dtoToDo(record);
@@ -150,9 +150,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         queryWrapper.eq("uuid", data.getUuid());
         int rows = mapper.update(data, queryWrapper);
         if (0 == rows) {
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         } else if (1 != rows) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
+            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
         return get(record.getId());
     }
@@ -163,9 +163,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         queryWrapper.eq("uuid", uuid.toString());
         int rows = mapper.delete(queryWrapper);
         if (0 == rows) {
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         } else if (1 != rows) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
+            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
     }
 
@@ -231,10 +231,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     protected List<D> verifyUuidList(List<UUID> uuidList) throws ServiceException {
         List<D> records = list(uuidList);
         if (records.size() > uuidList.size()) {
-            throw new ServiceException.InternalServerError(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
+            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         } else if (records.size() < uuidList.size()) {
             //TODO 返回所有不存在的列表
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "部分不存在");
         }
         return records;
     }

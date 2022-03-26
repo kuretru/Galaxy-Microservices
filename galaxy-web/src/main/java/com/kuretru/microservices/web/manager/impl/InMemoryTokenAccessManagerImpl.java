@@ -50,7 +50,7 @@ public class InMemoryTokenAccessManagerImpl implements AccessTokenManager {
 
         if (Instant.now().isAfter(value.getExpireTime())) {
             database.remove(id);
-            throw new ServiceException.Unauthorized(UserErrorCodes.USER_LOGIN_EXPIRED, "登录已过期，请重新登录");
+            throw ServiceException.build(UserErrorCodes.USER_LOGIN_EXPIRED, "登录已过期，请重新登录");
         }
 
         AccessTokenBO result = new AccessTokenBO();
@@ -75,7 +75,7 @@ public class InMemoryTokenAccessManagerImpl implements AccessTokenManager {
 
     private void exist(String id) throws ServiceException {
         if (!database.containsKey(id)) {
-            throw new ServiceException.Unauthorized(UserErrorCodes.ACCESS_PERMISSION_ERROR, "AccessToken不存在");
+            throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "AccessToken不存在");
         }
     }
 

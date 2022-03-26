@@ -31,7 +31,7 @@ public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends 
         T result = service.get(id);
         if (null == result) {
             // 指定ID查询单个实体但实体不存在时，认为是用户方ID输入错误，因此抛异常
-            throw new ServiceException.NotFound(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         }
         return ApiResponse.success(result);
     }

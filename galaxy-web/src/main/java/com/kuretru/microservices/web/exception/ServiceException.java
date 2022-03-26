@@ -1,8 +1,6 @@
 package com.kuretru.microservices.web.exception;
 
 import com.kuretru.microservices.web.constant.code.ResponseCodes;
-import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
-import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import lombok.Getter;
 
 /**
@@ -20,45 +18,8 @@ public class ServiceException extends Exception {
         this.code = code;
     }
 
-    public static final class BadRequest extends ServiceException {
-
-        public BadRequest(UserErrorCodes code, String message) {
-            super(code, message);
-        }
-
-    }
-
-    public static final class Unauthorized extends ServiceException {
-
-        public Unauthorized(UserErrorCodes code, String message) {
-            super(code, message);
-        }
-
-    }
-
-    public static final class Forbidden extends ServiceException {
-
-        public Forbidden(UserErrorCodes code, String message) {
-            super(code, message);
-        }
-
-    }
-
-    public static final class NotFound extends ServiceException {
-
-        public NotFound(UserErrorCodes code, String message) {
-            super(code, message);
-        }
-
-    }
-
-
-    public static final class InternalServerError extends ServiceException {
-
-        public InternalServerError(ServiceErrorCodes code, String message) {
-            super(code, message);
-        }
-
+    public static ServiceException build(ResponseCodes code, String message) {
+        return new ServiceException(code, message);
     }
 
 }

@@ -27,7 +27,7 @@ public class BaseSequenceRestController<S extends BaseSequenceService<T, Q>, T e
     @Parameter(name = "uuidList", description = "新顺序的记录ID列表")
     public ApiResponse<String> reorder(@RequestBody List<UUID> uuidList) throws ServiceException {
         if (uuidList == null || uuidList.isEmpty()) {
-            throw new ServiceException.BadRequest(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID列表");
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID列表");
         }
         service.reorder(uuidList);
         return ApiResponse.success("重新排序成功");

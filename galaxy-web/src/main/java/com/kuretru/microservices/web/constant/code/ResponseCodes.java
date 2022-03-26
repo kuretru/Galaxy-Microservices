@@ -1,5 +1,7 @@
 package com.kuretru.microservices.web.constant.code;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * 业务响应码枚举接口
  *
@@ -20,5 +22,12 @@ public interface ResponseCodes {
      * @return 业务信息
      */
     String getMessage();
+
+    /**
+     * 发送该错误时应该返回的HTTP状态码
+     *
+     * @return HTTP状态码
+     */
+    HttpStatus getHttpStatus();
 
 }
