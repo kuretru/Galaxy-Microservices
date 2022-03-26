@@ -4,8 +4,6 @@ import com.kuretru.microservices.web.constant.code.ResponseCodes;
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
-import com.kuretru.microservices.web.entity.OAuth2ErrorResponse;
-import com.kuretru.microservices.web.exception.OAuth2Exception;
 import com.kuretru.microservices.web.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
