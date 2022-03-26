@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.entity.enums;
+package com.kuretru.microservices.oauth2.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface OAuth2ErrorEnum<T> {
+public interface OAuth2ErrorEnum {
 
     /**
      * 获取错误内容
@@ -24,7 +24,7 @@ public interface OAuth2ErrorEnum<T> {
     HttpStatus getHttpStatus();
 
     @Getter
-    enum AuthorizeError implements OAuth2ErrorEnum<AuthorizeError> {
+    enum AuthorizeError implements OAuth2ErrorEnum {
 
         /** The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed. */
         INVALID_REQUEST("invalid_request", HttpStatus.BAD_REQUEST),
@@ -54,7 +54,7 @@ public interface OAuth2ErrorEnum<T> {
     }
 
     @Getter
-    enum AccessTokenError implements OAuth2ErrorEnum<AccessTokenError> {
+    enum AccessTokenError implements OAuth2ErrorEnum {
 
         /** The request is missing a required parameter, includes an unsupported parameter value (other than grant type), repeats a parameter, includes multiple credentials, utilizes more than one mechanism for authenticating the client, or is otherwise malformed. */
         INVALID_REQUEST("invalid_request", HttpStatus.BAD_REQUEST),

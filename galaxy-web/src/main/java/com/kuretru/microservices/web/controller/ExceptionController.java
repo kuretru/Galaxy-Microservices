@@ -91,11 +91,11 @@ public class ExceptionController {
 
     // OAuth2异常处理
 
-    @ExceptionHandler(OAuth2Exception.class)
-    public OAuth2ErrorResponse oAuth2ErrorResponseHandler(HttpServletResponse response, OAuth2Exception e) {
-        response.setStatus(e.getErrorEnum().getHttpStatus().value());
-        return new OAuth2ErrorResponse(e.getErrorEnum(), e.getMessage());
-    }
+//    @ExceptionHandler(OAuth2Exception.class)
+//    public OAuth2ErrorResponse oAuth2ErrorResponseHandler(HttpServletResponse response, OAuth2Exception e) {
+//        response.setStatus(e.getErrorEnum().getHttpStatus().value());
+//        return new OAuth2ErrorResponse(e.getErrorEnum(), e.getMessage());
+//    }
 
 
     // 其他异常处理

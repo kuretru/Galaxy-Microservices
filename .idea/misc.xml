@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/galaxy-web/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-common/pom.xml" />
+        <option value="$PROJECT_DIR$/galaxy-oauth2-common/pom.xml" />
       </list>
     </option>
   </component>

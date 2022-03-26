@@ -1,7 +1,7 @@
-package com.kuretru.microservices.web.entity;
+package com.kuretru.microservices.oauth2.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kuretru.microservices.web.entity.enums.OAuth2ErrorEnum;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,23 +14,22 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class OAuth2ErrorResponse {
 
     @NotNull
-    private OAuth2ErrorEnum<?> error;
+    private OAuth2ErrorEnum error;
 
-    @JsonProperty("error_description")
     private String errorDescription;
 
-    @JsonProperty("error_uri")
     private String errorUri;
 
-    public OAuth2ErrorResponse(OAuth2ErrorEnum<?> error) {
+    public OAuth2ErrorResponse(OAuth2ErrorEnum error) {
         this.error = error;
         this.errorDescription = error.getValue();
     }
 
-    public OAuth2ErrorResponse(OAuth2ErrorEnum<?> error, String errorDescription) {
+    public OAuth2ErrorResponse(OAuth2ErrorEnum error, String errorDescription) {
         this.error = error;
         this.errorDescription = errorDescription;
     }

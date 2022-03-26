@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.entity.transfer;
+package com.kuretru.microservices.oauth2.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -7,15 +7,18 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
+ * OAuth2 认证阶段的传输实体
+ *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 public class OAuth2AuthorizeDTO {
 
     @Data
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class Request {
+    public static class Request implements Serializable {
 
         @Setter
         @NotNull
