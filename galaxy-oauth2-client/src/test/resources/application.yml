@@ -1,0 +1,5 @@
+galaxy:
+  oauth2:
+    client:
+      application-id: id-888
+      application-secret: secret-666

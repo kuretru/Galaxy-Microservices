@@ -3,6 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -15,11 +19,7 @@
     <artifactId>galaxy-oauth2-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>galaxy-oauth2-common</name>
-    <description>galaxy-oauth2-common</description>
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
+    <description>银河微服务-OAuth2公共模块</description>
 
     <dependencies>
         <!-- Spring Web -->
