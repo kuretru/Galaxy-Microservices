@@ -1,7 +1,7 @@
-package com.kuretru.microservices.web.manager;
+package com.kuretru.microservices.authentication.manager;
 
-import com.kuretru.microservices.web.entity.business.AccessTokenBO;
-import com.kuretru.microservices.web.entity.transfer.AccessTokenDTO;
+import com.kuretru.microservices.authentication.entity.AccessTokenBO;
+import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 
 import java.util.Set;

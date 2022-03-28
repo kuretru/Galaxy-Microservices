@@ -1,11 +1,11 @@
-package com.kuretru.microservices.web.manager.impl;
+package com.kuretru.microservices.authentication.manager.impl;
 
+import com.kuretru.microservices.authentication.entity.AccessTokenBO;
+import com.kuretru.microservices.authentication.entity.AccessTokenDO;
+import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
+import com.kuretru.microservices.authentication.manager.AccessTokenManager;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
-import com.kuretru.microservices.web.entity.business.AccessTokenBO;
-import com.kuretru.microservices.web.entity.data.AccessTokenDO;
-import com.kuretru.microservices.web.entity.transfer.AccessTokenDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
-import com.kuretru.microservices.web.manager.AccessTokenManager;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -17,11 +17,11 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public class InMemoryTokenAccessManagerImpl implements AccessTokenManager {
+public class InMemoryAccessTokenManagerImpl implements AccessTokenManager {
 
     private final ConcurrentMap<String, AccessTokenDO> database;
 
-    public InMemoryTokenAccessManagerImpl() {
+    public InMemoryAccessTokenManagerImpl() {
         database = new ConcurrentHashMap<>(16);
     }
 

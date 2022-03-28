@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.entity.transfer;
+package com.kuretru.microservices.authentication.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,25 +1,22 @@
-package com.kuretru.microservices.web.entity.data;
+package com.kuretru.microservices.authentication.entity;
 
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
 /**
- * 数据库中存储的AccessToken实体
+ * 内部验证AccessToken的实体
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Data
-public class AccessTokenDO {
+public class AccessTokenBO {
 
     private String secret;
 
     private UUID userId;
 
     private Set<String> roles;
-
-    private Instant expireTime;
 
 }

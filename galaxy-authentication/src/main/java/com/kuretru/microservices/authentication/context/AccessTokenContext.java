@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.context;
+package com.kuretru.microservices.authentication.context;
 
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
