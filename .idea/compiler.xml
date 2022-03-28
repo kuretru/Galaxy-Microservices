@@ -10,6 +10,8 @@
         <module name="galaxy-common" />
         <module name="galaxy-oauth2-common" />
         <module name="galaxy-web" />
+        <module name="galaxy-oauth2-server" />
+        <module name="galaxy-authentication" />
       </profile>
       <profile name="Annotation profile for galaxy-oauth2-client" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -23,18 +25,22 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="galaxy-authentication" target="17" />
       <module name="galaxy-common" target="17" />
       <module name="galaxy-core" target="1.5" />
       <module name="galaxy-oauth2-client" target="17" />
       <module name="galaxy-oauth2-common" target="17" />
+      <module name="galaxy-oauth2-server" target="17" />
       <module name="galaxy-web" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="galaxy-authentication" options="-parameters" />
       <module name="galaxy-common" options="-parameters" />
       <module name="galaxy-oauth2-client" options="-parameters" />
       <module name="galaxy-oauth2-common" options="-parameters" />
+      <module name="galaxy-oauth2-server" options="-parameters" />
       <module name="galaxy-web" options="-parameters" />
     </option>
   </component>

@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/galaxy-authentication/galaxy-authentication.iml" filepath="$PROJECT_DIR$/galaxy-authentication/galaxy-authentication.iml" />
       <module fileurl="file://$PROJECT_DIR$/galaxy-common/galaxy-common.iml" filepath="$PROJECT_DIR$/galaxy-common/galaxy-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/galaxy-oauth2-client/galaxy-oauth2-client.iml" filepath="$PROJECT_DIR$/galaxy-oauth2-client/galaxy-oauth2-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/galaxy-oauth2-common/galaxy-oauth2-common.iml" filepath="$PROJECT_DIR$/galaxy-oauth2-common/galaxy-oauth2-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/galaxy-oauth2-server/galaxy-oauth2-server.iml" filepath="$PROJECT_DIR$/galaxy-oauth2-server/galaxy-oauth2-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/galaxy-web/galaxy-web.iml" filepath="$PROJECT_DIR$/galaxy-web/galaxy-web.iml" />
     </modules>
   </component>

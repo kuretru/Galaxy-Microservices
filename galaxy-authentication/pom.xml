@@ -17,22 +17,23 @@
     </parent>
 
     <groupId>com.kuretru.microservices</groupId>
-    <artifactId>galaxy-oauth2-client</artifactId>
+    <artifactId>galaxy-authentication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>galaxy-oauth2-client</name>
-    <description>银河微服务-OAuth2客户端模块</description>
+    <name>galaxy-authentication</name>
+    <description>银河微服务-身份认证模块</description>
 
     <dependencies>
         <dependency>
             <groupId>com.kuretru.microservices</groupId>
-            <artifactId>galaxy-oauth2-common</artifactId>
+            <artifactId>galaxy-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Spring Web -->
+        <!-- Spring Data Redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Configuration Processor -->
