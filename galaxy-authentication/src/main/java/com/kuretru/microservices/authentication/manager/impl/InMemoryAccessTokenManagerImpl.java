@@ -4,11 +4,11 @@ import com.kuretru.microservices.authentication.entity.AccessTokenBO;
 import com.kuretru.microservices.authentication.entity.AccessTokenDO;
 import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.authentication.manager.AccessTokenManager;
+import com.kuretru.microservices.authentication.property.AuthenticationProperty;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,9 +19,11 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class InMemoryAccessTokenManagerImpl implements AccessTokenManager {
 
+    private final AuthenticationProperty property;
     private final ConcurrentMap<String, AccessTokenDO> database;
 
-    public InMemoryAccessTokenManagerImpl() {
+    public InMemoryAccessTokenManagerImpl(AuthenticationProperty property) {
+        this.property = property;
         database = new ConcurrentHashMap<>(16);
     }
 
@@ -37,7 +39,7 @@ public class InMemoryAccessTokenManagerImpl implements AccessTokenManager {
         value.setSecret(UUID.randomUUID().toString().replace("-", ""));
         value.setUserId(userId);
         value.setRoles(roles);
-        value.setExpireTime(Instant.now().plus(120, ChronoUnit.MINUTES));
+        value.setExpireTime(Instant.now().plus(property.getExpireTime()));
         database.put(id, value);
 
         return new AccessTokenDTO(id, value.getSecret());
@@ -64,7 +66,7 @@ public class InMemoryAccessTokenManagerImpl implements AccessTokenManager {
     public void refresh(String id) throws ServiceException {
         exist(id);
         AccessTokenDO value = database.get(id);
-        value.setExpireTime(Instant.now().plus(120, ChronoUnit.MINUTES));
+        value.setExpireTime(Instant.now().plus(property.getExpireTime()));
     }
 
     @Override
