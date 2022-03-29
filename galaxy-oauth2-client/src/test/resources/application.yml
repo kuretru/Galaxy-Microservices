@@ -1,5 +1,7 @@
 galaxy:
   oauth2:
     client:
-      application-id: id-888
-      application-secret: secret-666
+      gemini:
+        application-id: id-888
+        application-secret: secret-666
+        server-url: http://127.0.0.1:7051

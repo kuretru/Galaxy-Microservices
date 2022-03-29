@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -20,13 +22,11 @@ class OAuth2ClientPropertyTest {
     }
 
     @Test
-    void getApplicationId() {
-        assertEquals("id-888", property.getApplicationId());
-    }
-
-    @Test
-    void getApplicationSecret() {
-        assertEquals("secret-666", property.getApplicationSecret());
+    void getGemini() {
+        assertEquals("id-888", property.getGemini().getApplicationId());
+        assertEquals("secret-666", property.getGemini().getApplicationSecret());
+        assertEquals("http://127.0.0.1:7051", property.getGemini().getServerUrl());
+        assertEquals(Duration.ofMinutes(15), property.getGemini().getStateExpireTime());
     }
 
 }
