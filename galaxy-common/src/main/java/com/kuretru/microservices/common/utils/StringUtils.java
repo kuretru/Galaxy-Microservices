@@ -38,6 +38,19 @@ public class StringUtils {
     }
 
     /**
+     * 若字符串为null则返回空字符串
+     *
+     * @param text 字符串
+     * @return 转换后的字符串
+     */
+    public static String nullToEmpty(String text) {
+        if (text == null) {
+            return "";
+        }
+        return text;
+    }
+
+    /**
      * 返回一个32位的小写字符串
      * e.g.: 7bf290551c7742878fb2d2fb73480856
      *

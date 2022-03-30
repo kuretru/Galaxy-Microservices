@@ -20,6 +20,13 @@ class StringUtilsTest {
     }
 
     @Test
+    void nullToEmpty() {
+        assertEquals("", StringUtils.nullToEmpty(null));
+        assertEquals("", StringUtils.nullToEmpty(""));
+        assertEquals("abc", StringUtils.nullToEmpty("abc"));
+    }
+
+    @Test
     void randomUUID() {
         assertEquals(32, StringUtils.randomUUID().length());
     }
