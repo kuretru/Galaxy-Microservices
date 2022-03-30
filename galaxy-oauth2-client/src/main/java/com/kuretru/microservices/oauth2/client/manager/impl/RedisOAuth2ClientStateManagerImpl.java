@@ -29,14 +29,23 @@ public class RedisOAuth2ClientStateManagerImpl implements OAuth2ClientStateManag
     }
 
     @Override
-    public String generate(String scope) {
+    public String generateAndSave(String redirectUri) {
         String state = UUID.randomUUID().toString();
         String key = buildKey(state);
         while (Boolean.TRUE.equals(redisTemplate.hasKey(key))) {
             state = UUID.randomUUID().toString();
         }
-        redisTemplate.opsForValue().set(key, scope, property.getGemini().getStateExpireTime());
+        redisTemplate.opsForValue().set(key, redirectUri, property.getGemini().getStateExpireTime());
         return state;
+    }
+
+    @Override
+    public String getAndDelete(String state) {
+        String key = buildKey(state);
+        if (Boolean.FALSE.equals(redisTemplate.hasKey(key))) {
+            return null;
+        }
+        return redisTemplate.opsForValue().getAndDelete(key);
     }
 
     private String buildKey(String key) {

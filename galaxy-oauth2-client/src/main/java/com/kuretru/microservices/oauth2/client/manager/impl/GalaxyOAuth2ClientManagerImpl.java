@@ -6,10 +6,15 @@ import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientManager;
 import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientStateManager;
 import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
+import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
+import com.kuretru.microservices.web.constant.code.UserErrorCodes;
+import com.kuretru.microservices.web.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
 
     private static final String AUTHORIZE_PATH = "/oauth2/authorize";
+    private static final String ACCESS_TOKEN_PATH = "/oauth2/access_token";
     private final OAuth2ClientProperty property;
     private final OAuth2ClientStateManager stateManager;
 
@@ -33,15 +39,24 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
 
     @Override
     public String authorize(OAuth2AuthorizeRequestDTO record) {
-        String scope = StringUtils.collectionToString(record.getScopes(), ",");
+        String redirectUrl = StringUtils.nullToEmpty(record.getRedirectUri());
         OAuth2AuthorizeDTO.Request request = new OAuth2AuthorizeDTO.Request(
-                OAuth2Constants.AUTHORIZATION_CODE_GRANT,
+                OAuth2Constants.AUTHORIZATION_REQUEST_RESPONSE_TYPE,
                 property.getGemini().getApplicationId(),
-                record.getRedirectUri(),
-                scope,
-                stateManager.generate(scope)
+                redirectUrl,
+                StringUtils.collectionToString(record.getScopes(), ","),
+                stateManager.generateAndSave(redirectUrl)
         );
         return buildRedirectUrl(request);
+    }
+
+    @Override
+    public OAuth2AccessTokenDTO.Response callback(OAuth2AuthorizeDTO.Response response) throws ServiceException {
+        String redirectUrl = stateManager.getAndDelete(response.getState());
+        if (redirectUrl == null) {
+            throw ServiceException.build(UserErrorCodes.USER_LOGIN_EXPIRED, "OAuth2认证已过期，请重新认证");
+        }
+        return obtainAccessToken(response.getCode(), redirectUrl);
     }
 
     private String buildRedirectUrl(OAuth2AuthorizeDTO.Request request) {
@@ -58,6 +73,20 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
         }
         result.append("&state=").append(request.getState());
         return result.toString();
+    }
+
+    private OAuth2AccessTokenDTO.Response obtainAccessToken(String code, String redirectUrl) {
+        OAuth2AccessTokenDTO.Request entity = new OAuth2AccessTokenDTO.Request(
+                OAuth2Constants.ACCESS_TOKEN_REQUEST_GRANT_TYPE,
+                code,
+                redirectUrl,
+                this.property.getGemini().getApplicationId(),
+                this.property.getGemini().getApplicationSecret()
+        );
+        String url = this.property.getGemini().getServerUrl() + ACCESS_TOKEN_PATH;
+        HttpEntity<OAuth2AccessTokenDTO.Request> request = new HttpEntity<>(entity);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForObject(url, request, OAuth2AccessTokenDTO.Response.class);
     }
 
 }

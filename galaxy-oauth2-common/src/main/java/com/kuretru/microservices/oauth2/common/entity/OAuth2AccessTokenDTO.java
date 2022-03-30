@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 public class OAuth2AccessTokenDTO {
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Request {
 

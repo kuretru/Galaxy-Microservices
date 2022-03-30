@@ -23,7 +23,12 @@ public class InMemoryOAuth2ClientStateManagerImpl implements OAuth2ClientStateMa
     }
 
     @Override
-    public String generate(String scope) {
+    public String generateAndSave(String scope) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getAndDelete(String state) {
         throw new NotImplementedException();
     }
 

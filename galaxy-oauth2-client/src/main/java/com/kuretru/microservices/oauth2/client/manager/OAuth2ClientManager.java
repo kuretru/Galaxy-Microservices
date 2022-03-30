@@ -1,6 +1,9 @@
 package com.kuretru.microservices.oauth2.client.manager;
 
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
+import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
+import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
+import com.kuretru.microservices.web.exception.ServiceException;
 
 /**
  * OAuth2 Client接口
@@ -16,5 +19,14 @@ public interface OAuth2ClientManager {
      * @return 重定向至服务端的URL
      */
     String authorize(OAuth2AuthorizeRequestDTO record);
+
+    /**
+     * 服务端身份验证成功后回调该方法，然后向服务端请求AccessToken
+     *
+     * @param response 回调内容
+     * @return AccessToken
+     * @throws ServiceException 业务异常
+     */
+    OAuth2AccessTokenDTO.Response callback(OAuth2AuthorizeDTO.Response response) throws ServiceException;
 
 }
