@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.kuretru.microservices.oauth2.server.configuration.OAuth2ServerAutoConfiguration

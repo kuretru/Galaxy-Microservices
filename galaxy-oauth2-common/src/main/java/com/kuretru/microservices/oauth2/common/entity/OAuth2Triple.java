@@ -1,6 +1,8 @@
 package com.kuretru.microservices.oauth2.common.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
@@ -11,7 +13,9 @@ import java.util.UUID;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Data
-public abstract class OAuth2Triple {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OAuth2Triple {
 
     private UUID applicationId;
 
