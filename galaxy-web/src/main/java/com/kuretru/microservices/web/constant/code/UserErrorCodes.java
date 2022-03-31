@@ -28,6 +28,16 @@ public enum UserErrorCodes implements ResponseCodes {
 
     /** A0300-访问权限异常 */
     ACCESS_PERMISSION_ERROR(10300, "访问权限异常", HttpStatus.FORBIDDEN),
+    /** A0301-访问未授权 */
+    ACCESS_UNAUTHORIZED(10301, "访问未授权", HttpStatus.UNAUTHORIZED),
+    /** A0302-正在授权中 */
+    AUTHORIZING(10302, "正在授权中", HttpStatus.UNAUTHORIZED),
+    /** A0303-用户授权申请被拒绝 */
+    USER_AUTHORIZATION_REJECTED(10303, "用户授权申请被拒绝", HttpStatus.UNAUTHORIZED),
+    /** A0311-授权已过期 */
+    AUTHORIZATION_EXPIRED(10311, "授权已过期", HttpStatus.UNAUTHORIZED),
+    /** A0312-无权限使用API */
+    NO_PERMISSION_TO_USE_API(10312, "无权限使用API", HttpStatus.FORBIDDEN),
     /** A0340-用户签名异常 */
     WRONG_USER_SIGNATURE(10340, "用户签名异常", HttpStatus.BAD_REQUEST),
 
