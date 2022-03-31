@@ -45,8 +45,10 @@ public class OAuth2AuthorizeDTO {
     @Data
     public static class Response {
 
+        @NotNull
         private String code;
 
+        @NotNull
         private String state;
 
     }

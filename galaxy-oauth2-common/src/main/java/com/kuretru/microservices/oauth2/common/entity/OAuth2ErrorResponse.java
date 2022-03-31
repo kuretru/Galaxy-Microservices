@@ -24,14 +24,4 @@ public class OAuth2ErrorResponse {
 
     private String errorUri;
 
-    public OAuth2ErrorResponse(OAuth2ErrorEnum error) {
-        this.error = error;
-        this.errorDescription = error.getValue();
-    }
-
-    public OAuth2ErrorResponse(OAuth2ErrorEnum error, String errorDescription) {
-        this.error = error;
-        this.errorDescription = errorDescription;
-    }
-
 }

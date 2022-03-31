@@ -25,6 +25,12 @@
     <dependencies>
         <dependency>
             <groupId>com.kuretru.microservices</groupId>
+            <artifactId>galaxy-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kuretru.microservices</groupId>
             <artifactId>galaxy-oauth2-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

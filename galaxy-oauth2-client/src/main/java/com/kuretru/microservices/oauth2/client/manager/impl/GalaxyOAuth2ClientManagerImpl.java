@@ -44,7 +44,7 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
                 OAuth2Constants.AUTHORIZATION_REQUEST_RESPONSE_TYPE,
                 property.getGemini().getApplicationId(),
                 redirectUrl,
-                StringUtils.collectionToString(record.getScopes(), ","),
+                StringUtils.collectionToString(record.getScopes(), OAuth2Constants.SCOPES_SEPARATOR),
                 stateManager.generateAndSave(redirectUrl)
         );
         return buildRedirectUrl(request);
