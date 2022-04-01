@@ -13,7 +13,7 @@ public class ServiceException extends Exception {
     @Getter
     private final ResponseCodes code;
 
-    private ServiceException(ResponseCodes code, String message) {
+    public ServiceException(ResponseCodes code, String message) {
         super(message);
         this.code = code;
     }

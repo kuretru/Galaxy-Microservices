@@ -5,6 +5,7 @@ import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.UUID;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Service
-@ConditionalOnBean(RedisTemplate.class)
+@ConditionalOnBean(StringRedisTemplate.class)
 public class RedisOAuth2ClientStateManagerImpl implements OAuth2ClientStateManager {
 
     private static final String REDIS_ROOT_KEY = "RedisOAuth2ClientStateManager.";
