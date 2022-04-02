@@ -52,7 +52,7 @@ public class OAuth2AccessTokenDTO {
         @NotNull
         private String tokenType;
 
-        private Integer expiresIn;
+        private Long expiresIn;
 
         private String refreshToken;
 

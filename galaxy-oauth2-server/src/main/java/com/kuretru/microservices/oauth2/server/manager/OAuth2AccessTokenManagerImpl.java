@@ -45,7 +45,13 @@ public class OAuth2AccessTokenManagerImpl implements OAuth2AccessTokenManager {
         OAuth2AccessTokenDO record = new OAuth2AccessTokenDO(triple);
         redisTemplate.opsForValue().set(buildKey(accessToken), record, ACCESS_TOKEN_EXPIRE_TIME);
 
-        return new OAuth2AccessTokenDTO.Response(accessToken, OAuth2Constants.TOKEN_TYPE, (int)ACCESS_TOKEN_EXPIRE_TIME.toSeconds(), record.getRefreshToken(), StringUtils.collectionToString(record.getScopes(), OAuth2Constants.SCOPES_SEPARATOR));
+        return new OAuth2AccessTokenDTO.Response(
+                accessToken,
+                OAuth2Constants.TOKEN_TYPE,
+                System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME.toSeconds(),
+                record.getRefreshToken(),
+                StringUtils.collectionToString(record.getScopes(), OAuth2Constants.SCOPES_SEPARATOR)
+        );
     }
 
     @Override
