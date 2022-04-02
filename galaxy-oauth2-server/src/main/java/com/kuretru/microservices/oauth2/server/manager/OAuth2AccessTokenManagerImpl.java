@@ -60,7 +60,7 @@ public class OAuth2AccessTokenManagerImpl implements OAuth2AccessTokenManager {
         exist(key);
         OAuth2AccessTokenDO record = (OAuth2AccessTokenDO)redisTemplate.opsForValue().get(key);
         assert record != null;
-        if (record.getScopes().contains(scope)) {
+        if (org.springframework.util.StringUtils.hasText(scope) && record.getScopes().contains(scope)) {
             return record.getUserId();
         }
         throw new OAuth2Exception(OAuth2ErrorEnum.AccessTokenError.INVALID_SCOPE, "用户未授权此操作");
