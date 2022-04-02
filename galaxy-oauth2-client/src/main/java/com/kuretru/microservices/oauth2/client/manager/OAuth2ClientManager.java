@@ -1,7 +1,7 @@
 package com.kuretru.microservices.oauth2.client.manager;
 
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
-import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
+import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 
@@ -27,6 +27,6 @@ public interface OAuth2ClientManager {
      * @return AccessToken
      * @throws ServiceException 业务异常
      */
-    OAuth2AccessTokenDTO.Response callback(OAuth2AuthorizeDTO.Response response) throws ServiceException;
+    GalaxyUserDTO callback(OAuth2AuthorizeDTO.Response response) throws ServiceException;
 
 }
