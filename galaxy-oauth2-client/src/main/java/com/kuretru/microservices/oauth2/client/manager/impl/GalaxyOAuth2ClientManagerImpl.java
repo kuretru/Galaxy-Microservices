@@ -1,5 +1,6 @@
 package com.kuretru.microservices.oauth2.client.manager.impl;
 
+import com.kuretru.microservices.authentication.constant.AccessTokenConstants;
 import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
 import com.kuretru.microservices.oauth2.client.manager.OAuth2AccessTokenManager;
@@ -10,11 +11,18 @@ import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
 import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
+import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
+import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.exception.ServiceException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +38,7 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
 
     private static final String AUTHORIZE_PATH = "/oauth2/authorize";
     private static final String ACCESS_TOKEN_PATH = "/oauth2/access_token";
+    private static final String USER_INFORMATION_PATH = "/api/users";
     private final OAuth2ClientProperty property;
     private final OAuth2ClientStateManager stateManager;
     private final OAuth2AccessTokenManager accessTokenManager;
@@ -99,8 +108,28 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
         return restTemplate.postForObject(url, request, OAuth2AccessTokenDTO.Response.class);
     }
 
-    private GalaxyUserDTO obtainUserId(String accessToken) {
-        return new GalaxyUserDTO();
+    private GalaxyUserDTO obtainUserId(String accessToken) throws ServiceException {
+        String url = this.property.getGemini().getServerUrl() + USER_INFORMATION_PATH;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(AccessTokenConstants.AUTHORIZATION, "token " + accessToken);
+        HttpEntity<GalaxyUserDTO> request = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ApiResponse<GalaxyUserDTO> template = new ApiResponse<>();
+        Class<ApiResponse<GalaxyUserDTO>> clazz = (Class<ApiResponse<GalaxyUserDTO>>)template.getClass();
+        ApiResponse<?> result = restTemplate.exchange(url, HttpMethod.GET, request, Template.class).getBody();
+        if (result != null && result.getData() instanceof GalaxyUserDTO) {
+            return (GalaxyUserDTO)result.getData();
+        }
+        throw new ServiceException(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "获取用户ID失败");
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    private static class Template extends ApiResponse<GalaxyUserDTO> {
+
+        private GalaxyUserDTO data;
+
     }
 
 }

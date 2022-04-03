@@ -33,7 +33,7 @@ public class RedisOAuth2AccessTokenManagerImpl implements OAuth2AccessTokenManag
 
     @Override
     public void save(String id, OAuth2AccessTokenDTO.Response record) {
-        Duration expireTime = Duration.ofMinutes(record.getExpiresIn() - System.currentTimeMillis());
+        Duration expireTime = Duration.ofMillis(record.getExpiresIn() - System.currentTimeMillis());
         OAuth2AccessTokenDO accessTokenDO = new OAuth2AccessTokenDO(
                 record.getAccessToken(),
                 record.getRefreshToken(),
