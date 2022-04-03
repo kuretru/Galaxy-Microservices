@@ -1,6 +1,5 @@
 package com.kuretru.microservices.authentication.entity;
 
-import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

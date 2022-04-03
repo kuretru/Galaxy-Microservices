@@ -3,6 +3,7 @@ package com.kuretru.microservices.authentication.interceptor;
 import com.kuretru.microservices.authentication.constant.AccessTokenConstants;
 import com.kuretru.microservices.authentication.context.AccessTokenContext;
 import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override

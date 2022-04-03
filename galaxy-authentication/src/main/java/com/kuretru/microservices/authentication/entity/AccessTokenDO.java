@@ -1,8 +1,10 @@
 package com.kuretru.microservices.authentication.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,14 +14,14 @@ import java.util.UUID;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Data
-public class AccessTokenDO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccessTokenDO implements Serializable {
 
     private String secret;
 
     private UUID userId;
 
     private Set<String> roles;
-
-    private Instant expireTime;
 
 }

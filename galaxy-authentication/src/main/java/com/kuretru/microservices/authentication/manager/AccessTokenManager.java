@@ -18,33 +18,33 @@ public interface AccessTokenManager {
      * 生成一个AccessToken，并存入数据库
      *
      * @param userId 该AccessToken绑定的用户ID
-     * @param roles  用户的角色列表
+     * @param roles  该用户拥有的角色列表
      * @return AccessToken
      */
     AccessTokenDTO generate(UUID userId, Set<String> roles);
 
     /**
-     * 根据Token ID查询AccessToken
+     * 根据AccessTokenId查询AccessToken
      *
-     * @param id Token ID
+     * @param id AccessTokenId
      * @return AccessToken
-     * @throws ServiceException 业务异常
+     * @throws ServiceException 找不到指定AccessToken时或AccessToken已过期时，引发业务异常
      */
     AccessTokenBO get(String id) throws ServiceException;
 
     /**
      * 刷新AccessToken的过期时间
      *
-     * @param id Token ID
-     * @throws ServiceException 业务异常
+     * @param id AccessTokenId
+     * @throws ServiceException 找不到指定AccessToken时引发业务异常
      */
     void refresh(String id) throws ServiceException;
 
     /**
-     * 吊销一个AccessToken，从数据库中删除
+     * 吊销指定AccessToken，并从数据库中删除
      *
-     * @param id Token ID
-     * @throws ServiceException 业务异常
+     * @param id AccessTokenId
+     * @throws ServiceException 找不到指定AccessToken时引发业务异常
      */
     void revoke(String id) throws ServiceException;
 

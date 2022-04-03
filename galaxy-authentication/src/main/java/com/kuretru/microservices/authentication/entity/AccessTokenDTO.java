@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 向前端传输的AccessToken实体
+ * 向外界传输的AccessToken实体
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
