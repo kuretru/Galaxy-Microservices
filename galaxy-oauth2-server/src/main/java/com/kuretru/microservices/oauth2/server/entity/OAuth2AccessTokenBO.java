@@ -10,7 +10,7 @@ public class OAuth2AccessTokenBO {
 
     private String accessToken;
 
-    private Integer expiresIn;
+    private Long expiresIn;
 
     private String refreshToken;
 

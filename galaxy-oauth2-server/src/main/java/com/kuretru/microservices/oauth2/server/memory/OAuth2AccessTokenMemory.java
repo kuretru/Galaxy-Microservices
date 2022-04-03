@@ -1,4 +1,4 @@
-package com.kuretru.microservices.oauth2.server.manager;
+package com.kuretru.microservices.oauth2.server.memory;
 
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2Triple;
@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface OAuth2AccessTokenManager {
+public interface OAuth2AccessTokenMemory {
 
     /**
      * 根据OAuth2基本三元组，生成AccessToken响应实体，存入数据库
@@ -21,7 +21,7 @@ public interface OAuth2AccessTokenManager {
     OAuth2AccessTokenDTO.Response generate(OAuth2Triple triple);
 
     /**
-     * 验证AccessToken
+     * 验证AccessToken，并返回该AccessToken所属的用户ID
      *
      * @param accessToken AccessToken
      * @param scope       权限
@@ -31,7 +31,7 @@ public interface OAuth2AccessTokenManager {
     UUID verify(String accessToken, String scope) throws OAuth2Exception;
 
     /**
-     * 刷新AccessToken
+     * 刷新AccessToken，并返回新的AccessToken
      *
      * @param record AccessToken和RefreshToken
      * @return 刷新后的AccessToken和RefreshToken

@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.time.Duration;
+
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
@@ -18,8 +20,22 @@ public class OAuth2ServerProperty {
      */
     String frontEndUrl;
 
-    public OAuth2ServerProperty(@DefaultValue("") String frontEndUrl) {
+    /**
+     * 身份认证需要在该时间内完成
+     */
+    Duration expireTime;
+
+    /**
+     * 身份认证完成后有效的时间
+     */
+    Duration effectiveTime;
+
+    public OAuth2ServerProperty(@DefaultValue("") String frontEndUrl,
+                                @DefaultValue("PT15M") Duration expireTime,
+                                @DefaultValue("PT2H") Duration effectiveTime) {
         this.frontEndUrl = frontEndUrl;
+        this.expireTime = expireTime;
+        this.effectiveTime = effectiveTime;
     }
 
 }
