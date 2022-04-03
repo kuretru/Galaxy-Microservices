@@ -15,4 +15,12 @@ public interface OAuth2UniqueTokenMemory {
      */
     String generateAndSave(OAuth2AuthorizeDTO.Request record);
 
+    /**
+     * 查询并返回OAuth2认证请求实体
+     *
+     * @param token 一次性凭证
+     * @return OAuth2认证请求实体
+     */
+    OAuth2AuthorizeDTO.Request getAndDelete(String token);
+
 }

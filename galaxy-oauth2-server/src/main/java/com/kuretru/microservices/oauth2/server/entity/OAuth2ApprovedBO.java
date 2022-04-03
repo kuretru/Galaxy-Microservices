@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2ApprovedDO implements Serializable {
+public class OAuth2ApprovedBO implements Serializable {
 
     private String redirectUri;
 

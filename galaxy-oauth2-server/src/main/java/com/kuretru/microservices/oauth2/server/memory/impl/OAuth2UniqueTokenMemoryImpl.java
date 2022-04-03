@@ -34,8 +34,17 @@ public class OAuth2UniqueTokenMemoryImpl implements OAuth2UniqueTokenMemory {
         while (Boolean.TRUE.equals(redisTemplate.hasKey(buildKey(token)))) {
             token = StringUtils.randomUUID();
         }
-        redisTemplate.opsForValue().set(REDIS_TOKEN_KEY + token, record, property.getExpireTime());
+        redisTemplate.opsForValue().set(buildKey(token), record, property.getExpireTime());
         return token;
+    }
+
+    @Override
+    public OAuth2AuthorizeDTO.Request getAndDelete(String token) {
+        String key = buildKey(token);
+        if (Boolean.FALSE.equals(redisTemplate.hasKey(key))) {
+            return null;
+        }
+        return (OAuth2AuthorizeDTO.Request)redisTemplate.opsForValue().getAndDelete(key);
     }
 
     private String buildKey(String key) {
