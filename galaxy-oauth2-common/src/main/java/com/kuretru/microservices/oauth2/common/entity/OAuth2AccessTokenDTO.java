@@ -28,7 +28,6 @@ public class OAuth2AccessTokenDTO {
         @NotNull
         private String code;
 
-        @NotNull
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private String redirectUri;
 

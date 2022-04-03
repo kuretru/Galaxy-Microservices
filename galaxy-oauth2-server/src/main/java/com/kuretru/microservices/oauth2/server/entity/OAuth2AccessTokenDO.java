@@ -2,9 +2,7 @@ package com.kuretru.microservices.oauth2.server.entity;
 
 import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2Triple;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -14,6 +12,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class OAuth2AccessTokenDO extends OAuth2Triple implements Serializable {
 
     private String refreshToken;
