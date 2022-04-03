@@ -5,7 +5,7 @@ import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
 import com.kuretru.microservices.oauth2.client.manager.OAuth2AccessTokenManager;
 import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientManager;
-import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientStateManager;
+import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
 import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
 import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
@@ -40,11 +40,11 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
     private static final String ACCESS_TOKEN_PATH = "/oauth2/access_token";
     private static final String USER_INFORMATION_PATH = "/api/users";
     private final OAuth2ClientProperty property;
-    private final OAuth2ClientStateManager stateManager;
+    private final OAuth2StateMemory stateManager;
     private final OAuth2AccessTokenManager accessTokenManager;
 
     @Autowired
-    public GalaxyOAuth2ClientManagerImpl(OAuth2ClientProperty property, OAuth2ClientStateManager stateManager, OAuth2AccessTokenManager accessTokenManager) {
+    public GalaxyOAuth2ClientManagerImpl(OAuth2ClientProperty property, OAuth2StateMemory stateManager, OAuth2AccessTokenManager accessTokenManager) {
         this.property = property;
         this.stateManager = stateManager;
         this.accessTokenManager = accessTokenManager;

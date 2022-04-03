@@ -1,9 +1,9 @@
-package com.kuretru.microservices.oauth2.client.manager;
+package com.kuretru.microservices.oauth2.client.memory;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface OAuth2ClientStateManager {
+public interface OAuth2StateMemory {
 
     /**
      * 生成一个state，并存入数据库

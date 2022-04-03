@@ -1,6 +1,6 @@
-package com.kuretru.microservices.oauth2.client.manager.impl;
+package com.kuretru.microservices.oauth2.client.memory.impl;
 
-import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientStateManager;
+import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
 import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @ConditionalOnMissingBean(StringRedisTemplate.class)
-public class InMemoryOAuth2ClientStateManagerImpl implements OAuth2ClientStateManager {
+public class InMemoryOAuth2StateMemoryImpl implements OAuth2StateMemory {
 
     private final OAuth2ClientProperty property;
 
     @Autowired
-    public InMemoryOAuth2ClientStateManagerImpl(OAuth2ClientProperty property) {
+    public InMemoryOAuth2StateMemoryImpl(OAuth2ClientProperty property) {
         this.property = property;
     }
 
