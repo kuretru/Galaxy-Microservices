@@ -18,7 +18,7 @@
 
     <groupId>com.kuretru.microservices</groupId>
     <artifactId>galaxy-authentication</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>galaxy-authentication</name>
     <description>银河微服务-身份认证模块</description>
 
