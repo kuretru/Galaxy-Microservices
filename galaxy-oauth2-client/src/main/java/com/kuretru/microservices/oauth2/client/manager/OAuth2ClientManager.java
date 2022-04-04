@@ -24,7 +24,7 @@ public interface OAuth2ClientManager {
      * 服务端身份验证成功后回调该方法，然后向服务端请求AccessToken
      *
      * @param response 回调内容
-     * @return AccessToken
+     * @return 用户信息实体
      * @throws ServiceException 业务异常
      */
     GalaxyUserDTO callback(OAuth2AuthorizeDTO.Response response) throws ServiceException;

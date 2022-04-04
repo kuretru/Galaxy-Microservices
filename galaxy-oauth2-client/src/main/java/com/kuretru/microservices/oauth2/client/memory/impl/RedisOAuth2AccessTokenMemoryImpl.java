@@ -1,8 +1,8 @@
-package com.kuretru.microservices.oauth2.client.manager.impl;
+package com.kuretru.microservices.oauth2.client.memory.impl;
 
 import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AccessTokenDO;
-import com.kuretru.microservices.oauth2.client.manager.OAuth2AccessTokenManager;
+import com.kuretru.microservices.oauth2.client.memory.OAuth2AccessTokenMemory;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,15 @@ import java.time.Duration;
  */
 @Service
 @ConditionalOnBean(StringRedisTemplate.class)
-public class RedisOAuth2AccessTokenManagerImpl implements OAuth2AccessTokenManager {
+public class RedisOAuth2AccessTokenMemoryImpl implements OAuth2AccessTokenMemory {
 
-    private static final String REDIS_ROOT_KEY = "RedisOAuth2AccessTokenManagerImpl.";
+    private static final String REDIS_ROOT_KEY = "OAuth2AccessTokenMemory.";
     private static final String REDIS_ACCESS_TOKEN_KEY = REDIS_ROOT_KEY + "accessToken.";
 
     private final RedisTemplate<String, Serializable> redisTemplate;
 
     @Autowired
-    public RedisOAuth2AccessTokenManagerImpl(RedisTemplate<String, Serializable> redisTemplate) {
+    public RedisOAuth2AccessTokenMemoryImpl(RedisTemplate<String, Serializable> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

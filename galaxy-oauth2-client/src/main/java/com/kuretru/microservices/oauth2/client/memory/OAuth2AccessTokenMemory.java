@@ -1,4 +1,4 @@
-package com.kuretru.microservices.oauth2.client.manager;
+package com.kuretru.microservices.oauth2.client.memory;
 
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AccessTokenDO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
@@ -6,7 +6,7 @@ import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface OAuth2AccessTokenManager {
+public interface OAuth2AccessTokenMemory {
 
     /**
      * 保存用户的OAuth2 AccessToken凭据
