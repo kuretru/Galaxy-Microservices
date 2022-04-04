@@ -6,7 +6,7 @@ import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
 import com.kuretru.microservices.web.controller.BaseController;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.exception.ServiceException;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +36,7 @@ public abstract class BaseOAuth2ClientController extends BaseController {
      * @return 响应实体
      * @throws ServiceException 业务异常
      */
-    @GetMapping("/galaxy/callback")
-    public abstract ApiResponse<?> galaxyCallback(OAuth2AuthorizeDTO.Response response) throws ServiceException;
+    @PostMapping("/galaxy/callback")
+    public abstract ApiResponse<?> galaxyCallback(@Validated @RequestBody OAuth2AuthorizeDTO.Response response) throws ServiceException;
 
 }
