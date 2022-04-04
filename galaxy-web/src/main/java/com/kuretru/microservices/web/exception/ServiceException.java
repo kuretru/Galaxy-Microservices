@@ -8,7 +8,7 @@ import lombok.Getter;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
 
     @Getter
     private final ResponseCodes code;

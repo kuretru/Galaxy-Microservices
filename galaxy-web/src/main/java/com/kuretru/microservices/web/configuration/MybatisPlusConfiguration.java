@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.kuretru.microservices.web.mapper.MyBatisPlusSqlInjector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * MyBatis-Plus配置
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Configuration
+@EnableTransactionManagement
 public class MybatisPlusConfiguration {
 
     @Bean
