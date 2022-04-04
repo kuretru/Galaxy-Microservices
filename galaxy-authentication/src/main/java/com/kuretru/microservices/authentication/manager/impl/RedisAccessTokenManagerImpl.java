@@ -79,7 +79,7 @@ public class RedisAccessTokenManagerImpl implements AccessTokenManager {
 
     private void exist(String key) throws ServiceException {
         if (Boolean.FALSE.equals(redisTemplate.hasKey(key))) {
-            throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "AccessToken不存在");
+            throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "登录已过期，请重新登录");
         }
     }
 

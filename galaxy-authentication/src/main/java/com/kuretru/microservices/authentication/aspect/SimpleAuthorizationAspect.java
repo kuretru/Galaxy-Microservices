@@ -11,11 +11,13 @@ import com.kuretru.microservices.web.exception.ServiceException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 /**
@@ -32,14 +34,25 @@ public class SimpleAuthorizationAspect {
     }
 
     @Before("@annotation(requireAuthorization)")
-//    @Before("@annotation(requireAuthorization) || " +
-//            "(@within(requireAuthorization) && execution(public com.kuretru.api.common.entity.ApiResponse *(..)))")
-    public void before(JoinPoint joinPoint, RequireAuthorization requireAuthorization) throws ServiceException {
+    public void beforeMethod(JoinPoint joinPoint, RequireAuthorization requireAuthorization) throws ServiceException {
         AccessTokenDTO accessTokenDTO = getAccessTokenFromUser();
         AccessTokenBO accessTokenBO = getAccessTokenFromDatabase(accessTokenDTO.getId());
         authentication(accessTokenDTO, accessTokenBO);
         authorization(requireAuthorization, accessTokenBO);
         AccessTokenContext.setUserId(accessTokenBO.getUserId());
+    }
+
+    @Before("@target(requireAuthorization) && execution(public com.kuretru.microservices.web.entity.ApiResponse *(..)))")
+    public void beforeController(JoinPoint joinPoint, RequireAuthorization requireAuthorization) throws ServiceException {
+        MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        if (method.isAnnotationPresent(RequireAuthorization.class)) {
+            // 优先使用方法上的注解
+            RequireAuthorization annotation = method.getAnnotation(RequireAuthorization.class);
+            beforeMethod(joinPoint, annotation);
+        } else {
+            beforeMethod(joinPoint, requireAuthorization);
+        }
     }
 
     protected void authentication(AccessTokenDTO dto, AccessTokenBO bo) throws ServiceException {
