@@ -4,7 +4,6 @@ import com.kuretru.microservices.authentication.constant.AccessTokenConstants;
 import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
 import com.kuretru.microservices.oauth2.client.memory.OAuth2AccessTokenMemory;
-import com.kuretru.microservices.oauth2.client.manager.OAuth2ClientManager;
 import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
 import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
@@ -18,6 +17,7 @@ import com.kuretru.microservices.web.exception.ServiceException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
+@Slf4j
 @Service
 @ConditionalOnProperty("galaxy.oauth2.client.gemini.server-url")
 public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
@@ -60,17 +61,33 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
                 StringUtils.collectionToString(record.getScopes(), OAuth2Constants.SCOPES_SEPARATOR),
                 stateManager.generateAndSave(redirectUrl)
         );
-        return buildRedirectUrl(request);
+        String result = buildRedirectUrl(request);
+        if (log.isInfoEnabled()) {
+            log.info("重定向至OAuth2服务器：" + result);
+        }
+        return result;
     }
 
     @Override
     public GalaxyUserDTO callback(OAuth2AuthorizeDTO.Response response) throws ServiceException {
         // OAuth2服务端认证完成回调时，发起请求获取用于OAuth2的AccessToken
         OAuth2AccessTokenDTO.Response oauth2AccessToken = obtainAccessToken(response);
+        if (log.isInfoEnabled()) {
+            log.info("从OAuth2服务器获取到AccessToken");
+        }
+
         // 使用AccessToken获取用户信息
         GalaxyUserDTO galaxyUserDTO = obtainUserId(oauth2AccessToken.getAccessToken());
+        if (log.isInfoEnabled()) {
+            log.info("从OAuth2服务器获取到用户信息：用户名[" + galaxyUserDTO.getNickname() + "]");
+        }
+
         // 保存AccessToken
         accessTokenManager.save(galaxyUserDTO.getId().toString(), oauth2AccessToken);
+        if (log.isInfoEnabled()) {
+            log.info("保存OAuth2的AccessToken");
+        }
+
         return galaxyUserDTO;
     }
 
@@ -114,8 +131,6 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
         headers.set(AccessTokenConstants.AUTHORIZATION, "token " + accessToken);
         HttpEntity<GalaxyUserDTO> request = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ApiResponse<GalaxyUserDTO> template = new ApiResponse<>();
-        Class<ApiResponse<GalaxyUserDTO>> clazz = (Class<ApiResponse<GalaxyUserDTO>>)template.getClass();
         ApiResponse<?> result = restTemplate.exchange(url, HttpMethod.GET, request, Template.class).getBody();
         if (result != null && result.getData() instanceof GalaxyUserDTO) {
             return (GalaxyUserDTO)result.getData();

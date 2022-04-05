@@ -7,6 +7,7 @@ import com.kuretru.microservices.authentication.manager.AccessTokenManager;
 import com.kuretru.microservices.authentication.property.AuthenticationProperty;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +21,7 @@ import java.util.UUID;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
+@Slf4j
 @Service
 @ConditionalOnBean(StringRedisTemplate.class)
 public class RedisAccessTokenManagerImpl implements AccessTokenManager {
@@ -50,6 +52,9 @@ public class RedisAccessTokenManagerImpl implements AccessTokenManager {
                 roles
         );
         redisTemplate.opsForValue().set(buildKey(id), value, property.getExpireTime());
+        if (log.isInfoEnabled()) {
+            log.info("已保存用户AccessToken凭据");
+        }
 
         return new AccessTokenDTO(id, value.getSecret());
     }
