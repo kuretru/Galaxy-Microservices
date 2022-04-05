@@ -39,6 +39,7 @@ public class SimpleAuthorizationAspect {
         AccessTokenBO accessTokenBO = getAccessTokenFromDatabase(accessTokenDTO.getId());
         authentication(accessTokenDTO, accessTokenBO);
         authorization(requireAuthorization, accessTokenBO);
+        accessTokenManager.refresh(accessTokenDTO.getId());
         AccessTokenContext.setUserId(accessTokenBO.getUserId());
     }
 
