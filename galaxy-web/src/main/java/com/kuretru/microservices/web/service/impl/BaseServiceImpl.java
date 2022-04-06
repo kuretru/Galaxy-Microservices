@@ -126,7 +126,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public synchronized T save(T record) throws ServiceException {
+    public T save(T record) throws ServiceException {
         verifyDTO(record);
 
         UUID uuid = UUID.randomUUID();
