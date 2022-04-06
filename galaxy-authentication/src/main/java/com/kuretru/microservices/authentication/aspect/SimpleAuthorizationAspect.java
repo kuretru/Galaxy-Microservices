@@ -8,9 +8,9 @@ import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.authentication.manager.AccessTokenManager;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,26 +33,31 @@ public class SimpleAuthorizationAspect {
         this.accessTokenManager = accessTokenManager;
     }
 
-    @Before("@annotation(requireAuthorization)")
-    public void beforeMethod(JoinPoint joinPoint, RequireAuthorization requireAuthorization) throws ServiceException {
+    @Around("@annotation(requireAuthorization)")
+    public Object aroundMethod(ProceedingJoinPoint joinPoint, RequireAuthorization requireAuthorization) throws Throwable {
         AccessTokenDTO accessTokenDTO = getAccessTokenFromUser();
         AccessTokenBO accessTokenBO = getAccessTokenFromDatabase(accessTokenDTO.getId());
         authentication(accessTokenDTO, accessTokenBO);
         authorization(requireAuthorization, accessTokenBO);
+
+        // 延长AccessToken的使用时间
         accessTokenManager.refresh(accessTokenDTO.getId());
         AccessTokenContext.setUserId(accessTokenBO.getUserId());
+        Object result = joinPoint.proceed();
+        AccessTokenContext.removeUserId();
+        return result;
     }
 
-    @Before("@target(requireAuthorization) && execution(public com.kuretru.microservices.web.entity.ApiResponse *(..)))")
-    public void beforeController(JoinPoint joinPoint, RequireAuthorization requireAuthorization) throws ServiceException {
+    @Around("@target(requireAuthorization) && execution(public com.kuretru.microservices.web.entity.ApiResponse *(..)))")
+    public Object beforeController(ProceedingJoinPoint joinPoint, RequireAuthorization requireAuthorization) throws Throwable {
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         if (method.isAnnotationPresent(RequireAuthorization.class)) {
             // 优先使用方法上的注解
             RequireAuthorization annotation = method.getAnnotation(RequireAuthorization.class);
-            beforeMethod(joinPoint, annotation);
+            return aroundMethod(joinPoint, annotation);
         } else {
-            beforeMethod(joinPoint, requireAuthorization);
+            return aroundMethod(joinPoint, requireAuthorization);
         }
     }
 
