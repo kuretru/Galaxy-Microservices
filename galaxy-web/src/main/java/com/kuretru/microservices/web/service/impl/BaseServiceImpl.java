@@ -1,6 +1,7 @@
 package com.kuretru.microservices.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
@@ -130,8 +131,8 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         verifyDTO(record);
 
         UUID uuid = UUID.randomUUID();
-        if (get(uuid) != null) {
-            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
+        while (get(uuid) != null) {
+            uuid = UUID.randomUUID();
         }
 
         D data = dtoToDo(record);
@@ -146,9 +147,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
         D data = dtoToDo(record);
         data.setUpdateTime(Instant.now());
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uuid", data.getUuid());
-        int rows = mapper.update(data, queryWrapper);
+        UpdateWrapper<D> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("uuid", data.getUuid());
+        int rows = mapper.update(data, updateWrapper);
         if (0 == rows) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         } else if (1 != rows) {

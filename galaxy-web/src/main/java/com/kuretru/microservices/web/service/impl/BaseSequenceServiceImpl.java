@@ -60,9 +60,11 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
 
     @Override
     public T save(T record) throws ServiceException {
+        verifyDTO(record);
+
         UUID uuid = UUID.randomUUID();
-        if (get(uuid) != null) {
-            throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "产生了已存在的UUID，请重新提交请求");
+        while (get(uuid) != null) {
+            uuid = UUID.randomUUID();
         }
 
         D data = dtoToDo(record);
