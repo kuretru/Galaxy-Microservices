@@ -1,6 +1,8 @@
 package com.kuretru.microservices.oauth2.client.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kuretru.microservices.authentication.context.AccessTokenContext;
+import com.kuretru.microservices.authentication.entity.AccessTokenBO;
 import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.authentication.entity.UserLoginDTO;
 import com.kuretru.microservices.authentication.manager.AccessTokenManager;
@@ -54,6 +56,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserDTO
         UUID userId = UUID.fromString(userDo.getUuid());
         AccessTokenDTO accessTokenDTO = accessTokenManager.generate(userId, null);
         return new UserLoginDTO(userId, accessTokenDTO);
+    }
+
+    @Override
+    public void logout(String accessTokenId) throws ServiceException {
+        AccessTokenBO accessTokenBO = accessTokenManager.get(accessTokenId);
+        UUID userId = AccessTokenContext.getUserId();
+        if (!accessTokenBO.getUserId().equals(userId)) {
+            throw new ServiceException(UserErrorCodes.ACCESS_PERMISSION_ERROR, "AccessTokenID与操作用户不匹配");
+        }
+        accessTokenManager.revoke(accessTokenId);
     }
 
     @Override

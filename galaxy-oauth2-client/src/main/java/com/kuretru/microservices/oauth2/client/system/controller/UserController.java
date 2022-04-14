@@ -2,6 +2,7 @@ package com.kuretru.microservices.oauth2.client.system.controller;
 
 import com.kuretru.microservices.authentication.annotaion.RequireAuthorization;
 import com.kuretru.microservices.authentication.context.AccessTokenContext;
+import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.oauth2.client.system.entity.UserDTO;
 import com.kuretru.microservices.oauth2.client.system.service.UserService;
 import com.kuretru.microservices.web.constant.EmptyConstants;
@@ -10,10 +11,7 @@ import com.kuretru.microservices.web.controller.BaseController;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -45,6 +43,13 @@ public class UserController extends BaseController {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         }
         return ApiResponse.success(result);
+    }
+
+    @PostMapping("/logout")
+    @RequireAuthorization
+    public ApiResponse<?> logout(@RequestBody AccessTokenDTO accessToken) {
+        service.logout(accessToken.getId());
+        return ApiResponse.success("已退出登录...");
     }
 
 }

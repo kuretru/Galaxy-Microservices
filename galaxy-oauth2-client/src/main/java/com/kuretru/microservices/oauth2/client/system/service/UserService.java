@@ -29,4 +29,12 @@ public interface UserService {
      */
     UserLoginDTO login(GalaxyUserDTO record) throws ServiceException;
 
+    /**
+     * 用户登出
+     *
+     * @param accessTokenId AccessTokenID
+     * @throws ServiceException 登出失败时会产生异常
+     */
+    void logout(String accessTokenId) throws ServiceException;
+
 }
