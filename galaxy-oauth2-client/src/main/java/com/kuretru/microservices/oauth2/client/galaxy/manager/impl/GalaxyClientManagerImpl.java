@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Service
-@ConditionalOnProperty("galaxy.oauth2.client.gemini.server-url")
+@ConditionalOnProperty("galaxy.oauth2.client.galaxy.server-url")
 public class GalaxyClientManagerImpl implements GalaxyClientManager {
 
     private static final String AUTHORIZE_PATH = "/oauth2/authorize";
