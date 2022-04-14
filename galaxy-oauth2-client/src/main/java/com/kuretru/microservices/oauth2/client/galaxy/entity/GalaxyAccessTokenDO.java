@@ -1,4 +1,4 @@
-package com.kuretru.microservices.oauth2.client.entity;
+package com.kuretru.microservices.oauth2.client.galaxy.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2AccessTokenDO implements Serializable {
+public class GalaxyAccessTokenDO implements Serializable {
 
     private String accessToken;
 

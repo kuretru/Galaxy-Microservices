@@ -1,4 +1,4 @@
-package com.kuretru.microservices.oauth2.client.memory;
+package com.kuretru.microservices.oauth2.client.galaxy.memory;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>

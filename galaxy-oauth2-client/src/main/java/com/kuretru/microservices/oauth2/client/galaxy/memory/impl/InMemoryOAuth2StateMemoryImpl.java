@@ -1,7 +1,7 @@
-package com.kuretru.microservices.oauth2.client.memory.impl;
+package com.kuretru.microservices.oauth2.client.galaxy.memory.impl;
 
-import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
-import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.GalaxyClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.memory.OAuth2StateMemory;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 @ConditionalOnMissingBean(StringRedisTemplate.class)
 public class InMemoryOAuth2StateMemoryImpl implements OAuth2StateMemory {
 
-    private final OAuth2ClientProperty property;
+    private final GalaxyClientProperty property;
 
     @Autowired
-    public InMemoryOAuth2StateMemoryImpl(OAuth2ClientProperty property) {
+    public InMemoryOAuth2StateMemoryImpl(GalaxyClientProperty property) {
         this.property = property;
     }
 

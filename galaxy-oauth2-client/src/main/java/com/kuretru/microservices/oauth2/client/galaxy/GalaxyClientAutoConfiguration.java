@@ -1,7 +1,6 @@
-package com.kuretru.microservices.oauth2.client.configuration;
+package com.kuretru.microservices.oauth2.client.galaxy;
 
 import com.kuretru.microservices.common.factory.RedisFactory;
-import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,10 +19,10 @@ import java.io.Serializable;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @Configuration
-@ComponentScan("com.kuretru.microservices.oauth2.client")
-@EnableConfigurationProperties(OAuth2ClientProperty.class)
+@ComponentScan("com.kuretru.microservices.oauth2.client.galaxy")
+@EnableConfigurationProperties(GalaxyClientProperty.class)
 @AutoConfigureAfter(RedisAutoConfiguration.class)
-public class OAuth2ClientAutoConfiguration {
+public class GalaxyClientAutoConfiguration {
 
     @Bean("serializableRedisTemplate")
     @ConditionalOnBean(StringRedisTemplate.class)

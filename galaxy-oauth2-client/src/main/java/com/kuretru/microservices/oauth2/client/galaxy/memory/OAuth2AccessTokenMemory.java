@@ -1,6 +1,6 @@
-package com.kuretru.microservices.oauth2.client.memory;
+package com.kuretru.microservices.oauth2.client.galaxy.memory;
 
-import com.kuretru.microservices.oauth2.client.entity.OAuth2AccessTokenDO;
+import com.kuretru.microservices.oauth2.client.galaxy.entity.GalaxyAccessTokenDO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 
 /**
@@ -22,7 +22,7 @@ public interface OAuth2AccessTokenMemory {
      * @param id 服务端侧的用户ID
      * @return AccessToken信息
      */
-    OAuth2AccessTokenDO get(String id);
+    GalaxyAccessTokenDO get(String id);
 
     /**
      * 删除保存的用户的OAuth2 AccessToken凭据

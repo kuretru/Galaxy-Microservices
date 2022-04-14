@@ -1,7 +1,7 @@
-package com.kuretru.microservices.oauth2.client.memory.impl;
+package com.kuretru.microservices.oauth2.client.galaxy.memory.impl;
 
-import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
-import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.GalaxyClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.memory.OAuth2StateMemory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,11 +20,11 @@ public class RedisOAuth2StateMemoryImpl implements OAuth2StateMemory {
     private static final String REDIS_ROOT_KEY = "OAuth2StateMemory.";
     private static final String REDIS_STATE_KEY = REDIS_ROOT_KEY + "state.";
 
-    private final OAuth2ClientProperty property;
+    private final GalaxyClientProperty property;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public RedisOAuth2StateMemoryImpl(OAuth2ClientProperty property, RedisTemplate<String, String> redisTemplate) {
+    public RedisOAuth2StateMemoryImpl(GalaxyClientProperty property, RedisTemplate<String, String> redisTemplate) {
         this.property = property;
         this.redisTemplate = redisTemplate;
     }
@@ -35,7 +35,7 @@ public class RedisOAuth2StateMemoryImpl implements OAuth2StateMemory {
         while (Boolean.TRUE.equals(redisTemplate.hasKey(buildKey(state)))) {
             state = UUID.randomUUID().toString();
         }
-        redisTemplate.opsForValue().set(buildKey(state), redirectUri, property.getGemini().getStateExpireTime());
+        redisTemplate.opsForValue().set(buildKey(state), redirectUri, property.getStateExpireTime());
         return state;
     }
 

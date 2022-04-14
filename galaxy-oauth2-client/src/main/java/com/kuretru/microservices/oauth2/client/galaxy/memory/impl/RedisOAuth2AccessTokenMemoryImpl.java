@@ -1,8 +1,8 @@
-package com.kuretru.microservices.oauth2.client.memory.impl;
+package com.kuretru.microservices.oauth2.client.galaxy.memory.impl;
 
 import com.kuretru.microservices.common.utils.StringUtils;
-import com.kuretru.microservices.oauth2.client.entity.OAuth2AccessTokenDO;
-import com.kuretru.microservices.oauth2.client.memory.OAuth2AccessTokenMemory;
+import com.kuretru.microservices.oauth2.client.galaxy.entity.GalaxyAccessTokenDO;
+import com.kuretru.microservices.oauth2.client.galaxy.memory.OAuth2AccessTokenMemory;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class RedisOAuth2AccessTokenMemoryImpl implements OAuth2AccessTokenMemory
     @Override
     public void save(String id, OAuth2AccessTokenDTO.Response record) {
         Duration expireTime = Duration.ofMillis(record.getExpiresIn() - System.currentTimeMillis());
-        OAuth2AccessTokenDO accessTokenDO = new OAuth2AccessTokenDO(
+        GalaxyAccessTokenDO accessTokenDO = new GalaxyAccessTokenDO(
                 record.getAccessToken(),
                 record.getRefreshToken(),
                 StringUtils.stringToSet(record.getScope(), OAuth2Constants.SCOPES_SEPARATOR)
@@ -43,8 +43,8 @@ public class RedisOAuth2AccessTokenMemoryImpl implements OAuth2AccessTokenMemory
     }
 
     @Override
-    public OAuth2AccessTokenDO get(String id) {
-        return (OAuth2AccessTokenDO)redisTemplate.opsForValue().get(buildKey(id));
+    public GalaxyAccessTokenDO get(String id) {
+        return (GalaxyAccessTokenDO)redisTemplate.opsForValue().get(buildKey(id));
     }
 
     @Override

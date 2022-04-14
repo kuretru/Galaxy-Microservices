@@ -1,6 +1,6 @@
-package com.kuretru.microservices.oauth2.client.manager;
+package com.kuretru.microservices.oauth2.client.galaxy.manager;
 
-import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
+import com.kuretru.microservices.oauth2.client.galaxy.entity.GalaxyAuthorizeRequestDTO;
 import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AuthorizeDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
@@ -10,7 +10,7 @@ import com.kuretru.microservices.web.exception.ServiceException;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public interface OAuth2ClientManager {
+public interface GalaxyClientManager {
 
     /**
      * 向服务端请求身份验证
@@ -18,7 +18,7 @@ public interface OAuth2ClientManager {
      * @param record 请求实体
      * @return 重定向至服务端的URL
      */
-    String authorize(OAuth2AuthorizeRequestDTO record);
+    String authorize(GalaxyAuthorizeRequestDTO record);
 
     /**
      * 服务端身份验证成功后回调该方法，然后向服务端请求AccessToken

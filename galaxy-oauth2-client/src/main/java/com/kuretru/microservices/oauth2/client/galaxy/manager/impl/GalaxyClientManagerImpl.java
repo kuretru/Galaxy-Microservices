@@ -1,11 +1,12 @@
-package com.kuretru.microservices.oauth2.client.manager;
+package com.kuretru.microservices.oauth2.client.galaxy.manager.impl;
 
 import com.kuretru.microservices.authentication.constant.AccessTokenConstants;
 import com.kuretru.microservices.common.utils.StringUtils;
-import com.kuretru.microservices.oauth2.client.entity.OAuth2AuthorizeRequestDTO;
-import com.kuretru.microservices.oauth2.client.memory.OAuth2AccessTokenMemory;
-import com.kuretru.microservices.oauth2.client.memory.OAuth2StateMemory;
-import com.kuretru.microservices.oauth2.client.property.OAuth2ClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.GalaxyClientProperty;
+import com.kuretru.microservices.oauth2.client.galaxy.entity.GalaxyAuthorizeRequestDTO;
+import com.kuretru.microservices.oauth2.client.galaxy.manager.GalaxyClientManager;
+import com.kuretru.microservices.oauth2.client.galaxy.memory.OAuth2AccessTokenMemory;
+import com.kuretru.microservices.oauth2.client.galaxy.memory.OAuth2StateMemory;
 import com.kuretru.microservices.oauth2.common.constant.OAuth2Constants;
 import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.oauth2.common.entity.OAuth2AccessTokenDTO;
@@ -35,28 +36,28 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Service
 @ConditionalOnProperty("galaxy.oauth2.client.gemini.server-url")
-public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
+public class GalaxyClientManagerImpl implements GalaxyClientManager {
 
     private static final String AUTHORIZE_PATH = "/oauth2/authorize";
     private static final String ACCESS_TOKEN_PATH = "/oauth2/access_token";
     private static final String USER_INFORMATION_PATH = "/api/users";
-    private final OAuth2ClientProperty property;
+    private final GalaxyClientProperty property;
     private final OAuth2StateMemory stateManager;
     private final OAuth2AccessTokenMemory accessTokenManager;
 
     @Autowired
-    public GalaxyOAuth2ClientManagerImpl(OAuth2ClientProperty property, OAuth2StateMemory stateManager, OAuth2AccessTokenMemory accessTokenManager) {
+    public GalaxyClientManagerImpl(GalaxyClientProperty property, OAuth2StateMemory stateManager, OAuth2AccessTokenMemory accessTokenManager) {
         this.property = property;
         this.stateManager = stateManager;
         this.accessTokenManager = accessTokenManager;
     }
 
     @Override
-    public String authorize(OAuth2AuthorizeRequestDTO record) {
+    public String authorize(GalaxyAuthorizeRequestDTO record) {
         String redirectUrl = StringUtils.nullToEmpty(record.getRedirectUri());
         OAuth2AuthorizeDTO.Request request = new OAuth2AuthorizeDTO.Request(
                 OAuth2Constants.AUTHORIZATION_REQUEST_RESPONSE_TYPE,
-                property.getGemini().getApplicationId(),
+                property.getApplicationId(),
                 redirectUrl,
                 StringUtils.collectionToString(record.getScopes(), OAuth2Constants.SCOPES_SEPARATOR),
                 stateManager.generateAndSave(redirectUrl)
@@ -93,7 +94,7 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
 
     private String buildRedirectUrl(OAuth2AuthorizeDTO.Request request) {
         StringBuilder result = new StringBuilder()
-                .append(property.getGemini().getServerUrl())
+                .append(property.getServerUrl())
                 .append(AUTHORIZE_PATH)
                 .append("?response_type=code")
                 .append("&client_id=").append(request.getClientId());
@@ -116,17 +117,17 @@ public class GalaxyOAuth2ClientManagerImpl implements OAuth2ClientManager {
                 OAuth2Constants.ACCESS_TOKEN_REQUEST_GRANT_TYPE,
                 response.getCode(),
                 redirectUrl,
-                this.property.getGemini().getApplicationId(),
-                this.property.getGemini().getApplicationSecret()
+                this.property.getApplicationId(),
+                this.property.getApplicationSecret()
         );
-        String url = this.property.getGemini().getServerUrl() + ACCESS_TOKEN_PATH;
+        String url = this.property.getServerUrl() + ACCESS_TOKEN_PATH;
         HttpEntity<OAuth2AccessTokenDTO.Request> request = new HttpEntity<>(entity);
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForObject(url, request, OAuth2AccessTokenDTO.Response.class);
     }
 
     private GalaxyUserDTO obtainUserId(String accessToken) throws ServiceException {
-        String url = this.property.getGemini().getServerUrl() + USER_INFORMATION_PATH;
+        String url = this.property.getServerUrl() + USER_INFORMATION_PATH;
         HttpHeaders headers = new HttpHeaders();
         headers.set(AccessTokenConstants.AUTHORIZATION, "token " + accessToken);
         HttpEntity<GalaxyUserDTO> request = new HttpEntity<>(headers);
