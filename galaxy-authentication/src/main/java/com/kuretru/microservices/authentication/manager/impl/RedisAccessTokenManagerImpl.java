@@ -63,7 +63,7 @@ public class RedisAccessTokenManagerImpl implements AccessTokenManager {
     public AccessTokenBO get(String id) throws ServiceException {
         String key = buildKey(id);
         exist(key);
-        AccessTokenDO value = (AccessTokenDO)redisTemplate.opsForValue().get(key);
+        AccessTokenDO value = (AccessTokenDO)redisTemplate.opsForValue().getAndExpire(key, property.getExpireTime());
         assert value != null;
         return new AccessTokenBO(value.getSecret(), value.getUserId(), value.getRoles());
     }
