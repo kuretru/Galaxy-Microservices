@@ -1,0 +1,32 @@
+name: CI
+on: [ push, pull_request ]
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Build Galaxy Common
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-common/
+      - name: Build Galaxy Web
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-web/
+      - name: Build Galaxy Authentication
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-authentication/
+      - name: Build Galaxy OAuth2 Common
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-oauth2-common/
+      - name: Build Galaxy OAuth2 Server
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-oauth2-server/
+      - name: Build Galaxy OAuth2 Client
+        run: mvn --batch-mode --update-snapshots install
+        working-directory: galaxy-oauth2-client/
