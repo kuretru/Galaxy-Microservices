@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.constant;
+package com.kuretru.microservices.common.constant;
 
 import java.time.LocalDate;
 import java.time.Month;

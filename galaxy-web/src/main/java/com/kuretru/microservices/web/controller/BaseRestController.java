@@ -1,6 +1,6 @@
 package com.kuretru.microservices.web.controller;
 
-import com.kuretru.microservices.web.constant.EmptyConstants;
+import com.kuretru.microservices.common.constant.EmptyConstants;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.entity.PaginationQuery;
