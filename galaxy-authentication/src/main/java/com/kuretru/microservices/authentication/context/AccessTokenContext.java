@@ -1,5 +1,7 @@
 package com.kuretru.microservices.authentication.context;
 
+import com.kuretru.microservices.authentication.entity.AccessTokenBO;
+import com.kuretru.microservices.authentication.util.RoleUtils;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
 
@@ -11,18 +13,27 @@ import java.util.UUID;
 @Component
 public class AccessTokenContext {
 
-    private static final ThreadLocal<UUID> USER_ID_HOLDER = new NamedThreadLocal<>("AccessToken.UserId");
+    private static final ThreadLocal<AccessTokenBO.Context> ACCESS_TOKEN_HOLDER = new NamedThreadLocal<>("AccessToken");
 
     public static UUID getUserId() {
-        return USER_ID_HOLDER.get();
+        return ACCESS_TOKEN_HOLDER.get().getUserId();
     }
 
-    public static void setUserId(UUID userId) {
-        USER_ID_HOLDER.set(userId);
+    public static boolean hasRole(String... roles) {
+        return RoleUtils.hasRole(ACCESS_TOKEN_HOLDER.get().getRoles(), roles);
+
     }
 
-    public static void removeUserId() {
-        USER_ID_HOLDER.remove();
+    public static boolean hasRoles(String... roles) {
+        return RoleUtils.hasRoles(ACCESS_TOKEN_HOLDER.get().getRoles(), roles);
+    }
+
+    public static void setAccessToken(AccessTokenBO.Context context) {
+        ACCESS_TOKEN_HOLDER.set(context);
+    }
+
+    public static void removeAccessToken() {
+        ACCESS_TOKEN_HOLDER.remove();
     }
 
 }

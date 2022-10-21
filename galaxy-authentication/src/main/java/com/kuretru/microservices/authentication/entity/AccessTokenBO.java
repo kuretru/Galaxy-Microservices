@@ -23,4 +23,15 @@ public class AccessTokenBO {
 
     private Set<String> roles;
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Context {
+
+        private UUID userId;
+
+        private Set<String> roles;
+        
+    }
+
 }

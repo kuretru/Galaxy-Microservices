@@ -36,18 +36,18 @@ public class SimpleAuthorizationAspect {
 
     @Around("@annotation(requireAuthorization)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint, RequireAuthorization requireAuthorization) throws Throwable {
-        AccessTokenDTO accessTokenDTO = getAccessTokenFromUser();
+        AccessTokenDTO accessTokenDTO = getAccessTokenFromBrowser();
         AccessTokenBO accessTokenBO = getAccessTokenFromDatabase(accessTokenDTO.getId());
         authentication(accessTokenDTO, accessTokenBO);
         authorization(requireAuthorization, accessTokenBO);
 
         // 延长AccessToken的使用时间
         accessTokenManager.refresh(accessTokenDTO.getId());
-        AccessTokenContext.setUserId(accessTokenBO.getUserId());
+        AccessTokenContext.setAccessToken(new AccessTokenBO.Context(accessTokenBO.getUserId(), accessTokenBO.getRoles()));
         try {
             return joinPoint.proceed();
         } finally {
-            AccessTokenContext.removeUserId();
+            AccessTokenContext.removeAccessToken();
         }
     }
 
@@ -90,7 +90,7 @@ public class SimpleAuthorizationAspect {
         }
     }
 
-    private AccessTokenDTO getAccessTokenFromUser() throws ServiceException {
+    private AccessTokenDTO getAccessTokenFromBrowser() throws ServiceException {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         if (servletRequestAttributes == null) {
             throw ServiceException.build(UserErrorCodes.USER_LOGIN_ERROR, "无法获得AccessToken");
