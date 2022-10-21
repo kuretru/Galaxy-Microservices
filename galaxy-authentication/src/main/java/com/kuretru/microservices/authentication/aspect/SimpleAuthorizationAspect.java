@@ -6,6 +6,7 @@ import com.kuretru.microservices.authentication.context.AccessTokenContext;
 import com.kuretru.microservices.authentication.entity.AccessTokenBO;
 import com.kuretru.microservices.authentication.entity.AccessTokenDTO;
 import com.kuretru.microservices.authentication.manager.AccessTokenManager;
+import com.kuretru.microservices.authentication.util.RoleUtils;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -43,9 +44,11 @@ public class SimpleAuthorizationAspect {
         // 延长AccessToken的使用时间
         accessTokenManager.refresh(accessTokenDTO.getId());
         AccessTokenContext.setUserId(accessTokenBO.getUserId());
-        Object result = joinPoint.proceed();
-        AccessTokenContext.removeUserId();
-        return result;
+        try {
+            return joinPoint.proceed();
+        } finally {
+            AccessTokenContext.removeUserId();
+        }
     }
 
     @Around("@target(requireAuthorization) && execution(public com.kuretru.microservices.web.entity.ApiResponse *(..)))")
@@ -75,19 +78,14 @@ public class SimpleAuthorizationAspect {
             return;
         }
 
-        Set<String> roles = accessTokenBO.getRoles();
+        Set<String> expected = accessTokenBO.getRoles();
         if (requireAuthorization.hasRole().length > 0) {
-            for (String role : requireAuthorization.hasRole()) {
-                if (roles.contains(role)) {
-                    return;
-                }
+            if (!RoleUtils.hasRole(expected, requireAuthorization.hasRole())) {
+                throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "用户缺少权限");
             }
-            throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "用户缺少权限");
         } else {
-            for (String role : requireAuthorization.hasRoles()) {
-                if (!roles.contains(role)) {
-                    throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "用户缺少权限");
-                }
+            if (!RoleUtils.hasRoles(expected, requireAuthorization.hasRoles())) {
+                throw ServiceException.build(UserErrorCodes.ACCESS_PERMISSION_ERROR, "用户缺少权限");
             }
         }
     }

@@ -5,6 +5,8 @@ import com.kuretru.microservices.common.constant.EmptyConstants;
 import java.util.UUID;
 
 /**
+ * UUID相关的静态工具类
+ *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 public class UuidUtils {
