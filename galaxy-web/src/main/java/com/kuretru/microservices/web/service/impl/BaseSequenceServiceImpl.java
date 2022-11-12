@@ -18,8 +18,8 @@ import java.util.UUID;
  */
 public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO, Q> extends BaseServiceImpl<M, D, T, Q> implements BaseSequenceService<T, Q> {
 
-    public BaseSequenceServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
-        super(mapper, doClass, dtoClass);
+    public BaseSequenceServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
+        super(mapper, entityMapper);
     }
 
     @Override
@@ -67,7 +67,7 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
             uuid = UUID.randomUUID();
         }
 
-        D data = dtoToDo(record);
+        D data = entityMapper.dtoToDo(record);
         addCreateTime(data, uuid);
         data.setSequence(getMaxSequence() + 1);
         mapper.insert(data);

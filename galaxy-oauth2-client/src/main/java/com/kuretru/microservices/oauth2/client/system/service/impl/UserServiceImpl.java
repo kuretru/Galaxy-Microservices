@@ -15,6 +15,7 @@ import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.impl.BaseServiceImpl;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserDTO
     private final AccessTokenManager accessTokenManager;
 
     @Autowired
-    public UserServiceImpl(UserMapper mapper, AccessTokenManager accessTokenManager) {
-        super(mapper, UserDO.class, UserDTO.class);
+    public UserServiceImpl(UserMapper mapper, UserEntityMapper entityMapper, AccessTokenManager accessTokenManager) {
+        super(mapper, entityMapper);
         this.accessTokenManager = accessTokenManager;
     }
 
@@ -68,24 +69,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserDTO
         accessTokenManager.revoke(accessTokenId);
     }
 
-    @Override
-    protected UserDTO doToDto(UserDO record) {
-        if (record == null) {
-            return null;
-        }
-        UserDTO result = super.doToDto(record);
-        result.setGeminiId(UUID.fromString(record.getGeminiId()));
-        return result;
-    }
+    @Mapper(componentModel = "spring")
+    interface UserEntityMapper extends BaseServiceImpl.BaseEntityMapper<UserDO, UserDTO> {
 
-    @Override
-    protected UserDO dtoToDo(UserDTO record) {
-        if (record == null) {
-            return null;
-        }
-        UserDO result = super.dtoToDo(record);
-        result.setGeminiId(record.getGeminiId().toString());
-        return result;
     }
 
 }

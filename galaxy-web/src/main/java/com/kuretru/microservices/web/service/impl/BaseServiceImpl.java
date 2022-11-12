@@ -17,7 +17,6 @@ import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.BaseService;
 import lombok.SneakyThrows;
 import org.mapstruct.Mapping;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import java.beans.BeanInfo;
@@ -29,7 +28,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -41,35 +43,25 @@ import java.util.stream.Collectors;
 public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q> implements BaseService<T, Q> {
 
     protected final M mapper;
+    protected final BaseEntityMapper<D, T> entityMapper;
     protected final Class<D> doClass;
     protected final Class<T> dtoClass;
-    protected final Class<?> queryClass;
-    protected BaseEntityMapper<D, T> entityMapper;
+    protected final Class<Q> queryClass;
 
-    public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
+    @SuppressWarnings("unchecked")
+    public BaseServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
         this.mapper = mapper;
-        this.doClass = doClass;
-        this.dtoClass = dtoClass;
-        ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
-        queryClass = (Class<?>)baseType.getActualTypeArguments()[3];
-    }
-
-    public BaseServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper, Class<D> doClass, Class<T> dtoClass) {
-        this(mapper, doClass, dtoClass);
         this.entityMapper = entityMapper;
-    }
-
-    public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass, Class<?> queryClass) {
-        this.mapper = mapper;
-        this.doClass = doClass;
-        this.dtoClass = dtoClass;
-        this.queryClass = queryClass;
+        ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
+        doClass = (Class<D>)baseType.getActualTypeArguments()[1];
+        dtoClass = (Class<T>)baseType.getActualTypeArguments()[2];
+        queryClass = (Class<Q>)baseType.getActualTypeArguments()[3];
     }
 
     @Override
     public T get(Long id) {
         D record = mapper.selectById(id);
-        return doToDto(record);
+        return entityMapper.doToDto(record);
     }
 
     @Override
@@ -77,11 +69,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid.toString());
         D record = mapper.selectOne(queryWrapper);
-        return doToDto(record);
+        return entityMapper.doToDto(record);
     }
 
     protected List<T> list(QueryWrapper<D> queryWrapper) {
-        return doToDto(mapper.selectList(queryWrapper));
+        return entityMapper.doToDto(mapper.selectList(queryWrapper));
     }
 
     protected List<D> list(List<UUID> uuidList) {
@@ -109,7 +101,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     protected PaginationResponse<T> list(PaginationQuery pagination, QueryWrapper<D> queryWrapper) {
         Page<D> page = new Page<>(pagination.getCurrent(), pagination.getPageSize());
         page = mapper.selectPage(page, queryWrapper);
-        List<T> records = doToDto(page.getRecords());
+        List<T> records = entityMapper.doToDto(page.getRecords());
         return new PaginationResponse<>(records, page.getCurrent(), page.getSize(), page.getTotal());
     }
 
@@ -142,7 +134,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
             uuid = UUID.randomUUID();
         }
 
-        D data = dtoToDo(record);
+        D data = entityMapper.dtoToDo(record);
         addCreateTime(data, uuid);
         mapper.insert(data);
         return get(data.getId());
@@ -152,7 +144,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     public T update(T record) throws ServiceException {
         verifyDTO(record);
 
-        D data = dtoToDo(record);
+        D data = entityMapper.dtoToDo(record);
         data.setUpdateTime(Instant.now());
         UpdateWrapper<D> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("uuid", data.getUuid());
@@ -248,74 +240,6 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     /**
-     * 将数据实体转换为数据传输实体
-     *
-     * @param record 数据实体
-     * @return 数据传输实体
-     */
-    protected T doToDto(D record) {
-        if (record == null) {
-            return null;
-        }
-        T result = buildDTOInstance();
-        BeanUtils.copyProperties(record, result);
-        result.setId(UUID.fromString(record.getUuid()));
-        return result;
-    }
-
-    /**
-     * 将数据实体批量转换为数据传输实体
-     *
-     * @param records 数据实体列表
-     * @return 数据传输实体列表
-     */
-    protected List<T> doToDto(List<D> records) {
-        if (records == null) {
-            return null;
-        }
-        List<T> result = new ArrayList<>(records.size());
-        for (D record : records) {
-            result.add(doToDto(record));
-        }
-        return result;
-    }
-
-    /**
-     * 将数据传输实体转换为数据实体
-     *
-     * @param record 数据传输实体
-     * @return 数据实体
-     */
-    protected D dtoToDo(T record) {
-        if (record == null) {
-            return null;
-        }
-        D result = buildDOInstance();
-        BeanUtils.copyProperties(record, result);
-        if (record.getId() != null) {
-            result.setUuid(record.getId().toString());
-        }
-        return result;
-    }
-
-    /**
-     * 将数据传输实体批量转换为数据实体
-     *
-     * @param records 数据传输实体列表
-     * @return 数据实体列表
-     */
-    protected List<D> dtoToDo(List<T> records) {
-        if (records == null) {
-            return null;
-        }
-        List<D> result = new ArrayList<>(records.size());
-        for (T record : records) {
-            result.add(dtoToDo(record));
-        }
-        return result;
-    }
-
-    /**
      * 构建DO的新实例
      *
      * @return DO的新实例
@@ -337,17 +261,41 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     public interface BaseEntityMapper<D extends BaseDO, T extends BaseDTO> {
 
+        /**
+         * 将数据实体转换为数据传输实体
+         *
+         * @param record 数据实体
+         * @return 数据传输实体
+         */
         @Mapping(source = "uuid", target = "id")
         T doToDto(D record);
 
+        /**
+         * 将数据实体批量转换为数据传输实体
+         *
+         * @param records 数据实体列表
+         * @return 数据传输实体列表
+         */
         List<T> doToDto(List<D> records);
 
+        /**
+         * 将数据传输实体转换为数据实体
+         *
+         * @param record 数据传输实体
+         * @return 数据实体
+         */
         @Mapping(source = "id", target = "uuid")
         @Mapping(target = "id", ignore = true)
         @Mapping(target = "createTime", ignore = true)
         @Mapping(target = "updateTime", ignore = true)
         D dtoToDo(T record);
 
+        /**
+         * 将数据传输实体批量转换为数据实体
+         *
+         * @param records 数据传输实体列表
+         * @return 数据实体列表
+         */
         List<D> dtoToDo(List<T> records);
 
     }
