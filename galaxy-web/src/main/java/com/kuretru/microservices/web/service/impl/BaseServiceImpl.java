@@ -16,6 +16,7 @@ import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.BaseService;
 import lombok.SneakyThrows;
+import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
@@ -43,6 +44,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     protected final Class<D> doClass;
     protected final Class<T> dtoClass;
     protected final Class<?> queryClass;
+    protected BaseEntityMapper<D, T> entityMapper;
 
     public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass) {
         this.mapper = mapper;
@@ -50,6 +52,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         this.dtoClass = dtoClass;
         ParameterizedType baseType = (ParameterizedType)this.getClass().getGenericSuperclass();
         queryClass = (Class<?>)baseType.getActualTypeArguments()[3];
+    }
+
+    public BaseServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper, Class<D> doClass, Class<T> dtoClass) {
+        this(mapper, doClass, dtoClass);
+        this.entityMapper = entityMapper;
     }
 
     public BaseServiceImpl(M mapper, Class<D> doClass, Class<T> dtoClass, Class<?> queryClass) {
@@ -326,6 +333,23 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @SneakyThrows
     protected T buildDTOInstance() {
         return dtoClass.getConstructor().newInstance();
+    }
+
+    public interface BaseEntityMapper<D extends BaseDO, T extends BaseDTO> {
+
+        @Mapping(source = "uuid", target = "id")
+        T doToDto(D record);
+
+        List<T> doToDto(List<D> records);
+
+        @Mapping(source = "id", target = "uuid")
+        @Mapping(target = "id", ignore = true)
+        @Mapping(target = "createTime", ignore = true)
+        @Mapping(target = "updateTime", ignore = true)
+        D dtoToDo(T record);
+
+        List<D> dtoToDo(List<T> records);
+
     }
 
 }
