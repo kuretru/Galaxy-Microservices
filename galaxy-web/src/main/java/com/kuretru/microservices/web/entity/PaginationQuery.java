@@ -24,6 +24,14 @@ public class PaginationQuery {
     @Schema(description = "每页记录条数")
     private Long pageSize;
 
+    public static boolean isNull(PaginationQuery paginationQuery) {
+        return paginationQuery == null || paginationQuery.current == null || paginationQuery.pageSize == null;
+    }
+
+    public static boolean isNotNull(PaginationQuery paginationQuery) {
+        return !isNull(paginationQuery);
+    }
+
     /**
      * 为了兼容下划线格式(page_size)传递的pageSize参数
      *
