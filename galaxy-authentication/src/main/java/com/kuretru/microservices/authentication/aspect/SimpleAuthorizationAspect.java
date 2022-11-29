@@ -56,9 +56,8 @@ public class SimpleAuthorizationAspect {
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         if (method.isAnnotationPresent(RequireAuthorization.class)) {
-            // 优先使用方法上的注解
-            RequireAuthorization annotation = method.getAnnotation(RequireAuthorization.class);
-            return aroundMethod(joinPoint, annotation);
+            // 优先使用方法上的注解，方法上的注解会进入aroundMethod()
+            return joinPoint.proceed();
         } else {
             return aroundMethod(joinPoint, requireAuthorization);
         }
