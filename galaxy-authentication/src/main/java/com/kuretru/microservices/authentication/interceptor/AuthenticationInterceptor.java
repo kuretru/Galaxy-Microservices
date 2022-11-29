@@ -20,9 +20,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         AccessTokenContext.removeAccessToken();
-        String id = request.getHeader(AccessTokenConstants.ACCESS_TOKEN_ID);
+        String id = request.getHeader(AccessTokenConstants.ACCESS_TOKEN_ID_HEADER);
         if (StringUtils.hasText(id)) {
-            String secret = request.getHeader(AccessTokenConstants.ACCESS_TOKEN);
+            String secret = request.getHeader(AccessTokenConstants.ACCESS_TOKEN_HEADER);
             AccessTokenDTO accessTokenDTO = new AccessTokenDTO(id, secret);
             request.setAttribute(AccessTokenConstants.ACCESS_TOKEN_ATTRIBUTE, accessTokenDTO);
         }
