@@ -8,20 +8,41 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="galaxy-common" />
-        <module name="galaxy-web" />
         <module name="galaxy-oauth2-common" />
       </profile>
-      <profile name="Annotation profile for galaxy-oauth2-server" enabled="true">
+      <profile name="Annotation profile for galaxy-web" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/2.7.5/spring-boot-configuration-processor-2.7.5.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
         </processorPath>
-        <module name="galaxy-oauth2-server" />
-        <module name="galaxy-authentication" />
+        <module name="galaxy-web" />
+      </profile>
+      <profile name="Annotation profile for galaxy-oauth2-client" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.6/spring-boot-configuration-processor-2.7.6.jar" />
+        </processorPath>
         <module name="galaxy-oauth2-client" />
+      </profile>
+      <profile name="Annotation profile for galaxy-authentication" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.6/spring-boot-configuration-processor-2.7.6.jar" />
+        </processorPath>
+        <module name="galaxy-authentication" />
+        <module name="galaxy-oauth2-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
