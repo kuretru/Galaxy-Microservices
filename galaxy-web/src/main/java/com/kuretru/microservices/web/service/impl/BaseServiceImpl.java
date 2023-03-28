@@ -199,6 +199,8 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                 } else if (value instanceof UUID) {
                     // UUID类型：= UUID
                     queryWrapper.eq(columnName, value.toString());
+                } else if (value instanceof Boolean) {
+                    queryWrapper.eq(columnName, value);
                 } else if (value instanceof BaseEnum) {
                     // 枚举类型：= 枚举编号
                     queryWrapper.eq(columnName, ((BaseEnum<?>)value).getCode());
