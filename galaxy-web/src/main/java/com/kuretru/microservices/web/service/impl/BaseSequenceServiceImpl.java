@@ -7,6 +7,7 @@ import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.mapper.BaseSequenceMapper;
 import com.kuretru.microservices.web.service.BaseSequenceService;
+import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +78,23 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     @Override
     protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
         queryWrapper.orderByAsc("sequence");
+    }
+
+    public interface BaseSequenceEntityMapper<D extends BaseSequenceDO, T extends BaseDTO> extends BaseEntityMapper<D, T> {
+
+        /**
+         * 将数据传输实体转换为数据实体
+         *
+         * @param record 数据传输实体
+         * @return 数据实体
+         */
+        @Mapping(source = "id", target = "uuid")
+        @Mapping(target = "id", ignore = true)
+        @Mapping(target = "createTime", ignore = true)
+        @Mapping(target = "updateTime", ignore = true)
+        @Mapping(target = "sequence", ignore = true)
+        D dtoToDo(T record);
+
     }
 
 }
