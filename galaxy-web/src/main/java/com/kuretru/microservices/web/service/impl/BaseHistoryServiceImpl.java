@@ -33,6 +33,12 @@ public abstract class BaseHistoryServiceImpl<M extends BaseMapper<D>, D extends 
         mapper.insert(data);
     }
 
+    /**
+     * 在业务层面验证传入的DTO内容是否合法
+     *
+     * @param record DTO
+     * @throws ServiceException 不合法时抛出业务异常
+     */
     protected void verifyDTO(T record) throws ServiceException {
 
     }

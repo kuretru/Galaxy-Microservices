@@ -169,7 +169,12 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         }
     }
 
-    /** 根据查询实体构建QueryWrapper */
+    /**
+     * 根据查询实体构建QueryWrapper
+     *
+     * @param query 查询实体
+     * @return QueryWrapper
+     */
     protected QueryWrapper<D> buildQueryWrapper(Q query) {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         try {
@@ -215,10 +220,21 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return queryWrapper;
     }
 
+    /**
+     * 为QueryWrapper设置默认排序依据
+     *
+     * @param queryWrapper QueryWrapper
+     */
     protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
         queryWrapper.orderByAsc("id");
     }
 
+    /**
+     * 增加记录创建时间
+     *
+     * @param record 记录
+     * @param uuid   UUID
+     */
     protected void addCreateTime(D record, UUID uuid) {
         record.setUuid(uuid.toString());
         Instant now = Instant.now();
@@ -226,10 +242,23 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         record.setUpdateTime(now);
     }
 
+    /**
+     * 增加或修改记录时，在业务层面验证传入的DTO内容是否合法
+     *
+     * @param record DTO
+     * @throws ServiceException 不合法时抛出业务异常
+     */
     protected void verifyDTO(T record) throws ServiceException {
 
     }
 
+    /**
+     * 验证给定UUID列表是否存在
+     *
+     * @param uuidList UUID列表
+     * @return 给定UUID列表对应的实体
+     * @throws ServiceException 部分UUID不存在时抛出异常
+     */
     protected List<D> verifyUuidList(List<UUID> uuidList) throws ServiceException {
         List<D> records = list(uuidList);
         if (records.size() > uuidList.size()) {
