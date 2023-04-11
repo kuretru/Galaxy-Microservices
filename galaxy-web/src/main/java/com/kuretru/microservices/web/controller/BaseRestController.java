@@ -41,7 +41,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @Operation(summary = "根据分页参数和查询条件查询记录列表", description = "若分页参数存在，则返回分页查询结果")
     @Parameter(name = "paginationQuery", description = "分页参数", example = "{current=1&page_size=10}")
     @Parameter(name = "query", description = "查询条件")
-    public ApiResponse<?> list(PaginationQuery paginationQuery, Q query) throws ServiceException {
+    public ApiResponse<?> list(PaginationQuery paginationQuery, @Validated Q query) throws ServiceException {
         if (paginationQuery != null && paginationQuery.getCurrent() != null && paginationQuery.getPageSize() != null) {
             return super.listByPage(paginationQuery, query);
         }
