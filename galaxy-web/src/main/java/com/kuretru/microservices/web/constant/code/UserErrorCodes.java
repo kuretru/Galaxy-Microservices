@@ -43,6 +43,8 @@ public enum UserErrorCodes implements ResponseCodes {
 
     /** A0400-用户请求参数错误 */
     REQUEST_PARAMETER_ERROR(10400, "用户请求参数错误", HttpStatus.BAD_REQUEST),
+    /** Custom-唯一性检查失败 */
+    UNIQUENESS_CHECK_FAILED(10409, "唯一性检查失败", HttpStatus.BAD_REQUEST),
     /** A0410-请求必填参数为空 */
     MISSING_REQUIRED_PARAMETERS(10410, "请求必填参数为空", HttpStatus.BAD_REQUEST),
     /** A0412-订购数量为空 */

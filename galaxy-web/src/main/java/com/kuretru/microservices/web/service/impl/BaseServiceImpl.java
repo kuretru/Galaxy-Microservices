@@ -128,6 +128,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public T save(T record) throws ServiceException {
         verifyDTO(record);
+        if (findUniqueRecord(record) != null) {
+            throw new ServiceException(UserErrorCodes.UNIQUENESS_CHECK_FAILED, "已存在相同的记录");
+        }
 
         UUID uuid = UUID.randomUUID();
         while (get(uuid) != null) {
@@ -143,6 +146,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public T update(T record) throws ServiceException {
         verifyDTO(record);
+        T uniqueRecord = findUniqueRecord(record);
+        if (uniqueRecord != null && !uniqueRecord.getId().equals(record.getId())) {
+            throw new ServiceException(UserErrorCodes.UNIQUENESS_CHECK_FAILED, "已存在相同的记录");
+        }
 
         D data = entityMapper.dtoToDo(record);
         data.setUpdateTime(Instant.now());
@@ -250,6 +257,17 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      */
     protected void verifyDTO(T record) throws ServiceException {
 
+    }
+
+    /**
+     * 增加或修改记录时，查找是否已存在相同的记录，应尽量保证查询的字段唯一索引存在
+     * 默认不检查唯一性
+     *
+     * @param record DTO
+     * @return 记录不存在时返回null，否则返回对应记录DTO，更新时用于判断是否为记录本身
+     */
+    protected T findUniqueRecord(T record) {
+        return null;
     }
 
     /**
