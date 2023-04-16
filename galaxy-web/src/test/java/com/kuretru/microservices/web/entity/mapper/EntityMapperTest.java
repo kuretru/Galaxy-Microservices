@@ -1,8 +1,7 @@
-package com.kuretru.microservices.web.service;
+package com.kuretru.microservices.web.entity.mapper;
 
 import com.kuretru.microservices.web.entity.data.BaseDO;
 import com.kuretru.microservices.web.entity.transfer.BaseDTO;
-import com.kuretru.microservices.web.service.impl.BaseServiceImpl;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest
 class EntityMapperTest {
 
-    private final PersonEntityMapper entityMap;
+    private final PersonEntityMapper entityMapper;
 
     @Autowired
-    public EntityMapperTest(PersonEntityMapper entityMap) {
-        this.entityMap = entityMap;
+    public EntityMapperTest(PersonEntityMapper entityMapper) {
+        this.entityMapper = entityMapper;
     }
 
     @Test
@@ -41,7 +40,7 @@ class EntityMapperTest {
         personDO.setMobile(12345678);
         personDO.setSocial(UUID.randomUUID().toString());
 
-        PersonDTO personDTO = entityMap.doToDto(personDO);
+        PersonDTO personDTO = entityMapper.doToDto(personDO);
         assertEquals(personDO.getUuid(), personDTO.getId().toString());
         assertEquals(personDO.getName(), personDTO.getName());
         assertEquals(personDO.getMobile(), personDTO.getMobile());
@@ -56,7 +55,7 @@ class EntityMapperTest {
         personDTO.setMobile(12345678);
         personDTO.setSocial(UUID.randomUUID());
 
-        PersonDO personDO = entityMap.dtoToDo(personDTO);
+        PersonDO personDO = entityMapper.dtoToDo(personDTO);
         assertEquals(personDTO.getId(), UUID.fromString(personDO.getUuid()));
         assertEquals(personDTO.getName(), personDO.getName());
         assertEquals(personDTO.getSocial(), UUID.fromString(personDO.getSocial()));
@@ -66,7 +65,7 @@ class EntityMapperTest {
     }
 
     @Mapper(componentModel = "spring")
-    interface PersonEntityMapper extends BaseServiceImpl.BaseEntityMapper<PersonDO, PersonDTO> {
+    interface PersonEntityMapper extends BaseEntityMapper<PersonDO, PersonDTO> {
 
     }
 

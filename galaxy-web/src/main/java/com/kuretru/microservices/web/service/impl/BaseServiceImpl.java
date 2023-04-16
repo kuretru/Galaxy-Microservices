@@ -12,11 +12,11 @@ import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.PaginationQuery;
 import com.kuretru.microservices.web.entity.PaginationResponse;
 import com.kuretru.microservices.web.entity.data.BaseDO;
+import com.kuretru.microservices.web.entity.mapper.BaseEntityMapper;
 import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.BaseService;
 import lombok.SneakyThrows;
-import org.mapstruct.Mapping;
 import org.springframework.util.StringUtils;
 
 import java.beans.BeanInfo;
@@ -40,7 +40,8 @@ import java.util.stream.Collectors;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q> implements BaseService<T, Q> {
+public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q>
+        implements BaseService<T, Q> {
 
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
@@ -306,47 +307,6 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @SneakyThrows
     protected T buildDTOInstance() {
         return dtoClass.getConstructor().newInstance();
-    }
-
-    public interface BaseEntityMapper<D extends BaseDO, T extends BaseDTO> {
-
-        /**
-         * 将数据实体转换为数据传输实体
-         *
-         * @param record 数据实体
-         * @return 数据传输实体
-         */
-        @Mapping(source = "uuid", target = "id")
-        T doToDto(D record);
-
-        /**
-         * 将数据实体批量转换为数据传输实体
-         *
-         * @param records 数据实体列表
-         * @return 数据传输实体列表
-         */
-        List<T> doToDto(List<D> records);
-
-        /**
-         * 将数据传输实体转换为数据实体
-         *
-         * @param record 数据传输实体
-         * @return 数据实体
-         */
-        @Mapping(source = "id", target = "uuid")
-        @Mapping(target = "id", ignore = true)
-        @Mapping(target = "createTime", ignore = true)
-        @Mapping(target = "updateTime", ignore = true)
-        D dtoToDo(T record);
-
-        /**
-         * 将数据传输实体批量转换为数据实体
-         *
-         * @param records 数据传输实体列表
-         * @return 数据实体列表
-         */
-        List<D> dtoToDo(List<T> records);
-
     }
 
 }

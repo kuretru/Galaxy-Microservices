@@ -9,13 +9,13 @@ import com.kuretru.microservices.authentication.manager.AccessTokenManager;
 import com.kuretru.microservices.oauth2.client.system.entity.UserDO;
 import com.kuretru.microservices.oauth2.client.system.entity.UserDTO;
 import com.kuretru.microservices.oauth2.client.system.entity.UserQuery;
+import com.kuretru.microservices.oauth2.client.system.entity.mapper.UserEntityMapper;
 import com.kuretru.microservices.oauth2.client.system.mapper.UserMapper;
 import com.kuretru.microservices.oauth2.client.system.service.UserService;
 import com.kuretru.microservices.oauth2.common.entity.GalaxyUserDTO;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.impl.BaseServiceImpl;
-import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,11 +67,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserDTO
             throw new ServiceException(UserErrorCodes.ACCESS_PERMISSION_ERROR, "AccessTokenID与操作用户不匹配");
         }
         accessTokenManager.revoke(accessTokenId);
-    }
-
-    @Mapper(componentModel = "spring")
-    interface UserEntityMapper extends BaseServiceImpl.BaseEntityMapper<UserDO, UserDTO> {
-
     }
 
 }

@@ -3,11 +3,11 @@ package com.kuretru.microservices.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.entity.data.BaseSequenceDO;
+import com.kuretru.microservices.web.entity.mapper.BaseSequenceEntityMapper;
 import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.mapper.BaseSequenceMapper;
 import com.kuretru.microservices.web.service.BaseSequenceService;
-import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,9 +17,11 @@ import java.util.UUID;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO, Q> extends BaseServiceImpl<M, D, T, Q> implements BaseSequenceService<T, Q> {
+public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D extends BaseSequenceDO, T extends BaseDTO, Q>
+        extends BaseServiceImpl<M, D, T, Q>
+        implements BaseSequenceService<T, Q> {
 
-    public BaseSequenceServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
+    public BaseSequenceServiceImpl(M mapper, BaseSequenceEntityMapper<D, T> entityMapper) {
         super(mapper, entityMapper);
     }
 
@@ -78,23 +80,6 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     @Override
     protected void addDefaultOrderBy(QueryWrapper<D> queryWrapper) {
         queryWrapper.orderByAsc("sequence");
-    }
-
-    public interface BaseSequenceEntityMapper<D extends BaseSequenceDO, T extends BaseDTO> extends BaseEntityMapper<D, T> {
-
-        /**
-         * 将数据传输实体转换为数据实体
-         *
-         * @param record 数据传输实体
-         * @return 数据实体
-         */
-        @Mapping(source = "id", target = "uuid")
-        @Mapping(target = "id", ignore = true)
-        @Mapping(target = "createTime", ignore = true)
-        @Mapping(target = "updateTime", ignore = true)
-        @Mapping(target = "sequence", ignore = true)
-        D dtoToDo(T record);
-
     }
 
 }
