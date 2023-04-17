@@ -14,7 +14,9 @@ public final class InstantUtils {
     /** 默认日期格式 */
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     /** 默认时区 */
-    public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Asia/Shanghai");
+    public static final String DEFAULT_ZONE = "Asia/Shanghai";
+    /** 默认时区 */
+    public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of(DEFAULT_ZONE);
     /** 默认日期格式及时区下的格式化器 */
     private static final DateTimeFormatter DEFAULT_FORMATTER =
             DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT).withZone(DEFAULT_ZONE_ID);
