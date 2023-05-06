@@ -1,7 +1,9 @@
 package com.kuretru.microservices.web.controller;
 
 import com.kuretru.microservices.common.utils.InstantUtils;
+import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
+import com.kuretru.microservices.web.exception.ServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,12 @@ public class TestController extends BaseController {
     public ApiResponse<?> ping() {
         String now = InstantUtils.toString(Instant.now());
         return ApiResponse.success(now);
+    }
+
+    @GetMapping("/exception")
+    @Operation(summary = "主动抛出一个异常，测试前端异常处理能力")
+    public ApiResponse<?> exception() {
+        throw new ServiceException(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "主动抛出异常");
     }
 
 }
