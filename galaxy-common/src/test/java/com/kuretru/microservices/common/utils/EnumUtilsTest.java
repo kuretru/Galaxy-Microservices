@@ -56,9 +56,9 @@ class EnumUtilsTest {
     @Test
     void buildDTO() {
         List<EnumDTO> map = new ArrayList<>();
-        map.add(new EnumDTO("UNKNOWN", "未知"));
-        map.add(new EnumDTO("MALE", "男"));
-        map.add(new EnumDTO("FEMALE", "女"));
+        map.add(new EnumDTO("未知", "UNKNOWN"));
+        map.add(new EnumDTO("男", "MALE"));
+        map.add(new EnumDTO("女", "FEMALE"));
         assertEquals(map, EnumUtils.buildDTO(GenderEnum.values()));
     }
 

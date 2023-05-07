@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnumDTO {
 
+    /** 前端展示的值 */
     private String label;
 
+    /** 前端保存的值 */
     private String value;
 
 }

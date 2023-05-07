@@ -100,8 +100,8 @@ public class EnumUtils {
      * 将枚举转换成供前端使用的DTO
      * <p>
      * [
-     * {"label":"MALE","value":"男"},
-     * {"label":"FEMALE","value":"女"},
+     * {"label":"男","value":"MALE"},
+     * {"label":"女","value":"FEMALE"},
      * ]
      *
      * @param values 举
@@ -111,7 +111,7 @@ public class EnumUtils {
     public static <E extends BaseEnum<E>> List<EnumDTO> buildDTO(BaseEnum<E>[] values) {
         List<EnumDTO> result = new ArrayList<>();
         for (BaseEnum<E> value : values) {
-            result.add(new EnumDTO(value.name(), value.getValue()));
+            result.add(new EnumDTO(value.getValue(), value.name()));
         }
         return result;
     }
