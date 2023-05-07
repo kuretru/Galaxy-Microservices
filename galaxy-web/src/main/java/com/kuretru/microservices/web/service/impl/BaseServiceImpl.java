@@ -62,6 +62,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public T get(Long id) {
         D record = mapper.selectById(id);
+        verifyDO(record);
         return entityMapper.doToDto(record);
     }
 
@@ -70,6 +71,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid.toString());
         D record = mapper.selectOne(queryWrapper);
+        verifyDO(record);
         return entityMapper.doToDto(record);
     }
 
@@ -94,6 +96,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public List<T> list(Q query) {
+        verifyQuery(query);
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
         return list(queryWrapper);
@@ -115,6 +118,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public PaginationResponse<T> list(PaginationQuery pagination, Q query) {
+        verifyQuery(query);
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
         return list(pagination, queryWrapper);
@@ -248,6 +252,26 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         Instant now = Instant.now();
         record.setCreateTime(now);
         record.setUpdateTime(now);
+    }
+
+    /**
+     * 查询记录时，在业务层面验证传入的Query是否合法
+     *
+     * @param query Query
+     * @throws ServiceException 不合法时抛出业务异常
+     */
+    protected void verifyQuery(Q query) throws ServiceException {
+
+    }
+
+    /**
+     * 查询单条记录时，在业务层面进行横向鉴权
+     *
+     * @param record 查询出的单条记录
+     * @throws ServiceException 不合法时抛出业务异常
+     */
+    protected void verifyDO(D record) throws ServiceException {
+
     }
 
     /**
