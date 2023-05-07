@@ -62,7 +62,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     @Override
     public T get(Long id) {
         D record = mapper.selectById(id);
-        verifyDO(record);
+        if (record != null) {
+            verifyDO(record);
+        }
         return entityMapper.doToDto(record);
     }
 
@@ -71,7 +73,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid.toString());
         D record = mapper.selectOne(queryWrapper);
-        verifyDO(record);
+        if (record != null) {
+            verifyDO(record);
+        }
         return entityMapper.doToDto(record);
     }
 
