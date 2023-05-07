@@ -79,16 +79,16 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return entityMapper.doToDto(record);
     }
 
-    protected List<T> list(QueryWrapper<D> queryWrapper) {
-        return entityMapper.doToDto(mapper.selectList(queryWrapper));
-    }
-
     protected List<D> list(List<UUID> uuidList) {
         List<String> ids = uuidList.stream().map(UUID::toString).collect(Collectors.toList());
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("uuid", ids);
         addDefaultOrderBy(queryWrapper);
         return mapper.selectList(queryWrapper);
+    }
+
+    protected List<T> list(QueryWrapper<D> queryWrapper) {
+        return entityMapper.doToDto(mapper.selectList(queryWrapper));
     }
 
     @Override
