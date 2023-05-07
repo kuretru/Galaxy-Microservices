@@ -16,22 +16,11 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.10/spring-boot-configuration-processor-2.7.10.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.11/spring-boot-configuration-processor-2.7.11.jar" />
         </processorPath>
         <module name="galaxy-oauth2-client" />
-      </profile>
-      <profile name="Annotation profile for galaxy-authentication" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.10/spring-boot-configuration-processor-2.7.10.jar" />
-        </processorPath>
-        <module name="galaxy-authentication" />
-        <module name="galaxy-oauth2-server" />
       </profile>
       <profile name="Annotation profile for galaxy-web" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -39,20 +28,25 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
-          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
         <module name="galaxy-web" />
       </profile>
+      <profile name="Annotation profile for galaxy-oauth2-server" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+          <entry name="$PROJECT_DIR$/../../../Repository/Maven/org/springframework/boot/spring-boot-configuration-processor/2.7.11/spring-boot-configuration-processor-2.7.11.jar" />
+        </processorPath>
+        <module name="galaxy-oauth2-server" />
+        <module name="galaxy-authentication" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="galaxy-authentication" target="17" />
-      <module name="galaxy-common" target="17" />
       <module name="galaxy-core" target="1.5" />
-      <module name="galaxy-oauth2-client" target="17" />
-      <module name="galaxy-oauth2-common" target="17" />
-      <module name="galaxy-oauth2-server" target="17" />
-      <module name="galaxy-web" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
