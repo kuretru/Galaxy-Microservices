@@ -21,4 +21,11 @@ public interface BaseEnum<T> extends Comparable<T> {
      */
     String getValue();
 
+    /**
+     * Java enum原生的获取枚举名称的方法
+     *
+     * @return 枚举名称
+     */
+    String name();
+
 }

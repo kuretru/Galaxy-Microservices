@@ -1,11 +1,15 @@
 package com.kuretru.microservices.common.utils;
 
 import com.kuretru.microservices.common.entity.enums.BaseEnum;
+import com.kuretru.microservices.common.entity.enums.EnumDTO;
 import lombok.Getter;
+import lombok.ToString;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,14 +37,33 @@ class EnumUtilsTest {
 
     @Test
     void buildEnumMap() {
-        Map<GenderEnum, String> map = new TreeMap<>();
+        Map<GenderEnum, String> map = new HashMap<>(16);
         map.put(GenderEnum.UNKNOWN, GenderEnum.UNKNOWN.getValue());
         map.put(GenderEnum.MALE, GenderEnum.MALE.getValue());
         map.put(GenderEnum.FEMALE, GenderEnum.FEMALE.getValue());
         assertEquals(map, EnumUtils.buildEnumMap(GenderEnum.values()));
     }
 
+    @Test
+    void buildStringEnumMap() {
+        Map<String, String> map = new HashMap<>(16);
+        map.put("UNKNOWN", GenderEnum.UNKNOWN.getValue());
+        map.put("MALE", GenderEnum.MALE.getValue());
+        map.put("FEMALE", GenderEnum.FEMALE.getValue());
+        assertEquals(map, EnumUtils.buildStringEnumMap(GenderEnum.values()));
+    }
+
+    @Test
+    void buildDTO() {
+        List<EnumDTO> map = new ArrayList<>();
+        map.add(new EnumDTO("UNKNOWN", "未知"));
+        map.add(new EnumDTO("MALE", "男"));
+        map.add(new EnumDTO("FEMALE", "女"));
+        assertEquals(map, EnumUtils.buildDTO(GenderEnum.values()));
+    }
+
     @Getter
+    @ToString
     private enum GenderEnum implements BaseEnum<GenderEnum> {
 
         /** 未知 */
