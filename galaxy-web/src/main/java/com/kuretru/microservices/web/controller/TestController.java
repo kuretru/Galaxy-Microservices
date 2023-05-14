@@ -1,6 +1,5 @@
 package com.kuretru.microservices.web.controller;
 
-import com.kuretru.microservices.common.utils.InstantUtils;
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.exception.ServiceException;
@@ -23,8 +22,7 @@ public class TestController extends BaseController {
     @GetMapping("/ping")
     @Operation(summary = "测试与API服务器的连通性")
     public ApiResponse<?> ping() {
-        String now = InstantUtils.toString(Instant.now());
-        return ApiResponse.success(now);
+        return ApiResponse.success(Instant.now());
     }
 
     @GetMapping("/exception")
