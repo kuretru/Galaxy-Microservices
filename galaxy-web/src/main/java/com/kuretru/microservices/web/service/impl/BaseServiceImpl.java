@@ -40,8 +40,7 @@ import java.util.stream.Collectors;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q>
-        implements BaseService<T, Q> {
+public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q> implements BaseService<T, Q> {
 
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
@@ -175,12 +174,15 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public void remove(UUID uuid) throws ServiceException {
+        T record = get(uuid);
+        if (record == null) {
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
+        }
+        verifyDTO(record);
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid.toString());
         int rows = mapper.delete(queryWrapper);
-        if (0 == rows) {
-            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
-        } else if (1 != rows) {
+        if (rows != 1) {
             throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
     }
@@ -279,7 +281,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     /**
-     * 增加或修改记录时，在业务层面验证传入的DTO内容是否合法
+     * 增加或修改或删除记录时，在业务层面验证传入的DTO内容是否合法
      *
      * @param record DTO
      * @throws ServiceException 不合法时抛出业务异常
