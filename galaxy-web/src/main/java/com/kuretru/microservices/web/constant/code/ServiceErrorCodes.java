@@ -12,7 +12,8 @@ import org.springframework.http.HttpStatus;
 public enum ServiceErrorCodes implements ResponseCodes {
 
     /** B0001-系统执行出错 */
-    SYSTEM_EXECUTION_ERROR(50001, "系统执行出错", HttpStatus.INTERNAL_SERVER_ERROR);
+    SYSTEM_EXECUTION_ERROR(50001, "系统执行出错", HttpStatus.INTERNAL_SERVER_ERROR),
+    SYSTEM_NOT_IMPLEMENTED(50099, "系统尚未实现", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final int code;
     private final String message;
