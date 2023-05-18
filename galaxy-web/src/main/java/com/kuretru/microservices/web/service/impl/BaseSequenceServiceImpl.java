@@ -2,6 +2,7 @@ package com.kuretru.microservices.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
+import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.data.BaseSequenceDO;
 import com.kuretru.microservices.web.entity.mapper.BaseSequenceEntityMapper;
 import com.kuretru.microservices.web.entity.transfer.BaseDTO;
@@ -64,9 +65,12 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     @Override
     public T save(T record) throws ServiceException {
         verifyDTO(record);
+        if (findUniqueRecord(record) != null) {
+            throw new ServiceException(UserErrorCodes.UNIQUENESS_CHECK_FAILED, "已存在相同的记录");
+        }
 
         UUID uuid = UUID.randomUUID();
-        while (get(uuid) != null) {
+        while (getDO(uuid) != null) {
             uuid = UUID.randomUUID();
         }
 

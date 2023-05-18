@@ -17,6 +17,7 @@ import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
 import com.kuretru.microservices.web.service.BaseService;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.beans.BeanInfo;
@@ -40,7 +41,9 @@ import java.util.stream.Collectors;
  *
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
-public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q> implements BaseService<T, Q> {
+@Slf4j
+public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q>
+        implements BaseService<T, Q> {
 
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
@@ -58,22 +61,26 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         queryClass = (Class<Q>)baseType.getActualTypeArguments()[3];
     }
 
+    protected D getDO(UUID uuid) {
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uuid", uuid.toString());
+        return mapper.selectOne(queryWrapper);
+    }
+
     @Override
-    public T get(Long id) {
+    public T get(Long id) throws ServiceException {
         D record = mapper.selectById(id);
         if (record != null) {
-            verifyDO(record);
+            verifyCanGet(record);
         }
         return entityMapper.doToDto(record);
     }
 
     @Override
-    public T get(UUID uuid) {
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uuid", uuid.toString());
-        D record = mapper.selectOne(queryWrapper);
+    public T get(UUID uuid) throws ServiceException {
+        D record = getDO(uuid);
         if (record != null) {
-            verifyDO(record);
+            verifyCanGet(record);
         }
         return entityMapper.doToDto(record);
     }
@@ -98,7 +105,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public List<T> list(Q query) {
+    public List<T> list(Q query) throws ServiceException {
         verifyQuery(query);
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
@@ -120,7 +127,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
-    public PaginationResponse<T> list(PaginationQuery pagination, Q query) {
+    public PaginationResponse<T> list(PaginationQuery pagination, Q query) throws ServiceException {
         verifyQuery(query);
         QueryWrapper<D> queryWrapper = buildQueryWrapper(query);
         addDefaultOrderBy(queryWrapper);
@@ -141,7 +148,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         }
 
         UUID uuid = UUID.randomUUID();
-        while (get(uuid) != null) {
+        while (getDO(uuid) != null) {
             uuid = UUID.randomUUID();
         }
 
@@ -174,13 +181,13 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public void remove(UUID uuid) throws ServiceException {
-        T record = get(uuid);
+        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uuid", uuid.toString());
+        D record = mapper.selectOne(queryWrapper);
         if (record == null) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         }
-        verifyDTO(record);
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uuid", uuid.toString());
+        verifyCanRemove(record);
         int rows = mapper.delete(queryWrapper);
         if (rows != 1) {
             throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
@@ -233,7 +240,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                 }
             }
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            log.error("构建QueryWrapper时抛出异常：" + e.getMessage());
         }
         return queryWrapper;
     }
@@ -261,22 +268,32 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     /**
+     * 查询单条记录时，在业务层面进行横向鉴权
+     *
+     * @param record 查询出的单条记录
+     * @throws ServiceException 不合法时抛出业务异常
+     */
+    protected void verifyCanGet(D record) throws ServiceException {
+
+    }
+
+    /**
+     * 删除单条记录时，在业务层面进行横向鉴权
+     *
+     * @param record 删除时查询出的单条记录
+     * @throws ServiceException 不合法时抛出业务异常
+     */
+    protected void verifyCanRemove(D record) throws ServiceException {
+
+    }
+
+    /**
      * 查询记录时，在业务层面验证传入的Query是否合法
      *
      * @param query Query
      * @throws ServiceException 不合法时抛出业务异常
      */
     protected void verifyQuery(Q query) throws ServiceException {
-
-    }
-
-    /**
-     * 查询单条记录时，在业务层面进行横向鉴权
-     *
-     * @param record 查询出的单条记录
-     * @throws ServiceException 不合法时抛出业务异常
-     */
-    protected void verifyDO(D record) throws ServiceException {
 
     }
 

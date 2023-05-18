@@ -21,16 +21,18 @@ public interface BaseService<T extends BaseDTO, Q> {
      *
      * @param id 物理主键ID
      * @return 一条记录，找不到时返回Null
+     * @throws ServiceException 没有权限时，抛出业务异常
      */
-    T get(Long id);
+    T get(Long id) throws ServiceException;
 
     /**
      * 根据业务逻辑主键查询一条记录
      *
      * @param uuid 业务逻辑主键UUID
      * @return 一条记录，找不到时返回Null
+     * @throws ServiceException 没有权限时，抛出业务异常
      */
-    T get(UUID uuid);
+    T get(UUID uuid) throws ServiceException;
 
     /**
      * 查询所有记录
@@ -44,8 +46,9 @@ public interface BaseService<T extends BaseDTO, Q> {
      *
      * @param query 查询条件
      * @return 所有记录，找不到时返回空List
+     * @throws ServiceException 没有权限时，抛出业务异常
      */
-    List<T> list(Q query);
+    List<T> list(Q query) throws ServiceException;
 
     /**
      * 分页查询所有记录
@@ -61,8 +64,9 @@ public interface BaseService<T extends BaseDTO, Q> {
      * @param pagination 分页参数
      * @param query      查询条件
      * @return 符合查询条件，分页后的所有记录
+     * @throws ServiceException 没有权限时，抛出业务异常
      */
-    PaginationResponse<T> list(PaginationQuery pagination, Q query);
+    PaginationResponse<T> list(PaginationQuery pagination, Q query) throws ServiceException;
 
     /**
      * 查询记录条数
@@ -76,7 +80,7 @@ public interface BaseService<T extends BaseDTO, Q> {
      *
      * @param record 新记录
      * @return 保存后的新记录
-     * @throws ServiceException 校验数据失败时会引发异常
+     * @throws ServiceException 校验数据失败时会抛出业务异常
      */
     T save(T record) throws ServiceException;
 
@@ -85,7 +89,7 @@ public interface BaseService<T extends BaseDTO, Q> {
      *
      * @param record 包含新数据及其他所有字段的记录
      * @return 更新后的新记录
-     * @throws ServiceException 找不到指定记录时会引发NotFound异常
+     * @throws ServiceException 找不到指定记录或校验数据失败时会抛出业务异常
      */
     T update(T record) throws ServiceException;
 
@@ -93,7 +97,7 @@ public interface BaseService<T extends BaseDTO, Q> {
      * 根据业务逻辑主键删除一条记录
      *
      * @param uuid 业务逻辑主键UUID
-     * @throws ServiceException 找不到指定记录时会引发NotFound异常
+     * @throws ServiceException 找不到指定记录时会抛出业务异常
      */
     void remove(UUID uuid) throws ServiceException;
 
