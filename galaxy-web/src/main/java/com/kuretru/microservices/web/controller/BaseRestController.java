@@ -42,7 +42,7 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
     @Parameter(name = "paginationQuery", description = "分页参数", example = "{current=1&page_size=10}")
     @Parameter(name = "query", description = "查询条件")
     public ApiResponse<?> list(PaginationQuery paginationQuery, @Validated Q query) throws ServiceException {
-        if (paginationQuery != null && paginationQuery.getCurrent() != null && paginationQuery.getPageSize() != null) {
+        if (PaginationQuery.isNotNull(paginationQuery)) {
             return super.listByPage(paginationQuery, query);
         }
         return super.list(query);

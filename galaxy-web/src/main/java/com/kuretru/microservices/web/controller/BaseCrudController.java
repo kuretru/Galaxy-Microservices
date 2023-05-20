@@ -29,7 +29,7 @@ public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends 
 
     protected ApiResponse<T> get(UUID id) throws ServiceException {
         T result = service.get(id);
-        if (null == result) {
+        if (result == null) {
             // 指定ID查询单个实体但实体不存在时，认为是用户方ID输入错误，因此抛异常
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
         }
@@ -38,7 +38,7 @@ public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends 
 
     protected ApiResponse<List<T>> list(Q query) throws ServiceException {
         List<T> result = service.list(query);
-        if (null == result) {
+        if (result == null) {
             result = new ArrayList<>();
         }
         if (result.isEmpty()) {
@@ -50,7 +50,7 @@ public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends 
 
     protected ApiResponse<PaginationResponse<T>> listByPage(PaginationQuery paginationQuery, Q query) throws ServiceException {
         PaginationResponse<T> result = service.list(paginationQuery, query);
-        if (null == result.getList()) {
+        if (result.getList() == null) {
             result.setList(new ArrayList<>());
         }
         if (result.getList().isEmpty()) {
