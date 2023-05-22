@@ -61,6 +61,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         queryClass = (Class<Q>)baseType.getActualTypeArguments()[3];
     }
 
+
+    protected D getDO(Long id) {
+        return mapper.selectById(id);
+    }
+
     protected D getDO(UUID uuid) {
         QueryWrapper<D> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid.toString());
@@ -69,7 +74,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     @Override
     public T get(Long id) throws ServiceException {
-        D record = mapper.selectById(id);
+        D record = getDO(id);
         if (record != null) {
             verifyCanGet(record);
         }
@@ -155,7 +160,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         D data = entityMapper.dtoToDo(record);
         addCreateTime(data, uuid);
         mapper.insert(data);
-        return get(data.getId());
+        return entityMapper.doToDto(getDO(data.getId()));
     }
 
     @Override
@@ -176,7 +181,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         } else if (1 != rows) {
             throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
-        return get(record.getId());
+        return entityMapper.doToDto(getDO(data.getId()));
     }
 
     @Override
