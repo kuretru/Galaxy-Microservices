@@ -181,7 +181,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         } else if (1 != rows) {
             throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
-        return entityMapper.doToDto(getDO(data.getId()));
+        return entityMapper.doToDto(getDO(record.getId()));
     }
 
     @Override
