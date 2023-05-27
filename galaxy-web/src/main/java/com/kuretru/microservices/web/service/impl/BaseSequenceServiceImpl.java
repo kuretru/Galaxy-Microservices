@@ -27,7 +27,7 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
     }
 
     @Override
-    public int getMaxSequence() {
+    public int getMaxSequence(T record) {
         Integer result = mapper.getMaxSequence(null);
         return null == result ? 0 : result;
     }
@@ -76,9 +76,9 @@ public abstract class BaseSequenceServiceImpl<M extends BaseSequenceMapper<D>, D
 
         D data = entityMapper.dtoToDo(record);
         addCreateTime(data, uuid);
-        data.setSequence(getMaxSequence() + 1);
+        data.setSequence(getMaxSequence(record) + 1);
         mapper.insert(data);
-        return super.get(data.getId());
+        return entityMapper.doToDto(getDO(data.getId()));
     }
 
     @Override

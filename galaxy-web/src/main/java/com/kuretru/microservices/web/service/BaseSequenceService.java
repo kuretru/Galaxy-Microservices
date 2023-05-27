@@ -16,7 +16,7 @@ public interface BaseSequenceService<T extends BaseDTO, Q> extends BaseService<T
      *
      * @return 最大的排序号
      */
-    int getMaxSequence();
+    int getMaxSequence(T record);
 
     /**
      * 根据UUID列表重新排序sequence字段
