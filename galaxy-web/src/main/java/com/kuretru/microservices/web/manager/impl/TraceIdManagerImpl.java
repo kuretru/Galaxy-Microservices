@@ -1,8 +1,10 @@
 package com.kuretru.microservices.web.manager.impl;
 
+import com.kuretru.microservices.common.utils.NetworkUtils;
 import com.kuretru.microservices.common.utils.StringUtils;
 import com.kuretru.microservices.web.manager.TraceIdManager;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
@@ -10,6 +12,7 @@ import java.net.InetAddress;
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
+@Slf4j
 @Service
 public class TraceIdManagerImpl implements TraceIdManager {
 
@@ -29,6 +32,8 @@ public class TraceIdManagerImpl implements TraceIdManager {
     @Override
     public String generateTraceId() {
         long now = System.currentTimeMillis();
+        // IPv4     Date     Time   PID    Sequence
+        // 7F000001_20230815-222715_123456_1234
         return String.format("%s-%013d-%s-%04d", LOCAL_IP, now, PID, nextSequence());
     }
 
@@ -42,7 +47,7 @@ public class TraceIdManagerImpl implements TraceIdManager {
 
     @SneakyThrows
     private String getLocalIp() {
-        InetAddress ip = InetAddress.getLocalHost();
+        InetAddress ip = NetworkUtils.getLocalIpv4Address();
         byte[] bytes = ip.getAddress();
         return StringUtils.bytesToHexString(bytes);
     }
