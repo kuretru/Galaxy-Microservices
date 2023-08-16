@@ -29,10 +29,12 @@ class TraceIdManagerTest {
     @Test
     void generateTraceId() throws InterruptedException {
         Set<Integer> sequenceSet = new HashSet<>();
-        for (int i = 0; i < SEQUENCE_COUNT; i++) {
+        for (int i = 0; i < SEQUENCE_COUNT / 100; i++) {
             Thread thread = new Thread(() -> {
-                synchronized (sequenceSet) {
-                    sequenceSet.add(getSequence());
+                for (int j = 0; j < 100; j++) {
+                    synchronized (sequenceSet) {
+                        sequenceSet.add(getSequence());
+                    }
                 }
             });
             thread.start();
@@ -40,11 +42,12 @@ class TraceIdManagerTest {
         }
         assertEquals(SEQUENCE_COUNT, sequenceSet.size());
         assertTrue(sequenceSet.contains(getSequence()));
+        assertEquals(36, manager.generateTraceId().length());
     }
 
     private int getSequence() {
         String traceId = manager.generateTraceId();
-        int index = traceId.lastIndexOf("-");
+        int index = traceId.lastIndexOf("_");
         return Integer.parseInt(traceId.substring(index + 1));
     }
 
