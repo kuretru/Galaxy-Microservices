@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class GalaxyWebApplication {
 
     public static void main(String[] args) {
-        System.setProperty("server.servlet.context-path", "/api");
         SpringApplication.run(GalaxyWebApplication.class, args);
     }
 
