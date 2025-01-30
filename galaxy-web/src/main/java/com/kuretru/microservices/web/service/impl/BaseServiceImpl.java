@@ -245,7 +245,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                 }
             }
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            log.error("构建QueryWrapper时抛出异常：" + e.getMessage());
+            log.error("构建QueryWrapper时抛出异常：{}", e.getMessage());
         }
         return queryWrapper;
     }
