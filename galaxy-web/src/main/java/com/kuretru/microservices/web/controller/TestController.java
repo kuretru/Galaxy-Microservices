@@ -20,14 +20,14 @@ import java.time.Instant;
 @Tag(name = "TestController", description = "测试控制器")
 public class TestController extends BaseController {
 
-    @GetMapping("/ping")
+    @GetMapping("/api/ping")
     @Operation(summary = "测试与API服务器的连通性")
     public ApiResponse<?> ping() {
         String now = InstantUtils.toString(Instant.now());
         return ApiResponse.success(now);
     }
 
-    @GetMapping("/exception")
+    @GetMapping("/api/exception")
     @Operation(summary = "主动抛出一个异常，测试前端异常处理能力")
     public ApiResponse<?> exception() {
         throw new ServiceException(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "主动抛出异常");
