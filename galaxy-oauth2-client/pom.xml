@@ -5,14 +5,14 @@
 
     <properties>
         <java.version>25</java.version>
-        <spring-boot.version>2.7.18</spring-boot.version>
-        <org.mapstruct.version>1.6.0</org.mapstruct.version>
+        <spring-boot.version>4.0.5</spring-boot.version>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>4.0.5</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -51,13 +51,20 @@
         <!-- Spring Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
 
         <!-- Spring Data Redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Jackson 3 -->
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
             <optional>true</optional>
         </dependency>
 
