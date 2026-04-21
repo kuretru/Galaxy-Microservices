@@ -24,9 +24,6 @@ jobs:
       - name: Build Galaxy OAuth2 Common
         run: mvn --batch-mode --update-snapshots install
         working-directory: galaxy-oauth2-common/
-      - name: Build Galaxy OAuth2 Server
-        run: mvn --batch-mode --update-snapshots install
-        working-directory: galaxy-oauth2-server/
       - name: Build Galaxy OAuth2 Client
         run: mvn --batch-mode --update-snapshots install
         working-directory: galaxy-oauth2-client/
