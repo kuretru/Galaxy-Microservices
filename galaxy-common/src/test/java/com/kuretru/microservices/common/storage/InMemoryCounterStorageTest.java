@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryCounterStorageTest {
 
     private static final int PURGE_INTERVAL = 10;
-    private final InMemoryStorage<String, String> inMemoryStorage;
+    private final InMemoryCounterStorage<String, String> inMemoryStorage;
 
     public InMemoryCounterStorageTest() {
         this.inMemoryStorage = new InMemoryCounterStorage<>(PURGE_INTERVAL);
@@ -121,11 +121,12 @@ class InMemoryCounterStorageTest {
     }
 
     @SneakyThrows
+    @SuppressWarnings("unchecked")
     private ConcurrentMap<String, ?> getInnerMap() {
-        Class<?> clazz = inMemoryStorage.getClass();
+        Class<?> clazz = InMemoryCounterStorage.class;
         Field field = clazz.getDeclaredField("map");
         field.setAccessible(true);
-        return (ConcurrentMap<String, ?>)field.get(inMemoryStorage);
+        return (ConcurrentMap<String, ?>) field.get(inMemoryStorage);
     }
 
 }

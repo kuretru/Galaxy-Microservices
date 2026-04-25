@@ -2,7 +2,7 @@ package com.kuretru.microservices.web.util;
 
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * HttpServletRequest相关的静态工具类

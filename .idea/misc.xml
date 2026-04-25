@@ -8,12 +8,11 @@
         <option value="$PROJECT_DIR$/galaxy-common/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-oauth2-common/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-oauth2-client/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-oauth2-server/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-authentication/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" project-jdk-name="temurin-21" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" project-jdk-name="temurin-25" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

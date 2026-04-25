@@ -2,7 +2,7 @@ package com.kuretru.microservices.oauth2.client.system.entity;
 
 import lombok.Data;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
