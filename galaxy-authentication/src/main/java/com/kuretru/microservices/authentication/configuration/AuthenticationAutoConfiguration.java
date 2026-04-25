@@ -4,7 +4,6 @@ import com.kuretru.microservices.authentication.aspect.SimpleAuthorizationAspect
 import com.kuretru.microservices.authentication.manager.AccessTokenManager;
 import com.kuretru.microservices.authentication.property.AuthenticationProperty;
 import com.kuretru.microservices.common.factory.RedisFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -36,7 +35,6 @@ public class AuthenticationAutoConfiguration {
     }
 
     @Bean
-    @Autowired
     public SimpleAuthorizationAspect authorizationAspect(AccessTokenManager accessTokenManager) {
         return new SimpleAuthorizationAspect(accessTokenManager);
     }
