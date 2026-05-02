@@ -6,8 +6,6 @@
       <list>
         <option value="$PROJECT_DIR$/galaxy-web/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-common/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-oauth2-common/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-oauth2-client/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-authentication/pom.xml" />
       </list>
     </option>
