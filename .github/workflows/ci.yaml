@@ -16,8 +16,8 @@ jobs:
         run: ./gradlew --no-daemon --stacktrace clean build
         working-directory: galaxy-common/
       - name: Build Galaxy Web
-        run: mvn --batch-mode --update-snapshots install
+        run: ./gradlew --no-daemon --stacktrace clean build
         working-directory: galaxy-web/
       - name: Build Galaxy Authentication
-        run: mvn --batch-mode --update-snapshots install
+        run: ./gradlew --no-daemon --stacktrace clean build
         working-directory: galaxy-authentication/

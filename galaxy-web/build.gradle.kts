@@ -29,10 +29,12 @@ dependencies {
     implementation("com.baomidou:mybatis-plus-spring-boot4-starter:$mybatisPlusVersion")
     implementation("com.baomidou:mybatis-plus-jsqlparser:$mybatisPlusVersion")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion")
+
     compileOnly("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:$mapstructVersion")
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testCompileOnly("org.projectlombok:lombok")
     testCompileOnly("org.mapstruct:mapstruct:$mapstructVersion")
