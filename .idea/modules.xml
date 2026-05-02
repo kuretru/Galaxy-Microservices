@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Galaxy-Microservices.iml" filepath="$PROJECT_DIR$/.idea/Galaxy-Microservices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxy-authentication.main.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxy-authentication.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxy-authentication.test.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxy-authentication.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxy-common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxy-common.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxy-common.test.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxy-common.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxy-web.main.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxy-web.main.iml" />
