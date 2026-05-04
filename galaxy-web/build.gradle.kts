@@ -8,8 +8,8 @@ group = "com.kuretru.microservices"
 version = "0.0.1-SNAPSHOT"
 
 val mybatisPlusVersion = "3.5.16"
-val springdocOpenapiVersion = "3.0.1"
 val mapstructVersion = "1.6.3"
+val springdocOpenapiVersion = "3.0.1"
 
 java {
     toolchain {
