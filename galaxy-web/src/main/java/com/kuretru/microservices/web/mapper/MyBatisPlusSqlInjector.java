@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.kuretru.microservices.web.mapper.method.GetMaxSequenceMethod;
+import com.kuretru.microservices.web.v2.mapper.BaseSequencedMapper;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class MyBatisPlusSqlInjector extends DefaultSqlInjector {
         if (BaseSequenceMapper.class.isAssignableFrom(mapperClass)) {
             methodList.add(new GetMaxSequenceMethod("getMaxSequence"));
             // methodList.add(new UpdateSequenceByUuidsMethod("updateSequenceByUuids"));
+        } else if (BaseSequencedMapper.class.isAssignableFrom(mapperClass)) {
+            methodList.add(new GetMaxSequenceMethod("getMaxSequence"));
         }
         return methodList;
     }

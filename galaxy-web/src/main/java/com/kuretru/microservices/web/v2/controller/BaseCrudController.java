@@ -1,0 +1,87 @@
+package com.kuretru.microservices.web.v2.controller;
+
+import com.kuretru.microservices.web.constant.code.UserErrorCodes;
+import com.kuretru.microservices.web.controller.BaseController;
+import com.kuretru.microservices.web.entity.ApiResponse;
+import com.kuretru.microservices.web.entity.PaginationQuery;
+import com.kuretru.microservices.web.entity.PaginationResponse;
+import com.kuretru.microservices.web.exception.ServiceException;
+import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.v2.service.BaseService;
+import com.kuretru.microservices.web.v2.service.impl.BaseServiceImpl;
+import org.springframework.core.ResolvableType;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 提供基本CRUD功能的控制器，继承后可获得一些基本的参数检验功能
+ *
+ * @author 呉真(kuretru) <kuretru@gmail.com>
+ */
+public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends BaseDTO, Q> extends BaseController {
+
+    protected final S service;
+    protected final Class<T> dtoClass;
+    protected final Class<Q> queryClass;
+
+    @SuppressWarnings("unchecked")
+    public BaseCrudController(S service) {
+        this.service = service;
+        ResolvableType type = ResolvableType.forClass(getClass()).as(BaseServiceImpl.class);
+        this.dtoClass = (Class<T>) type.getGeneric(2).resolve();
+        this.queryClass = (Class<Q>) type.getGeneric(3).resolve();
+    }
+
+    protected ApiResponse<T> get(Long id) throws ServiceException {
+        T result = service.get(id);
+        if (result == null) {
+            // 指定ID查询单个实体但实体不存在时，认为是用户方ID输入错误，因此抛异常
+            throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "指定资源不存在");
+        }
+        return ApiResponse.success(result);
+    }
+
+    protected ApiResponse<List<T>> list(Q query) throws ServiceException {
+        List<T> result = service.list(query);
+        if (result == null) {
+            result = new ArrayList<>();
+        }
+        if (result.isEmpty()) {
+            // 批量查询实体但实体不存在时，认为实体确实有不存在的可能，因此返回相应业务状态码和空列表
+            return ApiResponse.notFound(result);
+        }
+        return ApiResponse.success(result);
+    }
+
+    protected ApiResponse<PaginationResponse<T>> listByPage(PaginationQuery paginationQuery, Q query) throws ServiceException {
+        PaginationResponse<T> result = service.list(paginationQuery, query);
+        if (result.getList() == null) {
+            result.setList(new ArrayList<>());
+        }
+        if (result.getList().isEmpty()) {
+            return ApiResponse.notFound(result);
+        }
+        return ApiResponse.success(result);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    protected ApiResponse<T> create(T record) throws ServiceException {
+        T result = service.save(record);
+        return ApiResponse.created(result);
+    }
+
+    protected ApiResponse<T> update(Long id, T record) throws ServiceException {
+        record.setId(id);
+        T result = service.update(record);
+        return ApiResponse.updated(result);
+    }
+
+    protected ApiResponse<String> remove(Long id) throws ServiceException {
+        service.remove(id);
+        return ApiResponse.removed("资源已删除");
+    }
+
+}
