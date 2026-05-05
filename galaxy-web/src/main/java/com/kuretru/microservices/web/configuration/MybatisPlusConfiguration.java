@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.kuretru.microservices.web.context.CurrentUserContext;
 import com.kuretru.microservices.web.mapper.MyBatisPlusSqlInjector;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
@@ -40,16 +41,18 @@ public class MybatisPlusConfiguration {
 
         @Override
         public void insertFill(MetaObject metaObject) {
-            this.strictInsertFill(metaObject, "createTime", Instant.class, Instant.now());
-            this.strictInsertFill(metaObject, "createBy", String.class, "kuretru");
-            this.strictInsertFill(metaObject, "updateTime", Instant.class, Instant.now());
-            this.strictInsertFill(metaObject, "updateBy", String.class, "kuretru");
+            var now = Instant.now();
+            var username = CurrentUserContext.getUsername();
+            this.strictInsertFill(metaObject, "createTime", Instant.class, now);
+            this.strictInsertFill(metaObject, "createBy", String.class, username);
+            this.strictInsertFill(metaObject, "updateTime", Instant.class, now);
+            this.strictInsertFill(metaObject, "updateBy", String.class, username);
         }
 
         @Override
         public void updateFill(MetaObject metaObject) {
             this.strictUpdateFill(metaObject, "updateTime", Instant.class, Instant.now());
-            this.strictUpdateFill(metaObject, "updateBy", String.class, "kuretru");
+            this.strictUpdateFill(metaObject, "updateBy", String.class, CurrentUserContext.getUsername());
         }
 
     }

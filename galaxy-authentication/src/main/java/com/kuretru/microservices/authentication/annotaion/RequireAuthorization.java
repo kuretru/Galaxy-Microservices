@@ -18,13 +18,13 @@ public @interface RequireAuthorization {
      *
      * @return 角色
      */
-    String[] hasRole() default {};
+    String[] hasAnyRoles() default {};
 
     /**
      * 绑定的对象需要：用户必须含有给定的所有角色
      *
      * @return 角色
      */
-    String[] hasRoles() default {};
+    String[] hasAllRoles() default {};
 
 }
