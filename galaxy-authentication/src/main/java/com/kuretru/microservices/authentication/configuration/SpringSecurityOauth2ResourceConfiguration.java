@@ -39,6 +39,8 @@ public class SpringSecurityOauth2ResourceConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/healthz",
+                                "/login",
+                                "/login/callback",
                                 "/api/ping",
                                 "/api/exception"
                         ).permitAll()

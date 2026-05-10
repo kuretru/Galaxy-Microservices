@@ -1,6 +1,8 @@
 package com.kuretru.microservices.authentication.configuration;
 
+import com.kuretru.microservices.authentication.property.AuthenticationProperty;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @AutoConfiguration
 @ComponentScan("com.kuretru.microservices.authentication")
+@EnableConfigurationProperties(AuthenticationProperty.class)
 public class AuthenticationAutoConfiguration {
 
 
