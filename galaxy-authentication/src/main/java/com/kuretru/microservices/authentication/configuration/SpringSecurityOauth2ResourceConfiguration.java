@@ -42,7 +42,9 @@ public class SpringSecurityOauth2ResourceConfiguration {
                                 "/login",
                                 "/login/callback",
                                 "/api/ping",
-                                "/api/exception"
+                                "/api/exception",
+                                "/swagger-ui.html",
+                                "/v3/api-docs"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
