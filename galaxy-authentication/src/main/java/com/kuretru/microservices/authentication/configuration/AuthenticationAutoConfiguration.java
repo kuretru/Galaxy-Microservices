@@ -13,5 +13,4 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableConfigurationProperties(AuthenticationProperty.class)
 public class AuthenticationAutoConfiguration {
 
-
 }
