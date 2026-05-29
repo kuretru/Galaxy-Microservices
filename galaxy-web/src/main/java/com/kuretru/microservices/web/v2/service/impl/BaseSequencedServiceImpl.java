@@ -31,7 +31,7 @@ public abstract class BaseSequencedServiceImpl<M extends BaseSequencedMapper<D>,
     @Override
     protected D beforeSave(T record) throws ServiceException {
         D data = super.beforeSave(record);
-        data.setSequence(getMaxSequence(record));
+        data.setSequence(getMaxSequence(record) + 1);
         return data;
     }
 
