@@ -1,0 +1,42 @@
+package com.kuretru.microservices.web.v2.entity.mapper;
+
+import com.kuretru.microservices.web.v2.entity.data.BaseCreateOnlyDO;
+import com.kuretru.microservices.web.v2.entity.transfer.BaseCreateOnlyDTO;
+
+import java.util.List;
+
+public interface BaseCreateOnlyEntityMapper<D extends BaseCreateOnlyDO, T extends BaseCreateOnlyDTO> {
+
+    /**
+     * 将DO转换为DTO
+     *
+     * @param record DO
+     * @return DTO
+     */
+    T doToDto(D record);
+
+    /**
+     * 将DO批量转换为DTO
+     *
+     * @param records DO列表
+     * @return DTO列表
+     */
+    List<T> doToDto(List<D> records);
+
+    /**
+     * 将DTO转换为DO
+     *
+     * @param record DTO
+     * @return DO
+     */
+    D dtoToDo(T record);
+
+    /**
+     * 将DTO批量转换为DO
+     *
+     * @param records DTO列表
+     * @return DO列表
+     */
+    List<D> dtoToDo(List<T> records);
+
+}
