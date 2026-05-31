@@ -160,4 +160,18 @@ public class StringUtils {
         }
     }
 
+    /**
+     * 去掉指定后缀
+     *
+     * @param text   原始字符串
+     * @param suffix 后缀
+     * @return 结果
+     */
+    public static String trimSuffix(String text, String suffix) {
+        if (text == null || text.isEmpty() || !text.endsWith(suffix)) {
+            return text;
+        }
+        return text.substring(0, text.length() - suffix.length());
+    }
+
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author 呉真(kuretru) <kuretru@gmail.com>
@@ -14,7 +15,7 @@ class StringUtilsTest {
     @Test
     void bytesToHexString() {
         String expected = "123456ABCDEF";
-        final byte[] bytes = {0x12, 0x34, 0x56, (byte)0xAB, (byte)0xCD, (byte)0xEF};
+        final byte[] bytes = {0x12, 0x34, 0x56, (byte) 0xAB, (byte) 0xCD, (byte) 0xEF};
         String text = StringUtils.bytesToHexString(bytes);
         assertEquals(expected, text);
     }
@@ -99,6 +100,14 @@ class StringUtilsTest {
         assertEquals("xxx", iterator.next());
         assertEquals("yyy", iterator.next());
         assertEquals("zzz", iterator.next());
+    }
+
+    @Test
+    void trimSuffix() {
+        assertEquals("user", StringUtils.trimSuffix("userId", "Id"));
+        assertEquals("userId", StringUtils.trimSuffix("userId", "Name"));
+        assertEquals("", StringUtils.trimSuffix("", "Id"));
+        assertNull(StringUtils.trimSuffix(null, "Id"));
     }
 
 }
