@@ -11,7 +11,8 @@ import com.kuretru.microservices.web.v2.service.BaseSequencedService;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BaseSequencedServiceImpl<M extends BaseSequencedMapper<D>, D extends BaseDO & Sequenced, T extends BaseDTO, Q> extends BaseServiceImpl<M, D, T, Q> implements BaseSequencedService<T, Q> {
+public abstract class BaseSequencedServiceImpl<M extends BaseSequencedMapper<D>, D extends BaseDO & Sequenced, T extends BaseDTO, Q>
+        extends BaseServiceImpl<M, D, T, Q> implements BaseSequencedService<T, Q> {
 
     public BaseSequencedServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
         super(mapper, entityMapper);

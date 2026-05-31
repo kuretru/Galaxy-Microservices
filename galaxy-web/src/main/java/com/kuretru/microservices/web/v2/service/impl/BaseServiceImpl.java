@@ -27,17 +27,17 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q>
         implements BaseService<T, Q> {
 
+    private static final String QUERY_IN_SUFFIX = "IN";
     private static final String QUERY_LIKE_SUFFIX = "LIKE";
+    private static final String QUERY_BEGIN_SUFFIX = "BEGIN";
+    private static final String QUERY_END_SUFFIX = "END";
+
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
     protected final Class<D> doClass;
@@ -106,32 +106,44 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                     continue;
                 }
 
-                boolean like = false;
                 String filedName = descriptor.getName().toUpperCase();
-                if (filedName.endsWith(QUERY_LIKE_SUFFIX)) {
-                    like = true;
-                    filedName = filedName.substring(0, filedName.length() - QUERY_LIKE_SUFFIX.length());
-                }
-                String columnName = columns.get(filedName).getColumn();
-                if (!StringUtils.hasText(columnName)) {
-                    continue;
-                }
-
-                switch (value) {
-                    case String s when StringUtils.hasText(s) -> {
-                        // String类型
-                        if (like) {
-                            queryWrapper.like(columnName, value);
+                if (filedName.endsWith(QUERY_IN_SUFFIX)) {
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_IN_SUFFIX);
+                    String columnName = columns.get(filedName).getColumn();
+                    if (StringUtils.hasText(columnName)) {
+                        if (value instanceof Collection<?> collection) {
+                            List<Object> values = collection.stream()
+                                    .map(this::toDatabaseValue)
+                                    .toList();
+                            if (!values.isEmpty()) {
+                                queryWrapper.in(columnName, values);
+                            }
                         } else {
-                            queryWrapper.eq(columnName, value);
+                            log.warn("BaseServiceImpl.buildQueryWrapper: IN运算符不支持的类型{}", filedName);
                         }
                     }
-                    case UUID uuid -> queryWrapper.eq(columnName, uuid.toString());
-                    case Boolean b -> queryWrapper.eq(columnName, b);
-                    case BaseEnum<?> baseEnum -> queryWrapper.eq(columnName, baseEnum.getCode()); // 枚举类型：= 枚举编号
-                    case LocalDate localDate -> queryWrapper.eq(columnName, localDate);  // 日期类型
-                    default -> {
-                        log.warn("BaseServiceImpl.buildQueryWrapper: 尚不支持的类型{}", filedName);
+                } else if (filedName.endsWith(QUERY_LIKE_SUFFIX)) {
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_LIKE_SUFFIX);
+                    String columnName = columns.get(filedName).getColumn();
+                    if (StringUtils.hasText(columnName)) {
+                        queryWrapper.like(columnName, toDatabaseValue(value));
+                    }
+                } else if (filedName.endsWith(QUERY_BEGIN_SUFFIX)) {
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_BEGIN_SUFFIX);
+                    String columnName = columns.get(filedName).getColumn();
+                    if (StringUtils.hasText(columnName)) {
+                        queryWrapper.ge(columnName, toDatabaseValue(value));
+                    }
+                } else if (filedName.endsWith(QUERY_END_SUFFIX)) {
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_END_SUFFIX);
+                    String columnName = columns.get(filedName).getColumn();
+                    if (StringUtils.hasText(columnName)) {
+                        queryWrapper.le(columnName, toDatabaseValue(value));
+                    }
+                } else {
+                    String columnName = columns.get(filedName).getColumn();
+                    if (StringUtils.hasText(columnName)) {
+                        queryWrapper.eq(columnName, toDatabaseValue(value));
                     }
                 }
             }
@@ -139,6 +151,14 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
             log.error("构建QueryWrapper时抛出异常：{}", e.getMessage());
         }
         return queryWrapper;
+    }
+
+    private Object toDatabaseValue(Object value) {
+        return switch (value) {
+            case UUID uuid -> uuid.toString();
+            case BaseEnum<?> baseEnum -> baseEnum.getCode();
+            default -> value;
+        };
     }
     // endregion
 
