@@ -212,7 +212,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return entityMapper.dtoToDo(record);
     }
 
-    protected T afterSave(D record) throws ServiceException {
+    protected T afterSave(D record, T raw) throws ServiceException {
         return entityMapper.doToDto(record);
     }
 
@@ -220,7 +220,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     public T save(T record) throws ServiceException {
         D data = beforeSave(record);
         mapper.insert(data);
-        return afterSave(data);
+        return afterSave(data, record);
     }
     // endregion
 
@@ -233,7 +233,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return entityMapper.dtoToDo(record);
     }
 
-    protected T afterUpdate(D record) throws ServiceException {
+    protected T afterUpdate(D record, T raw) throws ServiceException {
         return entityMapper.doToDto(record);
     }
 
@@ -246,7 +246,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         } else if (rows != 1) {
             throw ServiceException.build(ServiceErrorCodes.SYSTEM_EXECUTION_ERROR, "发现多个相同业务主键");
         }
-        return afterUpdate(mapper.selectById(data.getId()));
+        return afterUpdate(mapper.selectById(data.getId()), record);
     }
     // endregion
 
