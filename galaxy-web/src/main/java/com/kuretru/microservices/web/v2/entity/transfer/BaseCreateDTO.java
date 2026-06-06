@@ -2,14 +2,15 @@ package com.kuretru.microservices.web.v2.entity.transfer;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.Instant;
 
 @Data
-public abstract class BaseCreateOnlyDTO {
-
-    @Schema(description = "记录ID")
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public abstract class BaseCreateDTO extends BaseDTO {
 
     @Schema(description = "记录主动创建的时刻")
     private Instant createTime;
