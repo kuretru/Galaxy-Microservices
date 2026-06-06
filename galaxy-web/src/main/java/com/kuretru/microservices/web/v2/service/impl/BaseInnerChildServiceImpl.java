@@ -34,6 +34,8 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
 
     protected abstract String getParentIdColumn();
 
+    protected abstract void setParentId(Long parentId, T record);
+
     protected abstract boolean bizEqual(D oldRecord, T newRecord);
 
     // region 通用方法
@@ -80,6 +82,7 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
         List<D> updateList = new ArrayList<>();
 
         for (var record : newRecords) {
+            setParentId(parentId, record);
             if (oldRecordsMap.containsKey(record.getId())) {
                 if (!bizEqual(oldRecordsMap.get(record.getId()), record)) {
                     updateList.add(entityMapper.dtoToDo(record));
