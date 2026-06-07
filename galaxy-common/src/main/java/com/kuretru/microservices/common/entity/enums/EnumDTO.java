@@ -11,19 +11,19 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-public class EnumDTO {
+public class EnumDTO<T> {
 
     /** 前端展示的值 */
     private String label;
 
     /** 前端保存的值 */
-    private String value;
+    private T value;
 
     /** 子元素 */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<EnumDTO> children;
+    private List<EnumDTO<T>> children;
 
-    public EnumDTO(String label, String value) {
+    public EnumDTO(String label, T value) {
         this.label = label;
         this.value = value;
     }

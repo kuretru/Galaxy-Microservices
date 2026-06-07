@@ -108,10 +108,10 @@ public class EnumUtils {
      * @param <E>    派生自BaseEnum的枚举类
      * @return 前端使用的DTO
      */
-    public static <E extends BaseEnum<E>> List<EnumDTO> buildDTO(BaseEnum<E>[] values) {
-        List<EnumDTO> result = new ArrayList<>();
+    public static <E extends BaseEnum<E>> List<EnumDTO<String>> buildDTO(BaseEnum<E>[] values) {
+        List<EnumDTO<String>> result = new ArrayList<>();
         for (BaseEnum<E> value : values) {
-            result.add(new EnumDTO(value.getValue(), value.name()));
+            result.add(new EnumDTO<>(value.getValue(), value.name()));
         }
         return result;
     }
