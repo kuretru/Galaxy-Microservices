@@ -34,6 +34,8 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
 
     protected abstract String getParentIdColumn();
 
+    protected abstract Long getParentId(T record);
+
     protected abstract void setParentId(Long parentId, T record);
 
     protected abstract boolean bizEqual(D oldRecord, T newRecord);
@@ -58,6 +60,13 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
         applyDefaultOrderBy(queryWrapper);
         return queryWrapper;
     }
+
+    protected QueryWrapper<D> buildQueryWrapper(List<Long> parentIdList) {
+        var queryWrapper = new QueryWrapper<D>();
+        queryWrapper.in(getParentIdColumn(), parentIdList);
+        applyDefaultOrderBy(queryWrapper);
+        return queryWrapper;
+    }
     // endregion
 
 
@@ -66,6 +75,14 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
         var queryWrapper = buildQueryWrapper(parentId);
         var records = mapper.selectList(queryWrapper);
         return entityMapper.doToDto(records);
+    }
+
+    @Override
+    public Map<Long, List<T>> listByParentId(List<Long> parentIdList) {
+        var queryWrapper = buildQueryWrapper(parentIdList);
+        var records = mapper.selectList(queryWrapper);
+        var dtoRecords = entityMapper.doToDto(records);
+        return dtoRecords.stream().collect(Collectors.groupingBy(this::getParentId));
     }
 
     @Override

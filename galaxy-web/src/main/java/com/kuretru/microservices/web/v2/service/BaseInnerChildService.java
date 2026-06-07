@@ -3,6 +3,7 @@ package com.kuretru.microservices.web.v2.service;
 import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BaseInnerChildService<T extends BaseDTO> {
 
@@ -13,6 +14,14 @@ public interface BaseInnerChildService<T extends BaseDTO> {
      * @return 主表下所有记录
      */
     List<T> listByParentId(Long parentId);
+
+    /**
+     * 根据主表ID查询所有记录
+     *
+     * @param parentIdList 主表ID列表
+     * @return 主表下所有记录
+     */
+    Map<Long, List<T>> listByParentId(List<Long> parentIdList);
 
     /**
      * 同步所有变更，无则新增，有则修改，不需要则删除
