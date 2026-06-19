@@ -6,7 +6,7 @@ import com.kuretru.microservices.web.entity.interfaces.Sequenced;
 import com.kuretru.microservices.web.v2.entity.data.BaseDO;
 import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
 import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
-import com.kuretru.microservices.web.v2.service.BaseInnerChildService;
+import com.kuretru.microservices.web.v2.service.BaseOneToManyService;
 import org.springframework.core.ResolvableType;
 
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO>
-        implements BaseInnerChildService<T> {
+public abstract class BaseOneToManyServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO>
+        implements BaseOneToManyService<T> {
 
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
@@ -24,10 +24,10 @@ public abstract class BaseInnerChildServiceImpl<M extends BaseMapper<D>, D exten
     protected final Class<T> dtoClass;
 
     @SuppressWarnings("unchecked")
-    public BaseInnerChildServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
+    public BaseOneToManyServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
         this.mapper = mapper;
         this.entityMapper = entityMapper;
-        ResolvableType type = ResolvableType.forClass(getClass()).as(BaseInnerChildServiceImpl.class);
+        ResolvableType type = ResolvableType.forClass(getClass()).as(BaseOneToManyServiceImpl.class);
         this.doClass = (Class<D>) type.getGeneric(1).resolve();
         this.dtoClass = (Class<T>) type.getGeneric(2).resolve();
     }

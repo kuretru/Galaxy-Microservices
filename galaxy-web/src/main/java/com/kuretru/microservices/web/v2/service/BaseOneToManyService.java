@@ -5,7 +5,7 @@ import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
 import java.util.List;
 import java.util.Map;
 
-public interface BaseInnerChildService<T extends BaseDTO> {
+public interface BaseOneToManyService<T extends BaseDTO> {
 
     /**
      * 根据主表ID查询所有记录
