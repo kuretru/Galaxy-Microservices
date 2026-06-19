@@ -10,29 +10,33 @@ import com.kuretru.microservices.web.entity.interfaces.Sequenced;
 import com.kuretru.microservices.web.v2.entity.data.BaseDO;
 import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
 import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
-import org.springframework.core.ResolvableType;
+import com.kuretru.microservices.web.v2.service.support.QueryWrapperBuilder;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DefaultChildrenOperator<M extends BaseMapper<D>, D extends BaseDO & Children<D>, T extends BaseDTO> implements ChildrenOperator<T> {
+public class DefaultChildrenOperator<M extends BaseMapper<D>, D extends BaseDO & Children<D>, T extends BaseDTO, Q>
+        implements ChildrenOperator<T, Q> {
 
-    protected final Class<D> doClass;
-    protected final Class<T> dtoClass;
     private final M mapper;
     private final BaseEntityMapper<D, T> entityMapper;
+    private final Class<D> doClass;
+    private final Class<T> dtoClass;
+    private final Class<Q> queryClass;
+    private final QueryWrapperBuilder<D, Q> queryWrapperBuilder;
     private final Field parentIdField;
     private final String parentIdColumn;
 
-    @SuppressWarnings("unchecked")
-    public DefaultChildrenOperator(M mapper, BaseEntityMapper<D, T> entityMapper) {
+    public DefaultChildrenOperator(M mapper, BaseEntityMapper<D, T> entityMapper,
+                                   Class<D> doClass, Class<T> dtoClass, Class<Q> queryClass) {
         this.mapper = mapper;
         this.entityMapper = entityMapper;
-        ResolvableType type = ResolvableType.forClass(getClass()).as(DefaultChildrenOperator.class);
-        this.doClass = (Class<D>) type.getGeneric(1).resolve();
-        this.dtoClass = (Class<T>) type.getGeneric(2).resolve();
+        this.doClass = doClass;
+        this.dtoClass = dtoClass;
+        this.queryClass = queryClass;
+        this.queryWrapperBuilder = new QueryWrapperBuilder<>(doClass, queryClass);
         this.parentIdField = resolveParentIdField();
         this.parentIdColumn = resolveParentIdColumn(parentIdField);
     }
@@ -79,6 +83,16 @@ public class DefaultChildrenOperator<M extends BaseMapper<D>, D extends BaseDO &
         }
     }
 
+    private Long toParentId(Object value) {
+        return switch (value) {
+            case null -> null;
+            case Long parentId -> parentId;
+            case Number number -> number.longValue();
+            case String text -> Long.valueOf(text);
+            default -> throw new IllegalStateException("不支持的ParentId类型：%s".formatted(value.getClass().getName()));
+        };
+    }
+
     /**
      * 为QueryWrapper设置排序依据
      *
@@ -104,7 +118,21 @@ public class DefaultChildrenOperator<M extends BaseMapper<D>, D extends BaseDO &
         applyDefaultOrderBy(queryWrapper);
         return queryWrapper;
     }
+
+    protected QueryWrapper<D> buildQueryWrapper(Q query) {
+        return queryWrapperBuilder.build(query);
+    }
     // endregion
+
+
+    @Override
+    public List<Long> listParentId(Q query) {
+        var queryWrapper = buildQueryWrapper(query);
+        queryWrapper.select("DISTINCT " + parentIdColumn);
+        return mapper.selectObjs(queryWrapper).stream()
+                .map(this::toParentId)
+                .toList();
+    }
 
     @Override
     public List<T> listByParentId(Long parentId) {

@@ -5,7 +5,15 @@ import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
 import java.util.List;
 import java.util.Map;
 
-public interface ChildrenOperator<T extends BaseDTO> {
+public interface ChildrenOperator<T extends BaseDTO, Q> {
+
+    /**
+     * 列出ParentId
+     *
+     * @param query Query
+     * @return ParentID去重后的结果
+     */
+    List<Long> listParentId(Q query);
 
     /**
      * 根据主表ID查询所有记录

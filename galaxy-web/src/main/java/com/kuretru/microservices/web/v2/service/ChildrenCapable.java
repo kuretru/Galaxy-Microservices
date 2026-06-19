@@ -6,9 +6,19 @@ import com.kuretru.microservices.web.v2.service.ability.children.ChildrenOperato
 import java.util.List;
 import java.util.Map;
 
-public interface ChildrenCapable<T extends BaseDTO> {
+public interface ChildrenCapable<T extends BaseDTO, Q> {
 
-    ChildrenOperator<T> childrenOperator();
+    ChildrenOperator<T, Q> childrenOperator();
+
+    /**
+     * 列出ParentId
+     *
+     * @param query Query
+     * @return ParentID去重后的结果
+     */
+    default List<Long> listParentId(Q query) {
+        return childrenOperator().listParentId(query);
+    }
 
     /**
      * 根据主表ID查询所有记录
