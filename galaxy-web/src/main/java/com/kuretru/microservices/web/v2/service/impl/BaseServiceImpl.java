@@ -2,10 +2,7 @@ package com.kuretru.microservices.web.v2.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
-import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kuretru.microservices.common.entity.enums.BaseEnum;
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.PaginationQuery;
@@ -16,33 +13,21 @@ import com.kuretru.microservices.web.v2.entity.data.BaseDO;
 import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
 import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.v2.service.BaseService;
+import com.kuretru.microservices.web.v2.service.support.QueryWrapperBuilder;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ResolvableType;
-import org.springframework.util.StringUtils;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
 
-@Slf4j
 public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO, T extends BaseDTO, Q>
         implements BaseService<T, Q> {
-
-    private static final String QUERY_IN_SUFFIX = "IN";
-    private static final String QUERY_LIKE_SUFFIX = "LIKE";
-    private static final String QUERY_BEGIN_SUFFIX = "BEGIN";
-    private static final String QUERY_END_SUFFIX = "END";
 
     protected final M mapper;
     protected final BaseEntityMapper<D, T> entityMapper;
     protected final Class<D> doClass;
     protected final Class<T> dtoClass;
     protected final Class<Q> queryClass;
+    protected final QueryWrapperBuilder<D, Q> queryWrapperBuilder;
 
     @SuppressWarnings("unchecked")
     public BaseServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
@@ -52,6 +37,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         this.doClass = (Class<D>) type.getGeneric(1).resolve();
         this.dtoClass = (Class<T>) type.getGeneric(2).resolve();
         this.queryClass = (Class<Q>) type.getGeneric(3).resolve();
+        this.queryWrapperBuilder = new QueryWrapperBuilder<>(doClass, queryClass);
     }
 
     // region 通用方法
@@ -86,79 +72,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
      * @return QueryWrapper
      */
     protected QueryWrapper<D> buildQueryWrapper(Q query) {
-        QueryWrapper<D> queryWrapper = new QueryWrapper<>();
-        try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(queryClass);
-            List<PropertyDescriptor> descriptors = Arrays.stream(beanInfo.getPropertyDescriptors()).filter(p -> {
-                String name = p.getName();
-                return !"class".equals(name);
-            }).toList();
-
-            // 用MyBatis自带的缓存，将驼峰映射为下划线列名
-            Map<String, ColumnCache> columns = LambdaUtils.getColumnMap(doClass);
-            for (PropertyDescriptor descriptor : descriptors) {
-                Method readMethod = descriptor.getReadMethod();
-                if (readMethod == null) {
-                    continue;
-                }
-                Object value = readMethod.invoke(query);
-                if (value == null) {
-                    continue;
-                }
-
-                String filedName = descriptor.getName().toUpperCase();
-                if (filedName.endsWith(QUERY_IN_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_IN_SUFFIX);
-                    String columnName = columns.get(filedName).getColumn();
-                    if (StringUtils.hasText(columnName)) {
-                        if (value instanceof Collection<?> collection) {
-                            List<Object> values = collection.stream()
-                                    .map(this::toDatabaseValue)
-                                    .toList();
-                            if (!values.isEmpty()) {
-                                queryWrapper.in(columnName, values);
-                            }
-                        } else {
-                            log.warn("BaseServiceImpl.buildQueryWrapper: IN运算符不支持的类型{}", filedName);
-                        }
-                    }
-                } else if (filedName.endsWith(QUERY_LIKE_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_LIKE_SUFFIX);
-                    String columnName = columns.get(filedName).getColumn();
-                    if (StringUtils.hasText(columnName)) {
-                        queryWrapper.like(columnName, toDatabaseValue(value));
-                    }
-                } else if (filedName.endsWith(QUERY_BEGIN_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_BEGIN_SUFFIX);
-                    String columnName = columns.get(filedName).getColumn();
-                    if (StringUtils.hasText(columnName)) {
-                        queryWrapper.ge(columnName, toDatabaseValue(value));
-                    }
-                } else if (filedName.endsWith(QUERY_END_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_END_SUFFIX);
-                    String columnName = columns.get(filedName).getColumn();
-                    if (StringUtils.hasText(columnName)) {
-                        queryWrapper.le(columnName, toDatabaseValue(value));
-                    }
-                } else {
-                    String columnName = columns.get(filedName).getColumn();
-                    if (StringUtils.hasText(columnName)) {
-                        queryWrapper.eq(columnName, toDatabaseValue(value));
-                    }
-                }
-            }
-        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            log.error("构建QueryWrapper时抛出异常：{}", e.getMessage());
-        }
-        return queryWrapper;
-    }
-
-    private Object toDatabaseValue(Object value) {
-        return switch (value) {
-            case UUID uuid -> uuid.toString();
-            case BaseEnum<?> baseEnum -> baseEnum.getCode();
-            default -> value;
-        };
+        return queryWrapperBuilder.build(query);
     }
     // endregion
 
