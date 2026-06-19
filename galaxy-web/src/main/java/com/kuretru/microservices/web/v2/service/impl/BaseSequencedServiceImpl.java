@@ -6,13 +6,13 @@ import com.kuretru.microservices.web.v2.entity.data.BaseDO;
 import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
 import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.v2.mapper.BaseSequencedMapper;
-import com.kuretru.microservices.web.v2.service.BaseSequencedService;
+import com.kuretru.microservices.web.v2.service.BaseService;
+import com.kuretru.microservices.web.v2.service.SequencedService;
 
 import java.util.List;
-import java.util.UUID;
 
 public abstract class BaseSequencedServiceImpl<M extends BaseSequencedMapper<D>, D extends BaseDO & Sequenced, T extends BaseDTO, Q>
-        extends BaseServiceImpl<M, D, T, Q> implements BaseSequencedService<T, Q> {
+        extends BaseServiceImpl<M, D, T, Q> implements BaseService<T, Q>, SequencedService<T> {
 
     public BaseSequencedServiceImpl(M mapper, BaseEntityMapper<D, T> entityMapper) {
         super(mapper, entityMapper);
@@ -25,7 +25,7 @@ public abstract class BaseSequencedServiceImpl<M extends BaseSequencedMapper<D>,
     }
 
     @Override
-    public void reorder(List<UUID> uuidList) throws ServiceException {
+    public void reorder(List<Integer> idList) throws ServiceException {
 
     }
 
