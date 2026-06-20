@@ -19,6 +19,15 @@ public interface BaseService<T extends BaseDTO, Q> {
     T get(Long id) throws ServiceException;
 
     /**
+     * 根据查询条件，查询所有主键ID
+     *
+     * @param query 查询条件
+     * @return 所有ID
+     * @throws ServiceException 没有权限时，抛出业务异常
+     */
+    List<Long> listId(Q query) throws ServiceException;
+
+    /**
      * 根据查询条件，查询所有记录
      *
      * @param query 查询条件

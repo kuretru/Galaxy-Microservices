@@ -101,6 +101,15 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
     }
 
     @Override
+    public List<Long> listId(Q query) throws ServiceException {
+        QueryWrapper<D> queryWrapper = beforeList(query);
+        queryWrapper.select("id");
+        return mapper.selectObjs(queryWrapper).stream()
+                .map(id -> ((Number) id).longValue())
+                .toList();
+    }
+
+    @Override
     public List<T> list(Q query) throws ServiceException {
         QueryWrapper<D> queryWrapper = beforeList(query);
         List<D> records = mapper.selectList(queryWrapper);
