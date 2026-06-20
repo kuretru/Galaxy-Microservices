@@ -59,7 +59,20 @@ public class QueryWrapperBuilder<D extends BaseDO, Q> {
                 }
 
                 String filedName = descriptor.getName().toUpperCase();
-                if (filedName.endsWith(QUERY_IN_SUFFIX)) {
+                if (filedName.endsWith(QUERY_BEGIN_SUFFIX)) {
+                    // begin一定要在in前面
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_BEGIN_SUFFIX);
+                    if (columns.containsKey(filedName)) {
+                        String columnName = columns.get(filedName).getColumn();
+                        queryWrapper.ge(columnName, toDatabaseValue(value));
+                    }
+                } else if (filedName.endsWith(QUERY_END_SUFFIX)) {
+                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_END_SUFFIX);
+                    if (columns.containsKey(filedName)) {
+                        String columnName = columns.get(filedName).getColumn();
+                        queryWrapper.le(columnName, toDatabaseValue(value));
+                    }
+                } else if (filedName.endsWith(QUERY_IN_SUFFIX)) {
                     filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_IN_SUFFIX);
                     if (columns.containsKey(filedName)) {
                         String columnName = columns.get(filedName).getColumn();
@@ -77,18 +90,6 @@ public class QueryWrapperBuilder<D extends BaseDO, Q> {
                     if (columns.containsKey(filedName)) {
                         String columnName = columns.get(filedName).getColumn();
                         queryWrapper.like(columnName, toDatabaseValue(value));
-                    }
-                } else if (filedName.endsWith(QUERY_BEGIN_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_BEGIN_SUFFIX);
-                    if (columns.containsKey(filedName)) {
-                        String columnName = columns.get(filedName).getColumn();
-                        queryWrapper.ge(columnName, toDatabaseValue(value));
-                    }
-                } else if (filedName.endsWith(QUERY_END_SUFFIX)) {
-                    filedName = com.kuretru.microservices.common.utils.StringUtils.trimSuffix(filedName, QUERY_END_SUFFIX);
-                    if (columns.containsKey(filedName)) {
-                        String columnName = columns.get(filedName).getColumn();
-                        queryWrapper.le(columnName, toDatabaseValue(value));
                     }
                 } else {
                     if (columns.containsKey(filedName)) {
