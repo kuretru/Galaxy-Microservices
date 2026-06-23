@@ -238,7 +238,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
                     queryWrapper.eq(columnName, value);
                 } else if (value instanceof BaseEnum) {
                     // 枚举类型：= 枚举编号
-                    queryWrapper.eq(columnName, ((BaseEnum<?>)value).getCode());
+                    queryWrapper.eq(columnName, ((BaseEnum<?>)value).getValue());
                 } else if (value instanceof LocalDate) {
                     // 日期类型：= 日期
                     queryWrapper.eq(columnName, value);

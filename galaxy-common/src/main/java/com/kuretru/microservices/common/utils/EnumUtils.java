@@ -3,10 +3,7 @@ package com.kuretru.microservices.common.utils;
 import com.kuretru.microservices.common.entity.enums.BaseEnum;
 import com.kuretru.microservices.common.entity.enums.EnumDTO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 枚举相关工具类
@@ -20,43 +17,23 @@ public class EnumUtils {
     }
 
     /**
-     * 从枚举编号还原枚举
+     * 从枚举值还原枚举
      *
      * @param eClass 枚举实体的Class
-     * @param code   枚举编号
-     * @param <E>    派生于BaseEnum的枚举类型
-     * @return 枚举实体
-     */
-    public static <E extends BaseEnum<E>> E valueOf(Class<E> eClass, Short code) {
-        if (code == null) {
-            throw new NullPointerException("枚举编号为null");
-        }
-        for (E element : eClass.getEnumConstants()) {
-            if (element.getCode() == code) {
-                return element;
-            }
-        }
-        throw new IllegalArgumentException("不存在枚举编号所对应的枚举实体");
-    }
-
-    /**
-     * 从枚举内容还原枚举
-     *
-     * @param eClass 枚举实体的Class
-     * @param value  枚举内容
+     * @param value   枚举值
      * @param <E>    派生于BaseEnum的枚举类型
      * @return 枚举实体
      */
     public static <E extends BaseEnum<E>> E valueOf(Class<E> eClass, String value) {
         if (value == null) {
-            throw new NullPointerException("枚举内容为null");
+            throw new NullPointerException("枚举值为null");
         }
         for (E element : eClass.getEnumConstants()) {
-            if (element.getValue().equals(value)) {
+            if (Objects.equals(element.getValue(), value)) {
                 return element;
             }
         }
-        throw new IllegalArgumentException("不存在枚举内容所对应的枚举实体");
+        throw new IllegalArgumentException("不存在枚举编号所对应的枚举实体");
     }
 
     /**
@@ -111,7 +88,7 @@ public class EnumUtils {
     public static <E extends BaseEnum<E>> List<EnumDTO<String>> buildDTO(BaseEnum<E>[] values) {
         List<EnumDTO<String>> result = new ArrayList<>();
         for (BaseEnum<E> value : values) {
-            result.add(new EnumDTO<>(value.getValue(), value.name()));
+            result.add(new EnumDTO<>(value.getValue(), value.getLabel()));
         }
         return result;
     }

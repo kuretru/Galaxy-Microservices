@@ -107,7 +107,7 @@ public class QueryWrapperBuilder<D extends BaseDO, Q> {
     private Object toDatabaseValue(Object value) {
         return switch (value) {
             case UUID uuid -> uuid.toString();
-            case BaseEnum<?> baseEnum -> baseEnum.getCode();
+            case BaseEnum<?> baseEnum -> baseEnum.getValue();
             default -> value;
         };
     }

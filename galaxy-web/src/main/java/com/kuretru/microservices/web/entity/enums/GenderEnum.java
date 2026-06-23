@@ -12,21 +12,19 @@ import lombok.Getter;
 public enum GenderEnum implements BaseEnum<GenderEnum> {
 
     /** 未知 */
-    UNKNOWN((short)0, "未知"),
+    UNKNOWN("unknown", "未知"),
     /** 男 */
-    MALE((short)1, "男"),
+    MALE("male", "男"),
     /** 女 */
-    FEMALE((short)2, "女");
+    FEMALE("female", "女");
 
-    /** 枚举编号 */
-    private final short code;
-
-    /** 枚举内容 */
     private final String value;
+    private final String label;
 
-    GenderEnum(short code, String value) {
-        this.code = code;
+
+    GenderEnum(String value, String label) {
         this.value = value;
+        this.label = label;
     }
 
 }

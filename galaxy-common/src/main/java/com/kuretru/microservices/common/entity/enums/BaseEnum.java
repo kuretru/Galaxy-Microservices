@@ -8,18 +8,18 @@ package com.kuretru.microservices.common.entity.enums;
 public interface BaseEnum<T> extends Comparable<T> {
 
     /**
-     * 获取枚举编号
+     * 获取枚举值
      *
-     * @return 枚举编号
-     */
-    short getCode();
-
-    /**
-     * 获取枚举内容
-     *
-     * @return 枚举内容
+     * @return 枚举值
      */
     String getValue();
+
+    /**
+     * 获取枚举标签
+     *
+     * @return 枚举标签
+     */
+    String getLabel();
 
     /**
      * Java enum原生的获取枚举名称的方法
