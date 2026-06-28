@@ -17,12 +17,12 @@ import java.time.Instant;
  * @author 呉真(kuretru) <kuretru@gmail.com>
  */
 @RestController
-@Tag(name = "TestController", description = "测试控制器")
+@Tag(name = "服务测试", description = "服务内部测试")
 public class TestController extends BaseController {
 
-    @GetMapping("/api/ping")
+    @GetMapping({"/api/ping", "/healthz"})
     @Operation(summary = "测试与API服务器的连通性")
-    public ApiResponse<?> ping() {
+    public ApiResponse<String> ping() {
         String now = InstantUtils.toString(Instant.now());
         return ApiResponse.success(now);
     }

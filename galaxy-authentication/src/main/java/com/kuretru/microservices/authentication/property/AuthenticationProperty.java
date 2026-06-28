@@ -4,22 +4,14 @@ import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import java.time.Duration;
-
-/**
- * @author 呉真(kuretru) <kuretru@gmail.com>
- */
 @Value
 @ConfigurationProperties(prefix = "galaxy.authentication")
 public class AuthenticationProperty {
 
-    /**
-     * AccessToken的有效时间
-     */
-    Duration expireTime;
+    String CloudSSOClientId;
 
-    public AuthenticationProperty(@DefaultValue("PT2H") Duration expireTime) {
-        this.expireTime = expireTime;
+    public AuthenticationProperty(@DefaultValue("U9XLAUhQIiyfwscUfdQwRmnBJvfTIbcAxXuMZJYa") String cloudSSOClientId) {
+        this.CloudSSOClientId = cloudSSOClientId;
     }
 
 }

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/galaxy-authentication" />
+    <file type="web" url="file://$PROJECT_DIR$/galaxy-common" />
+    <file type="web" url="file://$PROJECT_DIR$/galaxy-web" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/galaxy-web/pom.xml" />
         <option value="$PROJECT_DIR$/galaxy-common/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-oauth2-common/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-oauth2-client/pom.xml" />
-        <option value="$PROJECT_DIR$/galaxy-authentication/pom.xml" />
       </list>
     </option>
   </component>

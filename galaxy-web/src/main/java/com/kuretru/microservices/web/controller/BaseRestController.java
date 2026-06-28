@@ -1,19 +1,20 @@
 package com.kuretru.microservices.web.controller;
 
-import com.kuretru.microservices.common.constant.EmptyConstants;
 import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.entity.PaginationQuery;
-import com.kuretru.microservices.web.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.entity.PaginationResponse;
 import com.kuretru.microservices.web.exception.ServiceException;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.service.BaseService;
+import com.kuretru.microservices.web.service.impl.BaseServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 /**
  * 提供基本RESTful API功能的控制器，在派生类上设置@RequestMapping注解即可直接暴露出服务
@@ -24,36 +25,30 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
 
     public BaseRestController(S service) {
         super(service);
+        ResolvableType type = ResolvableType.forClass(getClass()).as(BaseServiceImpl.class);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "根据ID查询记录")
-    @Parameter(name = "id", description = "记录ID")
     @Override
-    public ApiResponse<T> get(@PathVariable("id") UUID id) throws ServiceException {
-        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
+    public ApiResponse<T> get(@Parameter(description = "记录ID") @PathVariable Long id) throws ServiceException {
+        if (id == null || id == 0) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }
         return super.get(id);
     }
 
     @GetMapping
-    @Operation(summary = "根据分页参数和查询条件查询记录列表", description = "若分页参数存在，则返回分页查询结果")
-    @Parameter(name = "paginationQuery", description = "分页参数", example = "{current=1&page_size=10}")
-    @Parameter(name = "query", description = "查询条件")
-    public ApiResponse<?> list(PaginationQuery paginationQuery, @Validated Q query) throws ServiceException {
-        if (PaginationQuery.isNotNull(paginationQuery)) {
-            return super.listByPage(paginationQuery, query);
-        }
-        return super.list(query);
+    @Operation(summary = "根据分页参数和查询条件查询记录列表")
+    public ApiResponse<PaginationResponse<T>> list(@ParameterObject @Validated PaginationQuery paginationQuery, @ParameterObject @Validated Q query) throws ServiceException {
+        return super.listByPage(paginationQuery, query);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "创建新记录")
-    @Parameter(name = "record", description = "记录内容", required = true)
     @Override
-    public ApiResponse<T> create(@Validated @RequestBody T record) throws ServiceException {
+    public ApiResponse<T> create(@Parameter(description = "记录内容", required = true) @Validated @RequestBody T record) throws ServiceException {
         if (record == null) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定记录");
         }
@@ -62,11 +57,9 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
 
     @PutMapping("/{id}")
     @Operation(summary = "更新记录")
-    @Parameter(name = "id", description = "记录ID")
-    @Parameter(name = "record", description = "记录内容", required = true)
     @Override
-    public ApiResponse<T> update(@PathVariable("id") UUID id, @Validated @RequestBody T record) throws ServiceException {
-        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
+    public ApiResponse<T> update(@Parameter(description = "记录ID") @PathVariable Long id, @Parameter(description = "记录内容", required = true) @Validated @RequestBody T record) throws ServiceException {
+        if (id == null || id == 0) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         } else if (record == null) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定记录");
@@ -78,10 +71,9 @@ public abstract class BaseRestController<S extends BaseService<T, Q>, T extends 
 
     @DeleteMapping("/{id}")
     @Operation(summary = "根据ID删除记录")
-    @Parameter(name = "id", description = "记录ID")
     @Override
-    public ApiResponse<String> remove(@PathVariable("id") UUID id) throws ServiceException {
-        if (id == null || EmptyConstants.EMPTY_UUID.equals(id)) {
+    public ApiResponse<String> remove(@Parameter(description = "记录ID") @PathVariable Long id) throws ServiceException {
+        if (id == null || id == 0) {
             throw ServiceException.build(UserErrorCodes.REQUEST_PARAMETER_ERROR, "未指定ID或ID错误");
         }
         return super.remove(id);

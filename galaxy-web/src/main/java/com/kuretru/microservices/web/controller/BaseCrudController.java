@@ -4,15 +4,16 @@ import com.kuretru.microservices.web.constant.code.UserErrorCodes;
 import com.kuretru.microservices.web.entity.ApiResponse;
 import com.kuretru.microservices.web.entity.PaginationQuery;
 import com.kuretru.microservices.web.entity.PaginationResponse;
-import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.service.BaseService;
+import com.kuretru.microservices.web.service.impl.BaseServiceImpl;
+import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 提供基本CRUD功能的控制器，继承后可获得一些基本的参数检验功能
@@ -22,12 +23,18 @@ import java.util.UUID;
 public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends BaseDTO, Q> extends BaseController {
 
     protected final S service;
+    protected final Class<T> dtoClass;
+    protected final Class<Q> queryClass;
 
+    @SuppressWarnings("unchecked")
     public BaseCrudController(S service) {
         this.service = service;
+        ResolvableType type = ResolvableType.forClass(getClass()).as(BaseServiceImpl.class);
+        this.dtoClass = (Class<T>) type.getGeneric(2).resolve();
+        this.queryClass = (Class<Q>) type.getGeneric(3).resolve();
     }
 
-    protected ApiResponse<T> get(UUID id) throws ServiceException {
+    protected ApiResponse<T> get(Long id) throws ServiceException {
         T result = service.get(id);
         if (result == null) {
             // 指定ID查询单个实体但实体不存在时，认为是用户方ID输入错误，因此抛异常
@@ -65,13 +72,13 @@ public abstract class BaseCrudController<S extends BaseService<T, Q>, T extends 
         return ApiResponse.created(result);
     }
 
-    protected ApiResponse<T> update(UUID id, T record) throws ServiceException {
+    protected ApiResponse<T> update(Long id, T record) throws ServiceException {
         record.setId(id);
         T result = service.update(record);
         return ApiResponse.updated(result);
     }
 
-    protected ApiResponse<String> remove(UUID id) throws ServiceException {
+    protected ApiResponse<String> remove(Long id) throws ServiceException {
         service.remove(id);
         return ApiResponse.removed("资源已删除");
     }

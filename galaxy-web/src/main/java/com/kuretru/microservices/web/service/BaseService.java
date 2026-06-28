@@ -2,18 +2,11 @@ package com.kuretru.microservices.web.service;
 
 import com.kuretru.microservices.web.entity.PaginationQuery;
 import com.kuretru.microservices.web.entity.PaginationResponse;
-import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 import com.kuretru.microservices.web.exception.ServiceException;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 
 import java.util.List;
-import java.util.UUID;
 
-/**
- * 业务逻辑层基类接口
- * 泛型：T->实体对应的数据传输对象，Q->实体对应的查询对象
- *
- * @author 呉真(kuretru) <kuretru@gmail.com>
- */
 public interface BaseService<T extends BaseDTO, Q> {
 
     /**
@@ -26,20 +19,13 @@ public interface BaseService<T extends BaseDTO, Q> {
     T get(Long id) throws ServiceException;
 
     /**
-     * 根据业务逻辑主键查询一条记录
+     * 根据查询条件，查询所有主键ID
      *
-     * @param uuid 业务逻辑主键UUID
-     * @return 一条记录，找不到时返回Null
+     * @param query 查询条件
+     * @return 所有ID
      * @throws ServiceException 没有权限时，抛出业务异常
      */
-    T get(UUID uuid) throws ServiceException;
-
-    /**
-     * 查询所有记录
-     *
-     * @return 所有记录，找不到时返回空List
-     */
-    List<T> list();
+    List<Long> listId(Q query) throws ServiceException;
 
     /**
      * 根据查询条件，查询所有记录
@@ -51,14 +37,6 @@ public interface BaseService<T extends BaseDTO, Q> {
     List<T> list(Q query) throws ServiceException;
 
     /**
-     * 分页查询所有记录
-     *
-     * @param paginationQuery 分页参数
-     * @return 分页后的所有记录
-     */
-    PaginationResponse<T> list(PaginationQuery paginationQuery);
-
-    /**
      * 根据查询条件，分页查询所有记录
      *
      * @param pagination 分页参数
@@ -67,13 +45,6 @@ public interface BaseService<T extends BaseDTO, Q> {
      * @throws ServiceException 没有权限时，抛出业务异常
      */
     PaginationResponse<T> list(PaginationQuery pagination, Q query) throws ServiceException;
-
-    /**
-     * 查询记录条数
-     *
-     * @return 记录条数
-     */
-    int count();
 
     /**
      * 保存新记录
@@ -96,9 +67,9 @@ public interface BaseService<T extends BaseDTO, Q> {
     /**
      * 根据业务逻辑主键删除一条记录
      *
-     * @param uuid 业务逻辑主键UUID
+     * @param id 物理主键ID
      * @throws ServiceException 找不到指定记录时会抛出业务异常
      */
-    void remove(UUID uuid) throws ServiceException;
+    void remove(Long id) throws ServiceException;
 
 }

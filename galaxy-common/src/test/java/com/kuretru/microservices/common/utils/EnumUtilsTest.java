@@ -20,18 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class EnumUtilsTest {
 
     @Test
-    void valueOfCode() {
-        assertEquals(GenderEnum.UNKNOWN, EnumUtils.valueOf(GenderEnum.class, (short)0));
-        assertEquals(GenderEnum.MALE, EnumUtils.valueOf(GenderEnum.class, (short)1));
-        assertEquals(GenderEnum.FEMALE, EnumUtils.valueOf(GenderEnum.class, (short)2));
-        assertThrows(IllegalArgumentException.class, () -> EnumUtils.valueOf(GenderEnum.class, (short)-1));
-    }
-
-    @Test
-    void ValueOfValue() {
-        assertEquals(GenderEnum.UNKNOWN, EnumUtils.valueOf(GenderEnum.class, "未知"));
-        assertEquals(GenderEnum.MALE, EnumUtils.valueOf(GenderEnum.class, "男"));
-        assertEquals(GenderEnum.FEMALE, EnumUtils.valueOf(GenderEnum.class, "女"));
+    void ValueOf() {
+        assertEquals(GenderEnum.UNKNOWN, EnumUtils.valueOf(GenderEnum.class, "unknown"));
+        assertEquals(GenderEnum.MALE, EnumUtils.valueOf(GenderEnum.class, "male"));
+        assertEquals(GenderEnum.FEMALE, EnumUtils.valueOf(GenderEnum.class, "female"));
         assertThrows(IllegalArgumentException.class, () -> EnumUtils.valueOf(GenderEnum.class, "测试"));
     }
 
@@ -55,10 +47,10 @@ class EnumUtilsTest {
 
     @Test
     void buildDTO() {
-        List<EnumDTO> map = new ArrayList<>();
-        map.add(new EnumDTO("未知", "UNKNOWN"));
-        map.add(new EnumDTO("男", "MALE"));
-        map.add(new EnumDTO("女", "FEMALE"));
+        List<EnumDTO<String>> map = new ArrayList<>();
+        map.add(new EnumDTO<>("unknown", "未知"));
+        map.add(new EnumDTO<>("male", "男"));
+        map.add(new EnumDTO<>("female", "女"));
         assertEquals(map, EnumUtils.buildDTO(GenderEnum.values()));
     }
 
@@ -67,21 +59,19 @@ class EnumUtilsTest {
     private enum GenderEnum implements BaseEnum<GenderEnum> {
 
         /** 未知 */
-        UNKNOWN((short)0, "未知"),
+        UNKNOWN("unknown", "未知"),
         /** 男 */
-        MALE((short)1, "男"),
+        MALE("male", "男"),
         /** 女 */
-        FEMALE((short)2, "女");
+        FEMALE("female", "女");
 
-        /** 枚举编号 */
-        private final short code;
-
-        /** 枚举内容 */
         private final String value;
+        private final String label;
 
-        GenderEnum(short code, String value) {
-            this.code = code;
+
+        GenderEnum(String value, String label) {
             this.value = value;
+            this.label = label;
         }
 
     }
