@@ -16,6 +16,7 @@ import com.kuretru.microservices.web.v2.service.BaseService;
 import com.kuretru.microservices.web.v2.service.support.QueryWrapperBuilder;
 import lombok.SneakyThrows;
 import org.springframework.core.ResolvableType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -139,6 +140,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return entityMapper.doToDto(record);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public T save(T record) throws ServiceException {
         D data = beforeSave(record);
@@ -160,6 +162,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
         return entityMapper.doToDto(record);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public T update(T record) throws ServiceException {
         D data = beforeUpdate(record);
@@ -182,6 +185,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<D>, D extends BaseDO,
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void remove(Long id) throws ServiceException {
         D record = beforeRemove(id);
