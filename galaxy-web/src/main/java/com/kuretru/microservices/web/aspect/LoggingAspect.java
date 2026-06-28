@@ -30,6 +30,8 @@ import java.lang.reflect.UndeclaredThrowableException;
 @Slf4j
 public class LoggingAspect {
 
+    private static final String HEALTHZ_PATH = "/healthz";
+
     private final TraceIdManager traceIdManager;
 
     @Autowired
@@ -42,6 +44,11 @@ public class LoggingAspect {
         long startTime = System.currentTimeMillis();
         BaseController controller = (BaseController)joinPoint.getTarget();
         HttpServletRequest request = controller.getRequest();
+
+        if (HEALTHZ_PATH.equals(request.getServletPath())) {
+            return (ApiResponse<?>)joinPoint.proceed();
+        }
+
         MDC.clear();
         MDC.put(LoggingConstants.TRACE_ID_KEY, traceIdManager.generateTraceId());
 
