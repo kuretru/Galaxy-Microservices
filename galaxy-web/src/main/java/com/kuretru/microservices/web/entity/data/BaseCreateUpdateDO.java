@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.v2.entity.data;
+package com.kuretru.microservices.web.entity.data;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

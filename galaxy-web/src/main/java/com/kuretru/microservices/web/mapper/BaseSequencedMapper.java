@@ -1,10 +1,10 @@
-package com.kuretru.microservices.web.v2.mapper;
+package com.kuretru.microservices.web.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.kuretru.microservices.web.entity.interfaces.Sequenced;
-import com.kuretru.microservices.web.v2.entity.data.BaseDO;
+import com.kuretru.microservices.web.entity.data.BaseDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

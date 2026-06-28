@@ -1,7 +1,7 @@
-package com.kuretru.microservices.web.v2.service;
+package com.kuretru.microservices.web.service;
 
 import com.kuretru.microservices.web.exception.ServiceException;
-import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 
 import java.util.List;
 

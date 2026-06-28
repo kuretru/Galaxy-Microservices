@@ -1,10 +1,10 @@
-package com.kuretru.microservices.web.v2.service.support;
+package com.kuretru.microservices.web.service.support;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.kuretru.microservices.common.entity.enums.BaseEnum;
-import com.kuretru.microservices.web.v2.entity.data.BaseDO;
+import com.kuretru.microservices.web.entity.data.BaseDO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.BeanInfo;

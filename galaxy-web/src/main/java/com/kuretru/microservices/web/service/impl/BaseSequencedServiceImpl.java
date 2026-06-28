@@ -1,14 +1,14 @@
-package com.kuretru.microservices.web.v2.service.impl;
+package com.kuretru.microservices.web.service.impl;
 
 import com.kuretru.microservices.web.constant.code.ServiceErrorCodes;
 import com.kuretru.microservices.web.entity.interfaces.Sequenced;
 import com.kuretru.microservices.web.exception.ServiceException;
-import com.kuretru.microservices.web.v2.entity.data.BaseDO;
-import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
-import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
-import com.kuretru.microservices.web.v2.mapper.BaseSequencedMapper;
-import com.kuretru.microservices.web.v2.service.BaseService;
-import com.kuretru.microservices.web.v2.service.SequencedService;
+import com.kuretru.microservices.web.entity.data.BaseDO;
+import com.kuretru.microservices.web.entity.mapper.BaseEntityMapper;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.mapper.BaseSequencedMapper;
+import com.kuretru.microservices.web.service.BaseService;
+import com.kuretru.microservices.web.service.SequencedService;
 
 import java.util.ArrayList;
 import java.util.Collections;

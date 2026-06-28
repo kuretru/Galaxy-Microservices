@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.v2.entity.transfer;
+package com.kuretru.microservices.web.entity.transfer;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

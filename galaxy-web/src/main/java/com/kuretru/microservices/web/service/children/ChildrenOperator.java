@@ -1,6 +1,6 @@
-package com.kuretru.microservices.web.v2.service.ability.children;
+package com.kuretru.microservices.web.service.children;
 
-import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
 
 import java.util.List;
 import java.util.Map;

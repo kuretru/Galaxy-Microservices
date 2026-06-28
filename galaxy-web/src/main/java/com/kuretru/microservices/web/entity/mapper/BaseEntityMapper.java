@@ -2,49 +2,40 @@ package com.kuretru.microservices.web.entity.mapper;
 
 import com.kuretru.microservices.web.entity.data.BaseDO;
 import com.kuretru.microservices.web.entity.transfer.BaseDTO;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
-/**
- * @author 呉真(kuretru) <kuretru@gmail.com>
- */
 public interface BaseEntityMapper<D extends BaseDO, T extends BaseDTO> {
 
     /**
-     * 将数据实体转换为数据传输实体
+     * 将DO转换为DTO
      *
-     * @param record 数据实体
-     * @return 数据传输实体
+     * @param record DO
+     * @return DTO
      */
-    @Mapping(source = "uuid", target = "id")
     T doToDto(D record);
 
     /**
-     * 将数据实体批量转换为数据传输实体
+     * 将DO批量转换为DTO
      *
-     * @param records 数据实体列表
-     * @return 数据传输实体列表
+     * @param records DO列表
+     * @return DTO列表
      */
     List<T> doToDto(List<D> records);
 
     /**
-     * 将数据传输实体转换为数据实体
+     * 将DTO转换为DO
      *
-     * @param record 数据传输实体
-     * @return 数据实体
+     * @param record DTO
+     * @return DO
      */
-    @Mapping(source = "id", target = "uuid")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createTime", ignore = true)
-    @Mapping(target = "updateTime", ignore = true)
     D dtoToDo(T record);
 
     /**
-     * 将数据传输实体批量转换为数据实体
+     * 将DTO批量转换为DO
      *
-     * @param records 数据传输实体列表
-     * @return 数据实体列表
+     * @param records DTO列表
+     * @return DO列表
      */
     List<D> dtoToDo(List<T> records);
 

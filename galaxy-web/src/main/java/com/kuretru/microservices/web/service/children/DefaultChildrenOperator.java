@@ -1,4 +1,4 @@
-package com.kuretru.microservices.web.v2.service.ability.children;
+package com.kuretru.microservices.web.service.children;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.kuretru.microservices.web.entity.annotations.ChildrenParentId;
 import com.kuretru.microservices.web.entity.interfaces.Children;
 import com.kuretru.microservices.web.entity.interfaces.Sequenced;
-import com.kuretru.microservices.web.v2.entity.data.BaseDO;
-import com.kuretru.microservices.web.v2.entity.mapper.BaseEntityMapper;
-import com.kuretru.microservices.web.v2.entity.transfer.BaseDTO;
-import com.kuretru.microservices.web.v2.service.support.QueryWrapperBuilder;
+import com.kuretru.microservices.web.entity.data.BaseDO;
+import com.kuretru.microservices.web.entity.mapper.BaseEntityMapper;
+import com.kuretru.microservices.web.entity.transfer.BaseDTO;
+import com.kuretru.microservices.web.service.support.QueryWrapperBuilder;
 
 import java.lang.reflect.Field;
 import java.util.*;
