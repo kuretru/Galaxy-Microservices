@@ -7,6 +7,8 @@ import com.kuretru.microservices.web.entity.interfaces.Sequenced;
 import com.kuretru.microservices.web.v2.entity.data.BaseDO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface BaseSequencedMapper<D extends BaseDO & Sequenced> extends BaseMapper<D> {
 
     /**
@@ -16,5 +18,13 @@ public interface BaseSequencedMapper<D extends BaseDO & Sequenced> extends BaseM
      * @return 最大的排序号
      */
     Integer getMaxSequence(@Param(Constants.WRAPPER) QueryWrapper<D> queryWrapper);
+
+    /**
+     * 根据ID批量更新排序号
+     *
+     * @param records 要更新的数据
+     * @return 受影响的行数
+     */
+    Integer updateSequenceById(List<D> records);
 
 }

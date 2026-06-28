@@ -21,6 +21,6 @@ public interface SequencedService<T extends BaseDTO> {
      * @param idList ID列表
      * @throws ServiceException 找不到记录时，会引发NotFound异常
      */
-    void reorder(List<Integer> idList) throws ServiceException;
+    void reorder(List<Long> idList) throws ServiceException;
 
 }
