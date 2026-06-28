@@ -38,17 +38,11 @@ public class SpringSecurityOauth2ResourceConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/healthz",
-                                "/login",
-                                "/login/callback",
                                 "/api/ping",
-                                "/api/exception",
-                                "/swagger-ui.html",
-                                "/swagger-ui/*",
-                                "/v3/api-docs",
-                                "/v3/api-docs/*"
+                                "/api/exception"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
